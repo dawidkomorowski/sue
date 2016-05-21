@@ -1,0 +1,20 @@
+﻿using Sue.Common.Model.ChessPiece;
+
+namespace Sue.Common.Model.Chessboard.Internal
+{
+    internal class ChessboardField : IChessboardField
+    {
+        public ChessboardField(File file, Rank rank, IChessboard chessboard)
+        {
+            File = file;
+            Rank = rank;
+            Chessboard = chessboard;
+        }
+
+        public File File { get; }
+        public Rank Rank { get; }
+        public IChessPiece ChessPiece { get; set; }
+        public bool Empty => ChessPiece == null;
+        public IChessboard Chessboard { get; }
+    }
+}
