@@ -9,15 +9,27 @@ namespace Sue.Common.UnitTests.Model
         [Test]
         public void ShouldReturnBlack_AsOppositeToWhite()
         {
-            var color = Color.White;
-            Assert.That(color.Opposite(), Is.EqualTo(Color.Black));
+            // Arrange
+            const Color color = Color.White;
+
+            // Act
+            var oppositeColor = color.Opposite();
+
+            // Assert
+            Assert.That(oppositeColor, Is.EqualTo(Color.Black));
         }
 
         [Test]
         public void ShouldReturnWhite_AsOppositeToBlack()
         {
-            var color = Color.Black;
-            Assert.That(color.Opposite(), Is.EqualTo(Color.White));
+            // Arrange
+            const Color color = Color.Black;
+
+            // Act
+            var oppositeColor = color.Opposite();
+
+            // Assert
+            Assert.That(oppositeColor, Is.EqualTo(Color.White));
         }
     }
 }

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Chessboard\CharExtensions.cs" />
     <Compile Include="Model\Chessboard\File.cs" />
     <Compile Include="Model\Chessboard\IChessboard.cs" />
     <Compile Include="Model\Chessboard\IChessboardField.cs" />
@@ -48,6 +49,8 @@
     <Compile Include="Model\Chessboard\Internal\ChessPieceFactory.cs" />
     <Compile Include="Model\Chessboard\Internal\ChessPieceKind.cs" />
     <Compile Include="Model\Chessboard\Internal\IChessPieceFactory.cs" />
+    <Compile Include="Model\Chessboard\Internal\ISettableChessboard.cs" />
+    <Compile Include="Model\Chessboard\IntExtensions.cs" />
     <Compile Include="Model\Chessboard\Rank.cs" />
     <Compile Include="Model\ChessPiece\IChessPiece.cs" />
     <Compile Include="Model\ChessPiece\Internal\Bishop.cs" />
@@ -58,6 +61,24 @@
     <Compile Include="Model\ChessPiece\Internal\Queen.cs" />
     <Compile Include="Model\ChessPiece\Internal\Rook.cs" />
     <Compile Include="Model\Color.cs" />
+    <Compile Include="Model\Fen\Internal\CastlingAvailability.cs" />
+    <Compile Include="Model\Fen\Internal\CastlingAvailabilityParser.cs" />
+    <Compile Include="Model\Fen\Internal\ChessField.cs" />
+    <Compile Include="Model\Fen\Internal\ChessFieldParser.cs" />
+    <Compile Include="Model\Fen\Internal\ChessPiece.cs" />
+    <Compile Include="Model\Fen\Internal\ChessPieceParser.cs" />
+    <Compile Include="Model\Fen\Internal\ExtractedFenString.cs" />
+    <Compile Include="Model\Fen\Internal\FenStringExtractor.cs" />
+    <Compile Include="Model\Fen\Internal\FenStringParser.cs" />
+    <Compile Include="Model\Fen\Internal\ICastlingAvailabilityParser.cs" />
+    <Compile Include="Model\Fen\Internal\IChessFieldParser.cs" />
+    <Compile Include="Model\Fen\Internal\IChessPieceParser.cs" />
+    <Compile Include="Model\Fen\Internal\IFenStringExtractor.cs" />
+    <Compile Include="Model\Fen\Internal\IFenStringParser.cs" />
+    <Compile Include="Model\Fen\Internal\IRankLineParser.cs" />
+    <Compile Include="Model\Fen\Internal\PlacedChessPiece.cs" />
+    <Compile Include="Model\Fen\Internal\RankLine.cs" />
+    <Compile Include="Model\Fen\Internal\RankLineParser.cs" />
     <Compile Include="Model\IMove.cs" />
     <Compile Include="Model\Internal\Move.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

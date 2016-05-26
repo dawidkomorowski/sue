@@ -17,9 +17,14 @@ namespace Sue.Common.UnitTests.Model.Chessboard
         [Test]
         public void ShouldReturnAllWhiteChessPieces_WhenChessboardInInitialState()
         {
+            // Arrange
             IChessPieceFactory chessPieceFactory = new ChessPieceFactory();
             IChessboard chessboard = new ArrayChessboard(chessPieceFactory);
+
+            // Act
             var whiteChessPieces = chessboard.GetChessPieces(Color.White);
+
+            // Assert
             Assert.That(whiteChessPieces.Count(), Is.EqualTo(16));
         }
     }

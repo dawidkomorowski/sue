@@ -45,7 +45,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Chessboard\ArrayChessboardTests.cs" />
+    <Compile Include="Model\Chessboard\ChessPieceFactoryTests.cs" />
     <Compile Include="Model\ColorTests.cs" />
+    <Compile Include="Model\Fen\CastlingAvailabilityParserTests.cs" />
+    <Compile Include="Model\Fen\ChessFieldParserTests.cs" />
+    <Compile Include="Model\Fen\ChessPieceParserTests.cs" />
+    <Compile Include="Model\Fen\FenStringExtractorTests.cs" />
+    <Compile Include="Model\Fen\FenStringParserTests.cs" />
+    <Compile Include="Model\Fen\RankLineParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
