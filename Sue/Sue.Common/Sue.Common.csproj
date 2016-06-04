@@ -45,6 +45,7 @@
     <Compile Include="Model\Chessboard\IChessboard.cs" />
     <Compile Include="Model\Chessboard\IChessboardField.cs" />
     <Compile Include="Model\Chessboard\Internal\ArrayChessboard.cs" />
+    <Compile Include="Model\Chessboard\Internal\ChessboardBase.cs" />
     <Compile Include="Model\Chessboard\Internal\ChessboardField.cs" />
     <Compile Include="Model\Chessboard\Internal\ChessPieceFactory.cs" />
     <Compile Include="Model\Chessboard\Internal\ChessPieceKind.cs" />
@@ -61,8 +62,11 @@
     <Compile Include="Model\ChessPiece\Internal\Queen.cs" />
     <Compile Include="Model\ChessPiece\Internal\Rook.cs" />
     <Compile Include="Model\Color.cs" />
+    <Compile Include="Model\Fen\FenString.cs" />
+    <Compile Include="Model\Fen\IChessboardFactory.cs" />
     <Compile Include="Model\Fen\Internal\CastlingAvailability.cs" />
     <Compile Include="Model\Fen\Internal\CastlingAvailabilityParser.cs" />
+    <Compile Include="Model\Fen\Internal\ChessboardFactory.cs" />
     <Compile Include="Model\Fen\Internal\ChessField.cs" />
     <Compile Include="Model\Fen\Internal\ChessFieldParser.cs" />
     <Compile Include="Model\Fen\Internal\ChessPiece.cs" />

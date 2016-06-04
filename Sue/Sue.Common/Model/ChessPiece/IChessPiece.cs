@@ -8,7 +8,7 @@ namespace Sue.Common.Model.ChessPiece
         Color Color { get; }
         IChessboardField ChessboardField { get; }
         IEnumerable<IMove> Moves { get; }
-        void MakeMove(IMove move);
         IChessboard Chessboard { get; }
+        void MakeMove(IMove move);
     }
 }

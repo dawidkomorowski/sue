@@ -37,3 +37,4 @@ using System.Runtime.InteropServices;
 
 // Expose internal implementations to test project
 [assembly: InternalsVisibleTo("Sue.Common.UnitTests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

@@ -31,6 +31,7 @@
         /// </summary>
         void Register();
 
+        // TODO hidden by overridden
         void Register(string name = null, string code = null);
 
         void SetOption(string name, string value);

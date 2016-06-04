@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Sue.Common.Model;
 using Sue.Common.Model.Chessboard;
+using Sue.Common.Model.Fen;
 using Sue.Common.Model.Fen.Internal;
 
 namespace Sue.Common.UnitTests.Model.Fen
@@ -14,7 +15,7 @@ namespace Sue.Common.UnitTests.Model.Fen
         {
             // Arrange
             IFenStringExtractor fenStringExtractor = new FenStringExtractor();
-            const string fenString = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+            const string fenString = FenString.StartPos;
 
             // Act
             var extractedFenString = fenStringExtractor.Extract(fenString);
