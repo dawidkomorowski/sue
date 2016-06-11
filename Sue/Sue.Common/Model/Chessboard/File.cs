@@ -49,5 +49,12 @@ namespace Sue.Common.Model.Chessboard
         {
             return new[] {File.A, File.B, File.C, File.D, File.E, File.F, File.G, File.H};
         }
+
+        public static File Add(this File file, int offset)
+        {
+            var fileIndex = file.Index();
+            var newFileIndex = fileIndex + offset;
+            return newFileIndex.ToFile();
+        }
     }
 }

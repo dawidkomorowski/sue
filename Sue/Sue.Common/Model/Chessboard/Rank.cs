@@ -49,5 +49,12 @@ namespace Sue.Common.Model.Chessboard
         {
             return new[] {Rank.One, Rank.Two, Rank.Three, Rank.Four, Rank.Five, Rank.Six, Rank.Seven, Rank.Eight};
         }
+
+        public static Rank Add(this Rank rank, int offset)
+        {
+            var rankIndex = rank.Index();
+            var newRankIndex = rankIndex + offset;
+            return newRankIndex.ToRank();
+        }
     }
 }

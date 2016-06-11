@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Sue.Common.Model.Chessboard;
 using Sue.Common.Model.Chessboard.Internal;
+using Sue.Common.Model.Internal;
 
 namespace Sue.Common.Model.ChessPiece.Internal
 {
@@ -40,9 +41,41 @@ namespace Sue.Common.Model.ChessPiece.Internal
             }
         }
 
-        private bool IsOpponent(IChessPiece chessPiece)
+        protected bool IsOpponent(IChessPiece chessPiece)
         {
             return Color != chessPiece.Color;
+        }
+
+        protected IMove NewMove(IChessboardField to)
+        {
+            return new Move(ChessboardField, to);
+        }
+
+
+        protected bool IsEmptyOrOpponent(IChessboardField chessboardField)
+        {
+            if (chessboardField.Empty)
+            {
+                return true;
+            }
+            else
+            {
+                if (IsOpponent(chessboardField.ChessPiece))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        protected void TryAddMove(File file, Rank rank, IList<IMove> moves)
+        {
+            var chessboardField = Chessboard.GetChessboardField(file, rank);
+            if (IsEmptyOrOpponent(chessboardField))
+            {
+                moves.Add(NewMove(chessboardField));
+            }
         }
     }
 }

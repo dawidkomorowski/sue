@@ -48,8 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CommonTestsBase.cs" />
     <Compile Include="Model\Chessboard\ArrayChessboardTests.cs" />
     <Compile Include="Model\Chessboard\ChessPieceFactoryTests.cs" />
+    <Compile Include="Model\Chessboard\FileTests.cs" />
+    <Compile Include="Model\Chessboard\RankTests.cs" />
+    <Compile Include="Model\ChessPiece\KnightTests.cs" />
     <Compile Include="Model\ColorTests.cs" />
     <Compile Include="Model\Fen\CastlingAvailabilityParserTests.cs" />
     <Compile Include="Model\Fen\ChessboardFactoryTests.cs" />
@@ -69,6 +73,7 @@
       <Name>Sue.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

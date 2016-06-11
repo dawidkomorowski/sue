@@ -9,12 +9,12 @@ using Sue.Common.Model;
 using Sue.Common.Model.Chessboard;
 using Sue.Common.Model.Chessboard.Internal;
 using Sue.Common.Model.Fen;
-using Sue.Common.Model.Fen.Internal;
+using Sue.Common.UnitTests.Common;
 
 namespace Sue.Common.UnitTests.Model.Chessboard
 {
     [TestFixture]
-    public class ArrayChessboardTests
+    public class ArrayChessboardTests : CommonTestsBase
     {
         [Test]
         public void ShouldGetChessPieceReturnNull_WhenChessboardEmpty()
@@ -87,21 +87,6 @@ namespace Sue.Common.UnitTests.Model.Chessboard
 
             // Assert
             Assert.That(whiteChessPieces.Count(), Is.EqualTo(16));
-        }
-
-        private static IChessboardFactory ChessboardFactory
-        {
-            get
-            {
-                IChessPieceFactory chessPieceFactory = new ChessPieceFactory();
-                IChessPieceParser chessPieceParser = new ChessPieceParser();
-                IRankLineParser rankLineParser = new RankLineParser(chessPieceParser);
-                IFenStringExtractor fenStringExtractor = new FenStringExtractor();
-                ICastlingAvailabilityParser castlingAvailabilityParser = new CastlingAvailabilityParser();
-                IChessFieldParser chessFieldParser = new ChessFieldParser();
-                IFenStringParser fenStringParser = new FenStringParser(rankLineParser, fenStringExtractor, castlingAvailabilityParser, chessFieldParser);
-                return new ChessboardFactory(chessPieceFactory, fenStringParser);
-            }
         }
     }
 }
