@@ -53,6 +53,7 @@
     <Compile Include="Model\Chessboard\ChessPieceFactoryTests.cs" />
     <Compile Include="Model\Chessboard\FileTests.cs" />
     <Compile Include="Model\Chessboard\RankTests.cs" />
+    <Compile Include="Model\ChessPiece\BishopTests.cs" />
     <Compile Include="Model\ChessPiece\KnightTests.cs" />
     <Compile Include="Model\ChessPiece\RookTests.cs" />
     <Compile Include="Model\ColorTests.cs" />
