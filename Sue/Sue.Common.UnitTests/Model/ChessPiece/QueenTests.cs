@@ -5,6 +5,7 @@ using Sue.Common.UnitTests.Common;
 
 namespace Sue.Common.UnitTests.Model.ChessPiece
 {
+    [TestFixture]
     public class QueenTests : CommonTestsBase
     {
         [Test]
