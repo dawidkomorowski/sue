@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Sue.Common.Model;
 using Sue.Common.Model.Chessboard;
 using Sue.Common.Model.Chessboard.Internal;
+using Sue.Common.Model.ChessPiece.Internal;
 using Sue.Common.Model.Fen;
 using Sue.Common.Model.Fen.Internal;
 
@@ -15,7 +16,9 @@ namespace Sue.Common.UnitTests.Common
         {
             get
             {
-                IChessPieceFactory chessPieceFactory = new ChessPieceFactory();
+                IRookMovesFinder rookMovesFinder = new RookMovesFinder();
+                IBishopMovesFinder bishopMovesFinder = new BishopMovesFinder();
+                IChessPieceFactory chessPieceFactory = new ChessPieceFactory(rookMovesFinder, bishopMovesFinder);
                 IChessPieceParser chessPieceParser = new ChessPieceParser();
                 IRankLineParser rankLineParser = new RankLineParser(chessPieceParser);
                 IFenStringExtractor fenStringExtractor = new FenStringExtractor();

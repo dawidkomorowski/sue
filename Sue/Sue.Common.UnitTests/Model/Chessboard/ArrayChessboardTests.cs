@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Sue.Common.Model;
 using Sue.Common.Model.Chessboard;
 using Sue.Common.Model.Chessboard.Internal;
+using Sue.Common.Model.ChessPiece.Internal;
 using Sue.Common.Model.Fen;
 using Sue.Common.UnitTests.Common;
 
@@ -33,7 +34,9 @@ namespace Sue.Common.UnitTests.Model.Chessboard
         public void ShouldSetAndGetChessPiece()
         {
             // Arrange
-            var chessPieceFactory = new ChessPieceFactory();
+            var rookMovesFinder = new RookMovesFinder();
+            var bishopMovesFinder = new BishopMovesFinder();
+            var chessPieceFactory = new ChessPieceFactory(rookMovesFinder, bishopMovesFinder);
             var chessboard = new ArrayChessboard(chessPieceFactory);
 
             // Act

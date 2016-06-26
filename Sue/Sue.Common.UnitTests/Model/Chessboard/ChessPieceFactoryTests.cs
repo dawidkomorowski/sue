@@ -48,6 +48,14 @@ namespace Sue.Common.UnitTests.Model.Chessboard
             Assert.That(chessPiece.ChessboardField, Is.EqualTo(chessboardField));
         }
 
-        private static IChessPieceFactory ChessPieceFactory => new ChessPieceFactory();
+        private static IChessPieceFactory ChessPieceFactory
+        {
+            get
+            {
+                var rookMovesFinder = new RookMovesFinder();
+                var bishopMovesFinder = new BishopMovesFinder();
+                return new ChessPieceFactory(rookMovesFinder, bishopMovesFinder);
+            }
+        }
     }
 }

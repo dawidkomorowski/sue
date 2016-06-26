@@ -175,24 +175,21 @@ namespace Sue.Common.UnitTests.Model.ChessPiece
         }
 
         [Test]
-        public void ShouldMovesReturn_A1_B2_D4_E5_F6_A5_B4_D2_E1_WhenBishopOn_C3_AndAsInGivenFenString()
+        public void ShouldMovesReturn_B2_D4_E5_F6_D2_E1_WhenBishopOn_C3_AndAsInGivenFenString()
         {
             // Arrange
-            var chessboard = ChessboardFactory.Create("8/8/5p2/8/8/2B5/8/4p3 w KQkq - 0 1");
+            var chessboard = ChessboardFactory.Create("8/8/5p2/8/1P6/2B5/8/P3p3 w KQkq - 0 1");
             var bishop = chessboard.GetChessPiece(File.C, Rank.Three);
 
             // Act
             var moves = bishop.Moves;
 
             // Assert
-            Assert.That(moves.Count(), Is.EqualTo(9));
-            AssertMoveExistsInMoves(File.C, Rank.Three, File.A, Rank.One, moves);
+            Assert.That(moves.Count(), Is.EqualTo(6));
             AssertMoveExistsInMoves(File.C, Rank.Three, File.B, Rank.Two, moves);
             AssertMoveExistsInMoves(File.C, Rank.Three, File.D, Rank.Four, moves);
             AssertMoveExistsInMoves(File.C, Rank.Three, File.E, Rank.Five, moves);
             AssertMoveExistsInMoves(File.C, Rank.Three, File.F, Rank.Six, moves);
-            AssertMoveExistsInMoves(File.C, Rank.Three, File.A, Rank.Five, moves);
-            AssertMoveExistsInMoves(File.C, Rank.Three, File.B, Rank.Four, moves);
             AssertMoveExistsInMoves(File.C, Rank.Three, File.D, Rank.Two, moves);
             AssertMoveExistsInMoves(File.C, Rank.Three, File.E, Rank.One, moves);
         }

@@ -267,7 +267,9 @@ namespace Sue.Common.UnitTests.Model.Fen
         {
             get
             {
-                IChessPieceFactory chessPieceFactory = new ChessPieceFactory();
+                IRookMovesFinder rookMovesFinder = new RookMovesFinder();
+                IBishopMovesFinder bishopMovesFinder = new BishopMovesFinder();
+                IChessPieceFactory chessPieceFactory = new ChessPieceFactory(rookMovesFinder, bishopMovesFinder);
                 return new ArrayChessboard(chessPieceFactory);
             }
         }

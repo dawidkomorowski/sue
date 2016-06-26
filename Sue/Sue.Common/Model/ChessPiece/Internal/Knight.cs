@@ -23,7 +23,7 @@ namespace Sue.Common.Model.ChessPiece.Internal
 
                 foreach (var potentialMoveCoordinate in potentialMoveCoordinates)
                 {
-                    TryAddMove(potentialMoveCoordinate.Item1, potentialMoveCoordinate.Item2, moves);
+                    this.TryAddMove(potentialMoveCoordinate.Item1, potentialMoveCoordinate.Item2, moves);
                 }
 
                 return moves;

@@ -55,12 +55,17 @@
     <Compile Include="Model\Chessboard\Rank.cs" />
     <Compile Include="Model\ChessPiece\IChessPiece.cs" />
     <Compile Include="Model\ChessPiece\Internal\Bishop.cs" />
+    <Compile Include="Model\ChessPiece\Internal\BishopMovesFinder.cs" />
     <Compile Include="Model\ChessPiece\Internal\ChessPiece.cs" />
+    <Compile Include="Model\ChessPiece\Internal\ChessPieceExtensions.cs" />
+    <Compile Include="Model\ChessPiece\Internal\IBishopMovesFinder.cs" />
     <Compile Include="Model\ChessPiece\Internal\King.cs" />
     <Compile Include="Model\ChessPiece\Internal\Knight.cs" />
     <Compile Include="Model\ChessPiece\Internal\Pawn.cs" />
     <Compile Include="Model\ChessPiece\Internal\Queen.cs" />
     <Compile Include="Model\ChessPiece\Internal\Rook.cs" />
+    <Compile Include="Model\ChessPiece\Internal\IRookMovesFinder.cs" />
+    <Compile Include="Model\ChessPiece\Internal\RookMovesFinder.cs" />
     <Compile Include="Model\Color.cs" />
     <Compile Include="Model\Fen\FenString.cs" />
     <Compile Include="Model\Fen\IChessboardFactory.cs" />
