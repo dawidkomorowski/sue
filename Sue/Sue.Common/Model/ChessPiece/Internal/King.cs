@@ -5,7 +5,7 @@ using Sue.Common.Model.Chessboard.Internal;
 
 namespace Sue.Common.Model.ChessPiece.Internal
 {
-    internal class King : Internal.ChessPiece
+    internal class King : ChessPiece
     {
         public King(Color color, ChessboardField chessboardField) : base(color, chessboardField)
         {
