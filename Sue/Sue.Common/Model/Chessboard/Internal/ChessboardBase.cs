@@ -7,7 +7,7 @@ namespace Sue.Common.Model.Chessboard.Internal
     {
         public Color CurrentPlayer { get; set; }
         public bool WhiteKingsideCastlingAvailable { get; set; }
-        public bool WhiteQueenssideCastlingAvailable { get; set; }
+        public bool WhiteQueensideCastlingAvailable { get; set; }
         public bool BlackKingsideCastlingAvailable { get; set; }
         public bool BlackQueensideCastlingAvailable { get; set; }
         public IChessboardField EnPassantTargetField { get; set; }

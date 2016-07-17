@@ -173,5 +173,32 @@ namespace Sue.Common.UnitTests.Model.ChessPiece
             AssertMoveExistsInMoves(File.E, Rank.Four, File.E, Rank.Six, moves);
             AssertMoveExistsInMoves(File.E, Rank.Four, File.E, Rank.Seven, moves);
         }
+
+        [TestCase("8/8/8/8/3R4/8/8/8 w - - 0 1", "8/8/8/8/6R1/8/8/8 b - - 1 1", File.D, Rank.Four, File.G, Rank.Four)]
+        [TestCase("8/8/8/8/3R4/8/8/8 w - - 0 1", "3R4/8/8/8/8/8/8/8 b - - 1 1", File.D, Rank.Four, File.D, Rank.Eight)]
+        [TestCase("3n4/8/8/8/3R4/8/8/8 w - - 0 1", "3R4/8/8/8/8/8/8/8 b - - 0 1", File.D, Rank.Four, File.D, Rank.Eight)]
+        [TestCase("3n4/8/8/8/3R4/8/8/8 w - - 5 10", "3R4/8/8/8/8/8/8/8 b - - 0 10", File.D, Rank.Four, File.D, Rank.Eight)]
+        [TestCase("8/8/8/8/3r4/8/8/8 b - - 0 1", "3r4/8/8/8/8/8/8/8 w - - 1 2", File.D, Rank.Four, File.D, Rank.Eight)]
+        [TestCase("3B4/8/8/8/3r4/8/8/8 b - - 1 1", "3r4/8/8/8/8/8/8/8 w - - 0 2", File.D, Rank.Four, File.D, Rank.Eight)]
+        // Castling availability
+        [TestCase("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1", "r3k2r/8/8/8/8/8/7R/R3K3 b Qkq - 1 1", File.H, Rank.One, File.H, Rank.Two)]
+        [TestCase("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1", "r3k2r/8/8/8/8/8/R7/4K2R b Kkq - 1 1", File.A, Rank.One, File.A, Rank.Two)]
+        [TestCase("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1", "r3k3/7r/8/8/8/8/8/R3K2R w KQq - 1 2", File.H, Rank.Eight, File.H, Rank.Seven)]
+        [TestCase("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1", "4k2r/r7/8/8/8/8/8/R3K2R w KQk - 1 2", File.A, Rank.Eight, File.A, Rank.Seven)]
+        public void ShouldMoveFromGivenPositionToGivenPosition(string initialFenString, string expectedFenString,
+            File fromFile, Rank fromRank, File toFile, Rank toRank)
+        {
+            // Arrange
+            var chessboard = ChessboardFactory.Create(initialFenString);
+            var rook = chessboard.GetChessPiece(fromFile, fromRank);
+            var move = CreateMove(rook, toFile, toRank);
+
+            // Act
+            rook.MakeMove(move);
+
+            // Assert
+            var expectedChessboard = ChessboardFactory.Create(expectedFenString);
+            Assert.That(chessboard.EqualsTo(expectedChessboard), Is.True);
+        }
     }
 }

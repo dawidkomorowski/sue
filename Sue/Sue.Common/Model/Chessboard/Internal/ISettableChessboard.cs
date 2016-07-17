@@ -4,7 +4,7 @@
     {
         new Color CurrentPlayer { set; }
         new bool WhiteKingsideCastlingAvailable { set; }
-        new bool WhiteQueenssideCastlingAvailable { set; }
+        new bool WhiteQueensideCastlingAvailable { set; }
         new bool BlackKingsideCastlingAvailable { set; }
         new bool BlackQueensideCastlingAvailable { set; }
         new IChessboardField EnPassantTargetField { set; }

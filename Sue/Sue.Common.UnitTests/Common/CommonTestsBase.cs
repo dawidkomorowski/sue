@@ -4,9 +4,11 @@ using NUnit.Framework;
 using Sue.Common.Model;
 using Sue.Common.Model.Chessboard;
 using Sue.Common.Model.Chessboard.Internal;
+using Sue.Common.Model.ChessPiece;
 using Sue.Common.Model.ChessPiece.Internal;
 using Sue.Common.Model.Fen;
 using Sue.Common.Model.Fen.Internal;
+using Sue.Common.Model.Internal;
 
 namespace Sue.Common.UnitTests.Common
 {
@@ -39,6 +41,13 @@ namespace Sue.Common.UnitTests.Common
                         move =>
                             move.From.File == fromFile && move.From.Rank == fromRank && move.To.File == toFile &&
                             move.To.Rank == toRank));
+        }
+
+        protected static IMove CreateMove(IChessPiece chessPiece, File toFile, Rank toRank)
+        {
+            var from = chessPiece.ChessboardField;
+            var to = chessPiece.Chessboard.GetChessboardField(toFile, toRank);
+            return new Move(from, to);
         }
     }
 }

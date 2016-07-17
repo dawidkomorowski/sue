@@ -308,5 +308,26 @@ namespace Sue.Common.UnitTests.Model.ChessPiece
             AssertMoveExistsInMoves(File.D, Rank.Four, File.D, Rank.Six, moves);
             AssertMoveExistsInMoves(File.D, Rank.Four, File.D, Rank.Seven, moves);
         }
+
+        [TestCase("8/8/8/8/3Q4/8/8/8 w - - 0 1", "8/8/8/8/6Q1/8/8/8 b - - 1 1", File.D, Rank.Four, File.G, Rank.Four)]
+        [TestCase("8/8/8/8/3Q4/8/8/8 w - - 2 3", "8/Q7/8/8/8/8/8/8 b - - 3 3", File.D, Rank.Four, File.A, Rank.Seven)]
+        [TestCase("8/p7/8/8/3Q4/8/8/8 w - - 2 3", "8/Q7/8/8/8/8/8/8 b - - 0 3", File.D, Rank.Four, File.A, Rank.Seven)]
+        [TestCase("8/8/8/8/3q4/8/8/8 b - - 2 5", "8/q7/8/8/8/8/8/8 w - - 3 6", File.D, Rank.Four, File.A, Rank.Seven)]
+        [TestCase("8/P7/8/8/3q4/8/8/8 b - - 2 5", "8/q7/8/8/8/8/8/8 w - - 0 6", File.D, Rank.Four, File.A, Rank.Seven)]
+        public void ShouldMoveFromGivenPositionToGivenPosition(string initialFenString, string expectedFenString,
+            File fromFile, Rank fromRank, File toFile, Rank toRank)
+        {
+            // Arrange
+            var chessboard = ChessboardFactory.Create(initialFenString);
+            var queen = chessboard.GetChessPiece(fromFile, fromRank);
+            var move = CreateMove(queen, toFile, toRank);
+
+            // Act
+            queen.MakeMove(move);
+
+            // Assert
+            var expectedChessboard = ChessboardFactory.Create(expectedFenString);
+            Assert.That(chessboard.EqualsTo(expectedChessboard), Is.True);
+        }
     }
 }

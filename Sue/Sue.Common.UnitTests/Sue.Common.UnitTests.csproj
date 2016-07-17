@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Common\CommonTestsBase.cs" />
     <Compile Include="Model\Chessboard\ArrayChessboardTests.cs" />
+    <Compile Include="Model\Chessboard\ChessboardTests.cs" />
     <Compile Include="Model\Chessboard\ChessPieceFactoryTests.cs" />
     <Compile Include="Model\Chessboard\FileTests.cs" />
     <Compile Include="Model\Chessboard\RankTests.cs" />

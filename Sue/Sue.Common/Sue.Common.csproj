@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Chessboard\CharExtensions.cs" />
+    <Compile Include="Model\Chessboard\ChessboardExtensions.cs" />
     <Compile Include="Model\Chessboard\File.cs" />
     <Compile Include="Model\Chessboard\IChessboard.cs" />
     <Compile Include="Model\Chessboard\IChessboardField.cs" />

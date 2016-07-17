@@ -11,6 +11,24 @@ namespace Sue.Common.Model.ChessPiece.Internal
         {
         }
 
+        public override void MakeMove(IMove move)
+        {
+            base.MakeMove(move);
+
+            if (Color == Color.White &&
+                (Chessboard.WhiteKingsideCastlingAvailable || Chessboard.WhiteQueensideCastlingAvailable))
+            {
+                SettableChessboard.WhiteKingsideCastlingAvailable = false;
+                SettableChessboard.WhiteQueensideCastlingAvailable = false;
+            }
+            if (Color == Color.Black &&
+                (Chessboard.BlackKingsideCastlingAvailable || Chessboard.BlackQueensideCastlingAvailable))
+            {
+                SettableChessboard.BlackKingsideCastlingAvailable = false;
+                SettableChessboard.BlackQueensideCastlingAvailable = false;
+            }
+        }
+
         public override IEnumerable<IMove> Moves
         {
             get

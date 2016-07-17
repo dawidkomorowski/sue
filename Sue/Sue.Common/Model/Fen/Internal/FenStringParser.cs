@@ -35,7 +35,7 @@ namespace Sue.Common.Model.Fen.Internal
 
             var castlingAvailability = _castlingAvailabilityParser.Parse(extractedFenString.CastlingAvailabilityString);
             settableChessboard.WhiteKingsideCastlingAvailable = castlingAvailability.WhiteKingsideCastlingAvailable;
-            settableChessboard.WhiteQueenssideCastlingAvailable = castlingAvailability.WhiteQueenssideCastlingAvailable;
+            settableChessboard.WhiteQueensideCastlingAvailable = castlingAvailability.WhiteQueenssideCastlingAvailable;
             settableChessboard.BlackKingsideCastlingAvailable = castlingAvailability.BlackKingsideCastlingAvailable;
             settableChessboard.BlackQueensideCastlingAvailable = castlingAvailability.BlackQueensideCastlingAvailable;
 

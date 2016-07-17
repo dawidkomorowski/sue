@@ -91,7 +91,7 @@ namespace Sue.Common.UnitTests.Model.Fen
 
             Assert.That(chessboard.CurrentPlayer, Is.EqualTo(Color.White));
             Assert.That(chessboard.WhiteKingsideCastlingAvailable, Is.True);
-            Assert.That(chessboard.WhiteQueenssideCastlingAvailable, Is.True);
+            Assert.That(chessboard.WhiteQueensideCastlingAvailable, Is.True);
             Assert.That(chessboard.BlackKingsideCastlingAvailable, Is.True);
             Assert.That(chessboard.BlackQueensideCastlingAvailable, Is.True);
             Assert.That(chessboard.EnPassantTargetField, Is.Null);
@@ -114,7 +114,7 @@ namespace Sue.Common.UnitTests.Model.Fen
             // Assert
             Assert.That(chessboard.CurrentPlayer, Is.EqualTo(Color.Black));
             Assert.That(chessboard.WhiteKingsideCastlingAvailable, Is.True);
-            Assert.That(chessboard.WhiteQueenssideCastlingAvailable, Is.False);
+            Assert.That(chessboard.WhiteQueensideCastlingAvailable, Is.False);
             Assert.That(chessboard.BlackKingsideCastlingAvailable, Is.False);
             Assert.That(chessboard.BlackQueensideCastlingAvailable, Is.False);
             Assert.That(chessboard.EnPassantTargetField.File, Is.EqualTo(File.C));
@@ -240,7 +240,7 @@ namespace Sue.Common.UnitTests.Model.Fen
 
             Assert.That(chessboard.CurrentPlayer, Is.EqualTo(Color.White));
             Assert.That(chessboard.WhiteKingsideCastlingAvailable, Is.False);
-            Assert.That(chessboard.WhiteQueenssideCastlingAvailable, Is.False);
+            Assert.That(chessboard.WhiteQueensideCastlingAvailable, Is.False);
             Assert.That(chessboard.BlackKingsideCastlingAvailable, Is.False);
             Assert.That(chessboard.BlackQueensideCastlingAvailable, Is.False);
             Assert.That(chessboard.EnPassantTargetField, Is.Null);

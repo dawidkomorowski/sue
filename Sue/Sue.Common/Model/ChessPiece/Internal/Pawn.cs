@@ -6,10 +6,18 @@ using Sue.Common.Model.Internal;
 
 namespace Sue.Common.Model.ChessPiece.Internal
 {
-    internal class Pawn : Internal.ChessPiece
+    internal class Pawn : ChessPiece
     {
         public Pawn(Color color, ChessboardField chessboardField) : base(color, chessboardField)
         {
+        }
+
+        public override void MakeMove(IMove move)
+        {
+            base.MakeMove(move);
+
+            // Reset halfmove clock
+            SettableChessboard.HalfmoveClock = 0;
         }
 
         public override IEnumerable<IMove> Moves
