@@ -22,9 +22,10 @@ namespace Sue.Engine.UnitTests.Model.Fen
 
             // Assert
             Assert.That(extractedFenString.RankLines.Count(), Is.EqualTo(8));
-            CollectionAssert.AreEqual(extractedFenString.RankLines.Select(r => r.Rank), RankExtensions.Enumerable().Reverse());
-            CollectionAssert.AreEqual(extractedFenString.RankLines.Select(r => r.String),
-                new[] {"rnbqkbnr", "pppppppp", "8", "8", "8", "8", "PPPPPPPP", "RNBQKBNR"});
+            Assert.That(extractedFenString.RankLines.Select(r => r.Rank),
+                Is.EqualTo(RankExtensions.Enumerable().Reverse()));
+            Assert.That(extractedFenString.RankLines.Select(r => r.String),
+                Is.EqualTo(new[] { "rnbqkbnr", "pppppppp", "8", "8", "8", "8", "PPPPPPPP", "RNBQKBNR" }));
         }
 
         [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", Color.White)]

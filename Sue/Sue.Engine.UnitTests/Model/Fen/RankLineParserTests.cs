@@ -21,7 +21,7 @@ namespace Sue.Engine.UnitTests.Model.Fen
             var chessPieces = rankLineParser.Parse(rankLine);
 
             // Assert
-            CollectionAssert.IsEmpty(chessPieces);
+            Assert.That(chessPieces, Is.Empty);
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace Sue.Engine.UnitTests.Model.Fen
             Assert.That(chessPieces.Count(), Is.EqualTo(8));
             var pawns =
                 chessPieces.Where(
-                    p => p.ChessPiece.Color == Color.White && p.ChessPiece.ChessPieceKind == ChessPieceKind.Pawn && p.Rank == Rank.Two)
+                        p => p.ChessPiece.Color == Color.White && p.ChessPiece.ChessPieceKind == ChessPieceKind.Pawn && p.Rank == Rank.Two)
                     .ToArray();
             Assert.That(pawns.Length, Is.EqualTo(8));
         }

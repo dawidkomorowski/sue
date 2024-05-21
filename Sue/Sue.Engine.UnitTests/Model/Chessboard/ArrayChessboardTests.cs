@@ -70,8 +70,8 @@ namespace Sue.Engine.UnitTests.Model.Chessboard
             var blackChessPieces = chessboard.GetChessPieces(Color.Black);
 
             // Assert
-            CollectionAssert.IsEmpty(whiteChessPieces);
-            CollectionAssert.IsEmpty(blackChessPieces);
+            Assert.That(whiteChessPieces, Is.Empty);
+            Assert.That(blackChessPieces, Is.Empty);
         }
 
         [Test]
