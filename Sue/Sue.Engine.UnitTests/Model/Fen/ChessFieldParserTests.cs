@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.Fen.Internal;
+using Sue.Engine.Model.Chessboard;
+using Sue.Engine.Model.Fen.Internal;
 
-namespace Sue.Common.UnitTests.Model.Fen
+namespace Sue.Engine.UnitTests.Model.Fen
 {
     [TestFixture]
     public class ChessFieldParserTests

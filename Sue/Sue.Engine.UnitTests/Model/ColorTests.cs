@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using Sue.Common.Model;
+using Sue.Engine.Model;
 
-namespace Sue.Common.UnitTests.Model
+namespace Sue.Engine.UnitTests.Model
 {
     [TestFixture]
     public class ColorTests

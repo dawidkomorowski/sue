@@ -1,7 +1,7 @@
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.Chessboard.Internal;
+using Sue.Engine.Model.Chessboard;
+using Sue.Engine.Model.Chessboard.Internal;
 
-namespace Sue.Common.Model.Fen.Internal
+namespace Sue.Engine.Model.Fen.Internal
 {
     public class ChessboardFactory : IChessboardFactory
     {

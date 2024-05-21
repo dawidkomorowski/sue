@@ -1,4 +1,4 @@
-﻿namespace Sue.Common.Model.Chessboard.Internal
+﻿namespace Sue.Engine.Model.Chessboard.Internal
 {
     public enum ChessPieceKind
     {

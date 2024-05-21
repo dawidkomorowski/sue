@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Sue.Common.Model.ChessPiece;
+using Sue.Engine.Model.ChessPiece;
 
-namespace Sue.Common.Model.Chessboard.Internal
+namespace Sue.Engine.Model.Chessboard.Internal
 {
     public abstract class ChessboardBase : ISettableChessboard
     {

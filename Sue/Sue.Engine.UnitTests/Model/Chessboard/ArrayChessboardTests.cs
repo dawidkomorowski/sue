@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework.Internal;
+﻿using System.Linq;
 using NUnit.Framework;
-using Sue.Common.Model;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.Chessboard.Internal;
-using Sue.Common.Model.ChessPiece.Internal;
-using Sue.Common.Model.Fen;
-using Sue.Common.UnitTests.Common;
+using Sue.Engine.Model;
+using Sue.Engine.Model.Chessboard;
+using Sue.Engine.Model.Chessboard.Internal;
+using Sue.Engine.Model.ChessPiece.Internal;
+using Sue.Engine.Model.Fen;
+using Sue.Engine.UnitTests.Common;
 
-namespace Sue.Common.UnitTests.Model.Chessboard
+namespace Sue.Engine.UnitTests.Model.Chessboard
 {
     [TestFixture]
     public class ArrayChessboardTests : CommonTestsBase

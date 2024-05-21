@@ -1,12 +1,10 @@
 ﻿using NSubstitute;
-using NSubstitute.Core.Arguments;
 using NUnit.Framework;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.Chessboard.Internal;
-using Sue.Common.Model.Fen;
-using Sue.Common.Model.Fen.Internal;
+using Sue.Engine.Model.Chessboard.Internal;
+using Sue.Engine.Model.Fen;
+using Sue.Engine.Model.Fen.Internal;
 
-namespace Sue.Common.UnitTests.Model.Fen
+namespace Sue.Engine.UnitTests.Model.Fen
 {
     [TestFixture]
     public class ChessboardFactoryTests

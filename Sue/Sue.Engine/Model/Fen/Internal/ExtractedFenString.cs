@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sue.Common.Model.Fen.Internal
+namespace Sue.Engine.Model.Fen.Internal
 {
     public struct ExtractedFenString
     {

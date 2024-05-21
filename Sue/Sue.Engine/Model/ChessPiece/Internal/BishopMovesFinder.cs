@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.Chessboard.Internal;
+using Sue.Engine.Model.Chessboard;
 
-namespace Sue.Common.Model.ChessPiece.Internal
+namespace Sue.Engine.Model.ChessPiece.Internal
 {
     public class BishopMovesFinder : IBishopMovesFinder
     {

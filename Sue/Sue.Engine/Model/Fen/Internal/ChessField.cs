@@ -1,6 +1,6 @@
-﻿using Sue.Common.Model.Chessboard;
+﻿using Sue.Engine.Model.Chessboard;
 
-namespace Sue.Common.Model.Fen.Internal
+namespace Sue.Engine.Model.Fen.Internal
 {
     public struct ChessField
     {

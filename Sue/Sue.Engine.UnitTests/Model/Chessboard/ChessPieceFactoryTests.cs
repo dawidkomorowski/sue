@@ -1,11 +1,11 @@
 ﻿using System;
 using NUnit.Framework;
-using Sue.Common.Model;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.Chessboard.Internal;
-using Sue.Common.Model.ChessPiece.Internal;
+using Sue.Engine.Model;
+using Sue.Engine.Model.Chessboard;
+using Sue.Engine.Model.Chessboard.Internal;
+using Sue.Engine.Model.ChessPiece.Internal;
 
-namespace Sue.Common.UnitTests.Model.Chessboard
+namespace Sue.Engine.UnitTests.Model.Chessboard
 {
     [TestFixture]
     public class ChessPieceFactoryTests

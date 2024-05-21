@@ -1,8 +1,8 @@
 using System;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.ChessPiece;
+using Sue.Engine.Model.Chessboard;
+using Sue.Engine.Model.ChessPiece;
 
-namespace Sue.Common.Model.Internal
+namespace Sue.Engine.Model.Internal
 {
     public class Move : IMove
     {

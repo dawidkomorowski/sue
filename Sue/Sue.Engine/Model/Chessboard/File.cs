@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Sue.Common.Model.Chessboard
+namespace Sue.Engine.Model.Chessboard
 {
     public enum File
     {

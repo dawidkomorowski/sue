@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sue.Common.Model.Chessboard
+namespace Sue.Engine.Model.Chessboard
 {
     public static class CharExtensions
     {

@@ -1,4 +1,4 @@
-﻿namespace Sue.Common.Model.Fen
+﻿namespace Sue.Engine.Model.Fen
 {
     public static class FenString
     {

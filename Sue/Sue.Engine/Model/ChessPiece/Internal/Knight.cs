@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.Chessboard.Internal;
-using Sue.Common.Model.Internal;
+using Sue.Engine.Model.Chessboard;
+using Sue.Engine.Model.Chessboard.Internal;
 
-namespace Sue.Common.Model.ChessPiece.Internal
+namespace Sue.Engine.Model.ChessPiece.Internal
 {
     public class Knight : ChessPiece
     {

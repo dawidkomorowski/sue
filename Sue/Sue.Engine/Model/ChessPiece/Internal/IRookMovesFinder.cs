@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Sue.Common.Model.Chessboard;
 
-namespace Sue.Common.Model.ChessPiece.Internal
+namespace Sue.Engine.Model.ChessPiece.Internal
 {
     public interface IRookMovesFinder
     {

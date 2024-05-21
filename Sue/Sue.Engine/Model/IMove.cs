@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.ChessPiece;
+﻿using Sue.Engine.Model.Chessboard;
+using Sue.Engine.Model.ChessPiece;
 
-namespace Sue.Common.Model
+namespace Sue.Engine.Model
 {
     public interface IMove
     {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Sue.Common.Model.Fen.Internal
+﻿namespace Sue.Engine.Model.Fen.Internal
 {
     public class CastlingAvailabilityParser : ICastlingAvailabilityParser
     {

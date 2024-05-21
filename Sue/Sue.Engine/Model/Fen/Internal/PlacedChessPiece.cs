@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sue.Common.Model.Chessboard;
+﻿using Sue.Engine.Model.Chessboard;
 
-namespace Sue.Common.Model.Fen.Internal
+namespace Sue.Engine.Model.Fen.Internal
 {
     public class PlacedChessPiece
     {

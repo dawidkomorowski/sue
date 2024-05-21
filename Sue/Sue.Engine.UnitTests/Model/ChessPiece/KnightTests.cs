@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
-using Sue.Common.Model;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.UnitTests.Common;
+using Sue.Engine.Model.Chessboard;
+using Sue.Engine.UnitTests.Common;
 
-namespace Sue.Common.UnitTests.Model.ChessPiece
+namespace Sue.Engine.UnitTests.Model.ChessPiece
 {
     [TestFixture]
     public class KnightTests : CommonTestsBase

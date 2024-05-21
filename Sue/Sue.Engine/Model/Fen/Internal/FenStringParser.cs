@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.Chessboard.Internal;
+using Sue.Engine.Model.Chessboard.Internal;
 
-namespace Sue.Common.Model.Fen.Internal
+namespace Sue.Engine.Model.Fen.Internal
 {
     public class FenStringParser : IFenStringParser
     {

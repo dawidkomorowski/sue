@@ -1,6 +1,6 @@
-﻿using Sue.Common.Model.Chessboard;
+﻿using Sue.Engine.Model.Chessboard;
 
-namespace Sue.Common.Model.Fen
+namespace Sue.Engine.Model.Fen
 {
     public interface IChessboardFactory
     {

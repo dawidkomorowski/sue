@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using Sue.Common.Model;
-using Sue.Common.Model.Chessboard.Internal;
-using Sue.Common.Model.Fen.Internal;
+using Sue.Engine.Model;
+using Sue.Engine.Model.Chessboard.Internal;
+using Sue.Engine.Model.Fen.Internal;
 
-namespace Sue.Common.UnitTests.Model.Fen
+namespace Sue.Engine.UnitTests.Model.Fen
 {
     [TestFixture]
     public class ChessPieceParserTests

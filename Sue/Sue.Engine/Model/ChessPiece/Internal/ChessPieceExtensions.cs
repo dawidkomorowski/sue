@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Sue.Common.Model.Chessboard;
-using Sue.Common.Model.Internal;
+using Sue.Engine.Model.Chessboard;
+using Sue.Engine.Model.Internal;
 
-namespace Sue.Common.Model.ChessPiece.Internal
+namespace Sue.Engine.Model.ChessPiece.Internal
 {
     public static class ChessPieceExtensions
     {

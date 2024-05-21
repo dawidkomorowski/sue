@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sue.Common.Model.ChessPiece.Internal
+namespace Sue.Engine.Model.ChessPiece.Internal
 {
     public interface IBishopMovesFinder
     {

@@ -1,10 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sue.Common.Model.ChessPiece;
+﻿using Sue.Engine.Model.ChessPiece;
 
-namespace Sue.Common.Model.Chessboard.Internal
+namespace Sue.Engine.Model.Chessboard.Internal
 {
     public interface IChessPieceFactory
     {

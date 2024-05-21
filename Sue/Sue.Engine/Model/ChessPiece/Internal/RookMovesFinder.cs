@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Sue.Common.Model.Chessboard;
+using Sue.Engine.Model.Chessboard;
 
-namespace Sue.Common.Model.ChessPiece.Internal
+namespace Sue.Engine.Model.ChessPiece.Internal
 {
     public class RookMovesFinder : IRookMovesFinder
     {

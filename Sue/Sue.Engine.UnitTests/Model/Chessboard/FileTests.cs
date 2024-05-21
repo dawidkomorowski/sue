@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using Sue.Common.Model.Chessboard;
+using Sue.Engine.Model.Chessboard;
 
-namespace Sue.Common.UnitTests.Model.Chessboard
+namespace Sue.Engine.UnitTests.Model.Chessboard
 {
     [TestFixture]
     public class FileTests
