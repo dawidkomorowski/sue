@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using NLog;
 
@@ -13,7 +12,7 @@ namespace Sue
 
         static async Task Main()
         {
-            //throw new InvalidOperationException("Test error logging.");
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
 
             var token = Environment.GetEnvironmentVariable("LICHESS_API_TOKEN");
 
@@ -28,6 +27,16 @@ namespace Sue
                 var line = await reader.ReadLineAsync();
                 Logger.Info(line);
             }
+        }
+
+        private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+            {
+                Logger.Fatal(ex);
+            }
+
+            Environment.FailFast("Unhandled exception.", e.ExceptionObject as Exception);
         }
     }
 }
