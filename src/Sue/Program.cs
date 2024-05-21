@@ -14,6 +14,8 @@ namespace Sue
             Logger.Warn("Test warn message.");
             Logger.Error("Test error message.");
             Logger.Fatal("Test fatal message.");
+            Logger.Error("Test error message.");
+            Logger.Warn("Test warn message.");
 
             Console.WriteLine("Hello, World!");
         }
