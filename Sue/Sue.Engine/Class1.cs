@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sue.Engine
+﻿namespace Sue.Engine
 {
     public class Class1
     {
+
     }
 }
