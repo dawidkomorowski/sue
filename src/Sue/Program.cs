@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NLog;
-using Sue.Lichess;
+using Sue.Lichess.Bot;
 
 namespace Sue;
 
@@ -21,39 +21,8 @@ internal class Program
             return;
         }
 
-        Logger.Info("Connecting to Lichess.");
-
-        using var lichessClient = new LichessClient(apiToken);
-        using var eventStream = await lichessClient.OpenEventStreamAsync();
-
-        while (!eventStream.EndOfStream)
-        {
-            var lichessEvent = await eventStream.ReadEventAsync();
-            Logger.Info("Event received: {0}", lichessEvent);
-
-            if (lichessEvent is ChallengeEvent challengeEvent)
-            {
-                if (challengeEvent.ChallengerId == "TODO_TODO_TODO" && challengeEvent.DestinationUserId == "sue_bot")
-                {
-                    await lichessClient.AcceptChallenge(challengeEvent.ChallengeId);
-                    Logger.Info("Accepted challenge: {0}", challengeEvent.ChallengeId);
-                }
-                else
-                {
-                    Logger.Info("Ignored challenge: {0}", challengeEvent.ChallengeId);
-                }
-            }
-
-            if (lichessEvent is GameStartEvent gameStartEvent)
-            {
-                Logger.Info("Introduce yourself in chat - gameId: {0}", gameStartEvent.GameId);
-
-                await Task.Delay(TimeSpan.FromMilliseconds(100));
-                await lichessClient.WriteChatMessage(gameStartEvent.GameId, "Hello! I am Sue, also known as Simple UCI Engine.");
-                await Task.Delay(TimeSpan.FromMilliseconds(100));
-                await lichessClient.WriteChatMessage(gameStartEvent.GameId, "I am in early stage of development so most of my actions are silly.");
-            }
-        }
+        using var lichessBot = new LichessBot(apiToken);
+        await lichessBot.RunAsync();
     }
 
     private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)

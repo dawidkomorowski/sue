@@ -1,4 +1,4 @@
-﻿namespace Sue.Lichess;
+﻿namespace Sue.Lichess.Api;
 
 public sealed class PingEvent : LichessEvent
 {

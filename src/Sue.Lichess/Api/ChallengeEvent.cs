@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 
-namespace Sue.Lichess;
+namespace Sue.Lichess.Api;
 
 public sealed class ChallengeEvent : LichessEvent
 {

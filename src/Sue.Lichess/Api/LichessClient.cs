@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using NLog;
 
-namespace Sue.Lichess;
+namespace Sue.Lichess.Api;
 
 public sealed class LichessClient : IDisposable
 {

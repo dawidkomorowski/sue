@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using NLog;
 
-namespace Sue.Lichess;
+namespace Sue.Lichess.Api;
 
 public sealed class EventStream : IDisposable
 {
