@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using NLog;
+using Sue.Engine.Model;
 
 namespace Sue.Lichess.Api;
 
@@ -71,6 +72,15 @@ internal sealed class LichessClient : IDisposable
         Logger.Debug("MakeMoveAsync: gameId: {0}, uciMove: {1}.", gameId, uciMove);
 
         var response = await _httpClient.PostAsync(new Uri($"api/bot/game/{gameId}/move/{uciMove}", UriKind.Relative), new StringContent(string.Empty));
+        Logger.Debug("Request response: {0}", await response.Content.ReadAsStringAsync());
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task ResignGameAsync(string gameId)
+    {
+        Logger.Debug("ResignGameAsync: gameId: {0}.", gameId);
+
+        var response = await _httpClient.PostAsync(new Uri($"api/bot/game/{gameId}/resign", UriKind.Relative), new StringContent(string.Empty));
         Logger.Debug("Request response: {0}", await response.Content.ReadAsStringAsync());
         response.EnsureSuccessStatusCode();
     }

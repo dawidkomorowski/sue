@@ -9,4 +9,8 @@
     <PackageReference Include="NLog" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sue.Engine\Sue.Engine.csproj" />
+  </ItemGroup>
+
 </Project>

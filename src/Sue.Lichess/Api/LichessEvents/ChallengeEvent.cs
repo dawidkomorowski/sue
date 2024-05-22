@@ -12,11 +12,13 @@ internal sealed class ChallengeEvent : LichessEvent
                        throw new ArgumentException("Missing 'challenge.challenger.id'.");
         DestinationUserId = eventJson.RootElement.GetProperty("challenge").GetProperty("destUser").GetProperty("id").GetString() ??
                             throw new ArgumentException("Missing 'challenge.destUser.id'.");
+        IsRated = eventJson.RootElement.GetProperty("challenge").GetProperty("rated").GetBoolean();
     }
 
     public string ChallengeId { get; }
     public string ChallengerId { get; }
     public string DestinationUserId { get; }
+    public bool IsRated { get; }
 
     public override string ToString() => $"{nameof(ChallengeEvent)}: {JsonSerializer.Serialize(this)}";
 }

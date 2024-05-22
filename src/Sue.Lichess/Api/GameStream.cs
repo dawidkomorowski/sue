@@ -42,6 +42,7 @@ internal sealed class GameStream : IDisposable
         return type switch
         {
             "gameFull" => new GameFullEvent(eventJson),
+            "gameState" => new GameStateEvent(eventJson),
             _ => new UnknownGameEvent(eventData)
         };
     }

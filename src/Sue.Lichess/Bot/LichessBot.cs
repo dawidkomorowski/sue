@@ -66,7 +66,7 @@ public sealed class LichessBot : IDisposable
 
     private async Task HandleEventAsync(ChallengeEvent challengeEvent)
     {
-        if (challengeEvent.ChallengerId == "TODO_TODO_TODO" && challengeEvent.DestinationUserId == Constants.BotId)
+        if (challengeEvent.DestinationUserId == Constants.BotId && !challengeEvent.IsRated)
         {
             await _lichessClient.AcceptChallengeAsync(challengeEvent.ChallengeId);
             Logger.Info("Challenge accepted: {0}", challengeEvent.ChallengeId);

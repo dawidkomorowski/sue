@@ -2,8 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
+using Sue.Engine;
 using Sue.Lichess.Api;
 using Sue.Lichess.Api.GameEvents;
+using Sue.Lichess.Api.LichessEvents;
 
 namespace Sue.Lichess.Bot;
 
@@ -13,6 +15,9 @@ internal sealed class GameWorker
     private readonly LichessClient _lichessClient;
     private readonly string _gameId;
     private readonly CancellationTokenSource _cancellationTokenSource = new();
+    private string _initialFen = string.Empty;
+    private bool _myColorIsWhite = false;
+    private int _consecutiveErrorsCounter = 0;
 
     public GameWorker(LichessClient lichessClient, string gameId)
     {
@@ -42,12 +47,15 @@ internal sealed class GameWorker
 
                 using var gameStream = await _lichessClient.OpenGameStreamAsync(_gameId);
 
-                Logger.Info("Introduce yourself in chat - gameId: {0}", _gameId);
+                if (string.IsNullOrEmpty(_initialFen))
+                {
+                    Logger.Info("Introduce yourself in chat - gameId: {0}", _gameId);
 
-                await Task.Delay(TimeSpan.FromMilliseconds(100));
-                await _lichessClient.WriteChatMessageAsync(_gameId, "Hello! I am Sue, also known as Simple UCI Engine.");
-                await Task.Delay(TimeSpan.FromMilliseconds(100));
-                await _lichessClient.WriteChatMessageAsync(_gameId, "I am in early stage of development so most of my actions are silly.");
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
+                    await _lichessClient.WriteChatMessageAsync(_gameId, "Hello! I am Sue, also known as Simple UCI Engine.");
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
+                    await _lichessClient.WriteChatMessageAsync(_gameId, "I am in early stage of development so most of my actions are silly.");
+                }
 
                 while (!gameStream.EndOfStream && !_cancellationTokenSource.IsCancellationRequested)
                 {
@@ -55,6 +63,7 @@ internal sealed class GameWorker
                     Logger.Info("Event received: {0}", gameEvent);
 
                     await DispatchEventAsync(gameEvent);
+                    _consecutiveErrorsCounter = 0;
                 }
 
                 if (gameStream.EndOfStream)
@@ -66,6 +75,15 @@ internal sealed class GameWorker
             {
                 Logger.Error(e);
                 await Task.Delay(TimeSpan.FromSeconds(5));
+
+                _consecutiveErrorsCounter++;
+
+                if (_consecutiveErrorsCounter > 5)
+                {
+                    await _lichessClient.WriteChatMessageAsync(_gameId, "I am so sorry but I need to resign. I got into an error state that I can't resolve.");
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                    await _lichessClient.ResignGameAsync(_gameId);
+                }
             }
         }
 
@@ -82,6 +100,9 @@ internal sealed class GameWorker
             case GameFullEvent gameFullEvent:
                 await HandleEventAsync(gameFullEvent);
                 break;
+            case GameStateEvent gameStateEvent:
+                await HandleEventAsync(gameStateEvent);
+                break;
             default:
                 Logger.Warn("DispatchEventAsync - No event handler for event: {0}", gameEvent.ToString());
                 break;
@@ -94,13 +115,42 @@ internal sealed class GameWorker
 
     private async Task HandleEventAsync(GameFullEvent gameFullEvent)
     {
-        if (gameFullEvent.WhiteId == Constants.BotId)
+        _initialFen = gameFullEvent.InitialFen;
+        _myColorIsWhite = gameFullEvent.WhiteId == Constants.BotId;
+
+        await TryMakeMoveAsync(gameFullEvent.Moves);
+    }
+
+    private async Task HandleEventAsync(GameStateEvent gameStateEvent)
+    {
+        await TryMakeMoveAsync(gameStateEvent.Moves);
+    }
+
+    private async Task TryMakeMoveAsync(string moves)
+    {
+        if (!IsItMyTurn(moves))
         {
-            await _lichessClient.MakeMoveAsync(_gameId, "e2e4");
+            return;
+        }
+
+        var move = ChessEngine.FindMove(_initialFen, moves);
+        if (move != null)
+        {
+            await _lichessClient.MakeMoveAsync(_gameId, move);
         }
         else
         {
-            await _lichessClient.MakeMoveAsync(_gameId, "e7e5");
+            Logger.Error("Did not find any move!");
         }
+    }
+
+    private bool IsItMyTurn(string moves)
+    {
+        if (string.IsNullOrWhiteSpace(moves))
+        {
+            return _myColorIsWhite;
+        }
+
+        return (moves.Split(" ").Length % 2 == 0) == _myColorIsWhite;
     }
 }
