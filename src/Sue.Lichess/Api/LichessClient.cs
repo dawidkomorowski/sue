@@ -29,7 +29,7 @@ internal sealed class LichessClient : IDisposable
         return new EventStream(stream);
     }
 
-    public async Task AcceptChallenge(string challengeId)
+    public async Task AcceptChallengeAsync(string challengeId)
     {
         Logger.Debug("Accepting challenge: {0}.", challengeId);
 
@@ -39,9 +39,9 @@ internal sealed class LichessClient : IDisposable
         Logger.Debug("Challenge accepted: {0}.", challengeId);
     }
 
-    public async Task WriteChatMessage(string gameId, string message)
+    public async Task WriteChatMessageAsync(string gameId, string message)
     {
-        Logger.Debug("WriteChatMessage: gameId: {0}, message: {1}.", gameId, message);
+        Logger.Debug("WriteChatMessageAsync: gameId: {0}, message: {1}.", gameId, message);
 
         var content = new FormUrlEncodedContent(new[]
         {
