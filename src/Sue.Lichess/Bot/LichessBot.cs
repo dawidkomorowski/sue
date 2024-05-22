@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using NLog;
 using Sue.Lichess.Api;
+using Sue.Lichess.Api.LichessEvents;
 
 namespace Sue.Lichess.Bot;
 

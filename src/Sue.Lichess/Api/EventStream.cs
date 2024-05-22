@@ -3,10 +3,11 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using NLog;
+using Sue.Lichess.Api.LichessEvents;
 
 namespace Sue.Lichess.Api;
 
-public sealed class EventStream : IDisposable
+internal sealed class EventStream : IDisposable
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
     private readonly Stream _stream;

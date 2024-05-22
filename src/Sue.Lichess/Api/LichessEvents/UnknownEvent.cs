@@ -1,6 +1,6 @@
-﻿namespace Sue.Lichess.Api;
+﻿namespace Sue.Lichess.Api.LichessEvents;
 
-public sealed class UnknownEvent : LichessEvent
+internal sealed class UnknownEvent : LichessEvent
 {
     public UnknownEvent(string eventData)
     {

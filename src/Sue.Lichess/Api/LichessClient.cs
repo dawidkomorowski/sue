@@ -6,7 +6,7 @@ using NLog;
 
 namespace Sue.Lichess.Api;
 
-public sealed class LichessClient : IDisposable
+internal sealed class LichessClient : IDisposable
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
     private readonly HttpClient _httpClient;
