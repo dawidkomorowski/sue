@@ -10,17 +10,12 @@ namespace Sue.Engine.Model
 
     public static class ColorExtensions
     {
-        public static Color Opposite(this Color color)
-        {
-            switch (color)
+        public static Color Opposite(this Color color) =>
+            color switch
             {
-                case Color.White:
-                    return Color.Black;
-                case Color.Black:
-                    return Color.White;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(color), color, null);
-            }
-        }
+                Color.White => Color.Black,
+                Color.Black => Color.White,
+                _ => throw new ArgumentOutOfRangeException(nameof(color), color, null)
+            };
     }
 }
