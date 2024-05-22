@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using NLog;
 
@@ -29,11 +30,23 @@ internal sealed class LichessClient : IDisposable
         return new EventStream(stream);
     }
 
+    public async Task<GameStream> OpenGameStreamAsync(string gameId)
+    {
+        Logger.Debug("Opening game stream for game: {0}.", gameId);
+
+        var stream = await _httpClient.GetStreamAsync(new Uri($"api/bot/game/stream/{gameId}", UriKind.Relative));
+
+        Logger.Debug("Game stream open for game: {0}.", gameId);
+
+        return new GameStream(stream);
+    }
+
     public async Task AcceptChallengeAsync(string challengeId)
     {
         Logger.Debug("Accepting challenge: {0}.", challengeId);
 
         var response = await _httpClient.PostAsync(new Uri($"api/challenge/{challengeId}/accept", UriKind.Relative), new StringContent(string.Empty));
+        Logger.Debug("Request response: {0}", await response.Content.ReadAsStringAsync());
         response.EnsureSuccessStatusCode();
 
         Logger.Debug("Challenge accepted: {0}.", challengeId);
@@ -49,6 +62,16 @@ internal sealed class LichessClient : IDisposable
             new KeyValuePair<string, string>("text", message)
         });
         var response = await _httpClient.PostAsync(new Uri($"api/bot/game/{gameId}/chat", UriKind.Relative), content);
+        Logger.Debug("Request response: {0}", await response.Content.ReadAsStringAsync());
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task MakeMoveAsync(string gameId, string uciMove)
+    {
+        Logger.Debug("MakeMoveAsync: gameId: {0}, uciMove: {1}.", gameId, uciMove);
+
+        var response = await _httpClient.PostAsync(new Uri($"api/bot/game/{gameId}/move/{uciMove}", UriKind.Relative), new StringContent(string.Empty));
+        Logger.Debug("Request response: {0}", await response.Content.ReadAsStringAsync());
         response.EnsureSuccessStatusCode();
     }
 
