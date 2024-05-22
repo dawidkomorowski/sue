@@ -1,42 +1,68 @@
 ﻿using System;
-using System.IO;
-using System.Net.Http;
 using System.Threading.Tasks;
 using NLog;
+using Sue.Lichess;
 
-namespace Sue
+namespace Sue;
+
+internal class Program
 {
-    internal class Program
+    private const string LichessApiTokenEnvVar = "LICHESS_API_TOKEN";
+    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
+    static async Task Main()
     {
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
 
-        static async Task Main()
+        var apiToken = Environment.GetEnvironmentVariable(LichessApiTokenEnvVar);
+        if (string.IsNullOrEmpty(apiToken))
         {
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
-
-            var token = Environment.GetEnvironmentVariable("LICHESS_API_TOKEN");
-
-            using var httpClient = new HttpClient(new HttpClientHandler());
-            httpClient.BaseAddress = new Uri("https://lichess.org/api/");
-            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-            await using var stream = await httpClient.GetStreamAsync(new Uri("stream/event", UriKind.Relative));
-            using var reader = new StreamReader(stream);
-
-            while (!reader.EndOfStream)
-            {
-                var line = await reader.ReadLineAsync();
-                Logger.Info(line);
-            }
+            Logger.Error("{0} environment variable is not set.", LichessApiTokenEnvVar);
+            return;
         }
 
-        private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        Logger.Info("Connecting to Lichess.");
+
+        using var lichessClient = new LichessClient(apiToken);
+        using var eventStream = await lichessClient.OpenEventStreamAsync();
+
+        while (!eventStream.EndOfStream)
         {
-            if (e.ExceptionObject is Exception ex)
+            var lichessEvent = await eventStream.ReadEventAsync();
+            Logger.Info("Event received: {0}", lichessEvent);
+
+            if (lichessEvent is ChallengeEvent challengeEvent)
             {
-                Logger.Fatal(ex);
+                if (challengeEvent.ChallengerId == "TODO_TODO_TODO" && challengeEvent.DestinationUserId == "sue_bot")
+                {
+                    await lichessClient.AcceptChallenge(challengeEvent.ChallengeId);
+                    Logger.Info("Accepted challenge: {0}", challengeEvent.ChallengeId);
+                }
+                else
+                {
+                    Logger.Info("Ignored challenge: {0}", challengeEvent.ChallengeId);
+                }
             }
 
-            Environment.FailFast("Unhandled exception.", e.ExceptionObject as Exception);
+            if (lichessEvent is GameStartEvent gameStartEvent)
+            {
+                Logger.Info("Introduce yourself in chat - gameId: {0}", gameStartEvent.GameId);
+
+                await Task.Delay(TimeSpan.FromMilliseconds(100));
+                await lichessClient.WriteChatMessage(gameStartEvent.GameId, "Hello! I am Sue, also known as Simple UCI Engine.");
+                await Task.Delay(TimeSpan.FromMilliseconds(100));
+                await lichessClient.WriteChatMessage(gameStartEvent.GameId, "I am in early stage of development so most of my actions are silly.");
+            }
         }
+    }
+
+    private static void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+        if (e.ExceptionObject is Exception ex)
+        {
+            Logger.Fatal(ex);
+        }
+
+        Environment.FailFast("Unhandled exception.", e.ExceptionObject as Exception);
     }
 }
