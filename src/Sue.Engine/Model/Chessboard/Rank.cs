@@ -44,7 +44,7 @@ namespace Sue.Engine.Model.Chessboard
 
         public static IEnumerable<Rank> Enumerable()
         {
-            return new[] {Rank.One, Rank.Two, Rank.Three, Rank.Four, Rank.Five, Rank.Six, Rank.Seven, Rank.Eight};
+            return new[] { Rank.One, Rank.Two, Rank.Three, Rank.Four, Rank.Five, Rank.Six, Rank.Seven, Rank.Eight };
         }
 
         public static Rank Add(this Rank rank, int offset)

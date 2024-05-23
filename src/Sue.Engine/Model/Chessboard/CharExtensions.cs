@@ -6,52 +6,34 @@ namespace Sue.Engine.Model.Chessboard
     {
         public static File ToFile(this char c)
         {
-            switch (c)
+            return c switch
             {
-                case 'a':
-                    return File.A;
-                case 'b':
-                    return File.B;
-                case 'c':
-                    return File.C;
-                case 'd':
-                    return File.D;
-                case 'e':
-                    return File.E;
-                case 'f':
-                    return File.F;
-                case 'g':
-                    return File.G;
-                case 'h':
-                    return File.H;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(c), c, null);
-            }
+                'a' => File.A,
+                'b' => File.B,
+                'c' => File.C,
+                'd' => File.D,
+                'e' => File.E,
+                'f' => File.F,
+                'g' => File.G,
+                'h' => File.H,
+                _ => throw new ArgumentOutOfRangeException(nameof(c), c, null)
+            };
         }
 
         public static Rank ToRank(this char c)
         {
-            switch (c)
+            return c switch
             {
-                case '1':
-                    return Rank.One;
-                case '2':
-                    return Rank.Two;
-                case '3':
-                    return Rank.Three;
-                case '4':
-                    return Rank.Four;
-                case '5':
-                    return Rank.Five;
-                case '6':
-                    return Rank.Six;
-                case '7':
-                    return Rank.Seven;
-                case '8':
-                    return Rank.Eight;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(c), c, null);
-            }
+                '1' => Rank.One,
+                '2' => Rank.Two,
+                '3' => Rank.Three,
+                '4' => Rank.Four,
+                '5' => Rank.Five,
+                '6' => Rank.Six,
+                '7' => Rank.Seven,
+                '8' => Rank.Eight,
+                _ => throw new ArgumentOutOfRangeException(nameof(c), c, null)
+            };
         }
     }
 }

@@ -16,6 +16,51 @@ internal struct Move : IEquatable<Move>
     public Position To { get; }
     public Promotion Promotion { get; }
 
+    public static Move FromUci(string uciMove)
+    {
+        uciMove = uciMove.Trim().ToLowerInvariant();
+        if (uciMove.Length != 4 && uciMove.Length != 5)
+        {
+            throw new ArgumentException("Invalid UCI move.");
+        }
+
+        const string validFiles = "abcdefgh";
+        const string validRanks = "12345678";
+
+        if (!validFiles.Contains(uciMove[0]) || !validFiles.Contains(uciMove[2]))
+        {
+            throw new ArgumentException("Invalid UCI move.");
+        }
+
+        if (!validRanks.Contains(uciMove[1]) || !validRanks.Contains(uciMove[3]))
+        {
+            throw new ArgumentException("Invalid UCI move.");
+        }
+
+        var promotion = Promotion.None;
+
+        if (uciMove.Length == 5)
+        {
+            promotion = uciMove[4] switch
+            {
+                'q' => Promotion.Queen,
+                'r' => Promotion.Rook,
+                'b' => Promotion.Bishop,
+                'n' => Promotion.Knight,
+                _ => throw new ArgumentException("Invalid UCI move.")
+            };
+        }
+
+        var from = new Position(uciMove[0].ToFile(), uciMove[1].ToRank());
+        var to = new Position(uciMove[2].ToFile(), uciMove[3].ToRank());
+        return new Move(from, to, promotion);
+    }
+
+    public string ToUci()
+    {
+        return string.Empty;
+    }
+
     public override string ToString() => $"{nameof(From)}: {From}, {nameof(To)}: {To}, {nameof(Promotion)}: {Promotion}";
 
     public bool Equals(Move other) => From.Equals(other.From) && To.Equals(other.To) && Promotion == other.Promotion;
