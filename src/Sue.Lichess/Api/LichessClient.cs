@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using NLog;
-using Sue.Engine.Model;
 
 namespace Sue.Lichess.Api;
 

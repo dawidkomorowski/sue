@@ -1,0 +1,61 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Sue.Engine.OldModel.Chessboard
+{
+    public enum Rank
+    {
+        One,
+        Two,
+        Three,
+        Four,
+        Five,
+        Six,
+        Seven,
+        Eight
+    }
+
+    public static class RankExtensions
+    {
+        public static char ToChar(this Rank rank)
+        {
+            return rank switch
+            {
+                Rank.One => '1',
+                Rank.Two => '2',
+                Rank.Three => '3',
+                Rank.Four => '4',
+                Rank.Five => '5',
+                Rank.Six => '6',
+                Rank.Seven => '7',
+                Rank.Eight => '8',
+                _ => throw new ArgumentOutOfRangeException(nameof(rank), rank, null)
+            };
+        }
+
+        public static int Index(this Rank rank)
+        {
+            return rank switch
+            {
+                Rank.One => 0,
+                Rank.Two => 1,
+                Rank.Three => 2,
+                Rank.Four => 3,
+                Rank.Five => 4,
+                Rank.Six => 5,
+                Rank.Seven => 6,
+                Rank.Eight => 7,
+                _ => throw new ArgumentOutOfRangeException(nameof(rank), rank, null)
+            };
+        }
+
+        public static IReadOnlyList<Rank> Enumerable() => [Rank.One, Rank.Two, Rank.Three, Rank.Four, Rank.Five, Rank.Six, Rank.Seven, Rank.Eight];
+
+        public static Rank Add(this Rank rank, int offset)
+        {
+            var rankIndex = rank.Index();
+            var newRankIndex = rankIndex + offset;
+            return newRankIndex.ToRank();
+        }
+    }
+}

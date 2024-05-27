@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Sue.Engine.Model;
-using Sue.Engine.Model.Chessboard;
-using Sue.Engine.Model.Chessboard.Internal;
-using Sue.Engine.Model.ChessPiece;
-using Sue.Engine.Model.ChessPiece.Internal;
-using Sue.Engine.Model.Fen;
-using Sue.Engine.Model.Fen.Internal;
-using Sue.Engine.Model.Internal;
+using Sue.Engine.OldModel;
+using Sue.Engine.OldModel.Chessboard;
+using Sue.Engine.OldModel.Chessboard.Internal;
+using Sue.Engine.OldModel.ChessPiece;
+using Sue.Engine.OldModel.ChessPiece.Internal;
+using Sue.Engine.OldModel.Fen;
+using Sue.Engine.OldModel.Fen.Internal;
+using Sue.Engine.OldModel.Internal;
 
 namespace Sue.Engine.UnitTests.Common
 {
