@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Sue.Engine.Model.Chessboard;
 
 namespace Sue.Engine.NewModel;
@@ -16,7 +17,7 @@ internal struct Move : IEquatable<Move>
     public Position To { get; }
     public Promotion Promotion { get; }
 
-    public static Move FromUci(string uciMove)
+    public static Move ParseUciMove(string uciMove)
     {
         uciMove = uciMove.Trim().ToLowerInvariant();
         if (uciMove.Length != 4 && uciMove.Length != 5)
@@ -56,9 +57,28 @@ internal struct Move : IEquatable<Move>
         return new Move(from, to, promotion);
     }
 
+    public static IReadOnlyList<Move> ParseUciMoves(string uciMoves)
+    {
+        throw new NotImplementedException("TODO");
+    }
+
     public string ToUci()
     {
-        return string.Empty;
+        var uciMove = $"{From.File.ToChar()}{From.Rank.ToChar()}{To.File.ToChar()}{To.Rank.ToChar()}";
+
+        if (Promotion is not Promotion.None)
+        {
+            uciMove += Promotion switch
+            {
+                Promotion.Queen => 'q',
+                Promotion.Rook => 'r',
+                Promotion.Bishop => 'b',
+                Promotion.Knight => 'n',
+                _ => throw new InvalidOperationException($"Unexpected promotion value: {Promotion}")
+            };
+        }
+
+        return uciMove;
     }
 
     public override string ToString() => $"{nameof(From)}: {From}, {nameof(To)}: {To}, {nameof(Promotion)}: {Promotion}";

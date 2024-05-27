@@ -17,35 +17,39 @@ namespace Sue.Engine.Model.Chessboard
 
     public static class FileExtensions
     {
-        public static int Index(this File file)
+        public static char ToChar(this File file)
         {
-            switch (file)
+            return file switch
             {
-                case File.A:
-                    return 0;
-                case File.B:
-                    return 1;
-                case File.C:
-                    return 2;
-                case File.D:
-                    return 3;
-                case File.E:
-                    return 4;
-                case File.F:
-                    return 5;
-                case File.G:
-                    return 6;
-                case File.H:
-                    return 7;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(file), file, null);
-            }
+                File.A => 'a',
+                File.B => 'b',
+                File.C => 'c',
+                File.D => 'd',
+                File.E => 'e',
+                File.F => 'f',
+                File.G => 'g',
+                File.H => 'h',
+                _ => throw new ArgumentOutOfRangeException(nameof(file), file, null)
+            };
         }
 
-        public static IEnumerable<File> Enumerable()
+        public static int Index(this File file)
         {
-            return new[] {File.A, File.B, File.C, File.D, File.E, File.F, File.G, File.H};
+            return file switch
+            {
+                File.A => 0,
+                File.B => 1,
+                File.C => 2,
+                File.D => 3,
+                File.E => 4,
+                File.F => 5,
+                File.G => 6,
+                File.H => 7,
+                _ => throw new ArgumentOutOfRangeException(nameof(file), file, null)
+            };
         }
+
+        public static IReadOnlyList<File> Enumerable() => [File.A, File.B, File.C, File.D, File.E, File.F, File.G, File.H];
 
         public static File Add(this File file, int offset)
         {

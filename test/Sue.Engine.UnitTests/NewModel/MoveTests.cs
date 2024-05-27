@@ -60,7 +60,7 @@ public class MoveTests
     [TestCase("f2f1n", File.F, Rank.Two, File.F, Rank.One, Promotion.Knight, false)]
     [TestCase("F2F1N", File.F, Rank.Two, File.F, Rank.One, Promotion.Knight, false)]
     [TestCase("  f2f1n    ", File.F, Rank.Two, File.F, Rank.One, Promotion.Knight, false)]
-    public void FromUci_ShouldCreateMoveIfUciIsValid(string uciMove, File fileFrom, Rank rankFrom, File fileTo, Rank rankTo, object promotion,
+    public void ParseUciMove_ShouldCreateMoveIfUciIsValid(string uciMove, File fileFrom, Rank rankFrom, File fileTo, Rank rankTo, object promotion,
         bool expectedException)
     {
         if (expectedException)
@@ -68,18 +68,38 @@ public class MoveTests
             // Arrange
             // Act
             // Assert
-            Assert.That(() => Move.FromUci(uciMove), Throws.Exception);
+            Assert.That(() => Move.ParseUciMove(uciMove), Throws.Exception);
         }
         else
         {
             // Arrange
             // Act
-            var move = Move.FromUci(uciMove);
+            var move = Move.ParseUciMove(uciMove);
 
             // Assert
             Assert.That(move.From, Is.EqualTo(new Position(fileFrom, rankFrom)));
             Assert.That(move.To, Is.EqualTo(new Position(fileTo, rankTo)));
             Assert.That(move.Promotion, Is.EqualTo(promotion));
         }
+    }
+
+    [TestCase(File.A, Rank.One, File.B, Rank.Two, Promotion.None, "a1b2")]
+    [TestCase(File.C, Rank.Three, File.D, Rank.Four, Promotion.None, "c3d4")]
+    [TestCase(File.E, Rank.Five, File.F, Rank.Six, Promotion.None, "e5f6")]
+    [TestCase(File.G, Rank.Seven, File.H, Rank.Eight, Promotion.None, "g7h8")]
+    [TestCase(File.A, Rank.Seven, File.A, Rank.Eight, Promotion.Queen, "a7a8q")]
+    [TestCase(File.A, Rank.Seven, File.A, Rank.Eight, Promotion.Rook, "a7a8r")]
+    [TestCase(File.A, Rank.Seven, File.A, Rank.Eight, Promotion.Bishop, "a7a8b")]
+    [TestCase(File.A, Rank.Seven, File.A, Rank.Eight, Promotion.Knight, "a7a8n")]
+    public void ToUci_ShouldReturnUciMove(File fileFrom, Rank rankFrom, File fileTo, Rank rankTo, object promotion, string uciMove)
+    {
+        // Arrange
+        var move = new Move(new Position(fileFrom, rankFrom), new Position(fileTo, rankTo), (Promotion)promotion);
+
+        // Act
+        var actual = move.ToUci();
+
+        // Assert
+        Assert.That(actual, Is.EqualTo(uciMove));
     }
 }
