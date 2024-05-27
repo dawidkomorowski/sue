@@ -31,7 +31,7 @@ public static class ChessEngine
         var chessboardFactory = new ChessboardFactory(chessPieceFactory, fenStringParser);
 
         var chessboard = chessboardFactory.Create(fenString);
-        SetupChessboardForMoves(chessboard, uciMoves);
+        PlayUciMoves(chessboard, uciMoves);
 
         var availableMoves = chessboard.GetChessPieces(chessboard.CurrentPlayer).SelectMany(cp => cp.Moves).ToList();
         var move = availableMoves.MinBy(_ => Guid.NewGuid());
@@ -49,7 +49,7 @@ public static class ChessEngine
         return $"{p0}{p1}{p2}{p3}";
     }
 
-    private static void SetupChessboardForMoves(IChessboard chessboard, string uciMoves)
+    private static void PlayUciMoves(IChessboard chessboard, string uciMoves)
     {
         if (string.IsNullOrWhiteSpace(uciMoves))
         {

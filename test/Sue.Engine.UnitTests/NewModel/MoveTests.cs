@@ -83,6 +83,47 @@ public class MoveTests
         }
     }
 
+    [TestCase("f2f3 a7a5 f3f4 b7b5 b1c3 c8a6 c3d5b5b4 g1f3 a5a4 c2c3 b4c3 f3d4 c3b2 d4b5 b2b1q")]
+    [TestCase("f2f3 a7a5 f3f4 b7b5 b1c3 c8a6 c3d5 b5b4 g1f3 a5a4 c2c3 b4c3 f3d4 c3b2 d4b5 b2b1x")]
+    [TestCase("f2f3 a7a5 f3f4 b7b5 b1c3 c9a6 c3d5 b5b4 g1f3 a5a4 c2c3 b4c3 f3d4 c3b2 d4b5 b2b1q")]
+    public void ParseUciMoves_ShouldThrowException_GivenInvalidUciMoves(string uciMoves)
+    {
+        // Arrange
+        // Act
+        // Assert
+        Assert.That(() => Move.ParseUciMoves(uciMoves), Throws.ArgumentException);
+    }
+
+    [TestCase("f2f3 a7a5 f3f4 b7b5 b1c3 c8a6 c3d5 b5b4 g1f3 a5a4 c2c3 b4c3 f3d4 c3b2 d4b5 b2b1q")]
+    [TestCase("F2f3 A7a5 f3F4 b7B5 b1c3 c8a6 c3d5 b5b4 g1f3 a5a4 c2c3 b4c3 f3d4 c3b2 d4b5 b2b1q")]
+    [TestCase("   F2f3 A7a5 f3F4 b7B5 b1c3 c8a6 c3d5 b5b4 g1f3 a5a4 c2c3 b4c3 f3d4 c3b2 d4b5 b2b1q   ")]
+    [TestCase("F2f3 A7a5 f3F4   b7B5 b1c3 c8a6 c3d5 b5b4     g1f3 a5a4 c2c3 b4c3 f3d4 c3b2 d4b5 b2b1q   ")]
+    public void ParseUciMoves_ShouldCreateMoves_GivenValidUciMoves(string uciMoves)
+    {
+        // Arrange
+        // Act
+        var moves = Move.ParseUciMoves(uciMoves);
+
+        // Assert
+        Assert.That(moves, Has.Count.EqualTo(16));
+        Assert.That(moves[0], Is.EqualTo(new Move(new Position(File.F, Rank.Two), new Position(File.F, Rank.Three))));
+        Assert.That(moves[1], Is.EqualTo(new Move(new Position(File.A, Rank.Seven), new Position(File.A, Rank.Five))));
+        Assert.That(moves[2], Is.EqualTo(new Move(new Position(File.F, Rank.Three), new Position(File.F, Rank.Four))));
+        Assert.That(moves[3], Is.EqualTo(new Move(new Position(File.B, Rank.Seven), new Position(File.B, Rank.Five))));
+        Assert.That(moves[4], Is.EqualTo(new Move(new Position(File.B, Rank.One), new Position(File.C, Rank.Three))));
+        Assert.That(moves[5], Is.EqualTo(new Move(new Position(File.C, Rank.Eight), new Position(File.A, Rank.Six))));
+        Assert.That(moves[6], Is.EqualTo(new Move(new Position(File.C, Rank.Three), new Position(File.D, Rank.Five))));
+        Assert.That(moves[7], Is.EqualTo(new Move(new Position(File.B, Rank.Five), new Position(File.B, Rank.Four))));
+        Assert.That(moves[8], Is.EqualTo(new Move(new Position(File.G, Rank.One), new Position(File.F, Rank.Three))));
+        Assert.That(moves[9], Is.EqualTo(new Move(new Position(File.A, Rank.Five), new Position(File.A, Rank.Four))));
+        Assert.That(moves[10], Is.EqualTo(new Move(new Position(File.C, Rank.Two), new Position(File.C, Rank.Three))));
+        Assert.That(moves[11], Is.EqualTo(new Move(new Position(File.B, Rank.Four), new Position(File.C, Rank.Three))));
+        Assert.That(moves[12], Is.EqualTo(new Move(new Position(File.F, Rank.Three), new Position(File.D, Rank.Four))));
+        Assert.That(moves[13], Is.EqualTo(new Move(new Position(File.C, Rank.Three), new Position(File.B, Rank.Two))));
+        Assert.That(moves[14], Is.EqualTo(new Move(new Position(File.D, Rank.Four), new Position(File.B, Rank.Five))));
+        Assert.That(moves[15], Is.EqualTo(new Move(new Position(File.B, Rank.Two), new Position(File.B, Rank.One), Promotion.Queen)));
+    }
+
     [TestCase(File.A, Rank.One, File.B, Rank.Two, Promotion.None, "a1b2")]
     [TestCase(File.C, Rank.Three, File.D, Rank.Four, Promotion.None, "c3d4")]
     [TestCase(File.E, Rank.Five, File.F, Rank.Six, Promotion.None, "e5f6")]

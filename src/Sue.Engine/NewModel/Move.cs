@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sue.Engine.Model.Chessboard;
 
 namespace Sue.Engine.NewModel;
 
-internal struct Move : IEquatable<Move>
+internal readonly struct Move : IEquatable<Move>
 {
     public Move(Position from, Position to, Promotion promotion = Promotion.None)
     {
@@ -22,7 +23,7 @@ internal struct Move : IEquatable<Move>
         uciMove = uciMove.Trim().ToLowerInvariant();
         if (uciMove.Length != 4 && uciMove.Length != 5)
         {
-            throw new ArgumentException("Invalid UCI move.");
+            throw new ArgumentException($"Invalid UCI move: {uciMove}");
         }
 
         const string validFiles = "abcdefgh";
@@ -30,12 +31,12 @@ internal struct Move : IEquatable<Move>
 
         if (!validFiles.Contains(uciMove[0]) || !validFiles.Contains(uciMove[2]))
         {
-            throw new ArgumentException("Invalid UCI move.");
+            throw new ArgumentException($"Invalid UCI move: {uciMove}");
         }
 
         if (!validRanks.Contains(uciMove[1]) || !validRanks.Contains(uciMove[3]))
         {
-            throw new ArgumentException("Invalid UCI move.");
+            throw new ArgumentException($"Invalid UCI move: {uciMove}");
         }
 
         var promotion = Promotion.None;
@@ -48,7 +49,7 @@ internal struct Move : IEquatable<Move>
                 'r' => Promotion.Rook,
                 'b' => Promotion.Bishop,
                 'n' => Promotion.Knight,
-                _ => throw new ArgumentException("Invalid UCI move.")
+                _ => throw new ArgumentException($"Invalid UCI move: {uciMove}")
             };
         }
 
@@ -59,7 +60,9 @@ internal struct Move : IEquatable<Move>
 
     public static IReadOnlyList<Move> ParseUciMoves(string uciMoves)
     {
-        throw new NotImplementedException("TODO");
+        uciMoves = uciMoves.Trim().ToLowerInvariant();
+        var splitUciMoves = uciMoves.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return splitUciMoves.Select(ParseUciMove).ToList().AsReadOnly();
     }
 
     public string ToUci()
@@ -90,7 +93,7 @@ internal struct Move : IEquatable<Move>
     public static bool operator !=(Move left, Move right) => !left.Equals(right);
 }
 
-internal struct Position : IEquatable<Position>
+internal readonly struct Position : IEquatable<Position>
 {
     public Position(File file, Rank rank)
     {
