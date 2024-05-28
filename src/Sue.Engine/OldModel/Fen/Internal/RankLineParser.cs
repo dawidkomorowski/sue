@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Sue.Engine.OldModel.Chessboard;
+using Sue.Engine.Model;
 
 namespace Sue.Engine.OldModel.Fen.Internal
 {

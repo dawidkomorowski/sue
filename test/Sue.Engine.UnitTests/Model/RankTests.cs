@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using Sue.Engine.OldModel.Chessboard;
+using Sue.Engine.Model;
 
-namespace Sue.Engine.UnitTests.OldModel.Chessboard
+namespace Sue.Engine.UnitTests.Model
 {
     [TestFixture]
     public class RankTests
@@ -14,7 +14,7 @@ namespace Sue.Engine.UnitTests.OldModel.Chessboard
         [TestCase(Rank.Six, 5)]
         [TestCase(Rank.Seven, 6)]
         [TestCase(Rank.Eight, 7)]
-        public void ShouldReturnCorespondingIntegerIndexValue_GivenSomeRank(Rank rank, int index)
+        public void ShouldReturnCorrespondingIntegerIndexValue_GivenRank(Rank rank, int index)
         {
             // Arrange
             // Act
@@ -29,7 +29,7 @@ namespace Sue.Engine.UnitTests.OldModel.Chessboard
         [TestCase(Rank.One, 7, Rank.Eight)]
         [TestCase(Rank.Eight, -1, Rank.Seven)]
         [TestCase(Rank.Eight, -7, Rank.One)]
-        public void ShouldReturnCorrectRank_GivenSomeRankAndOffsetToAdd(Rank baseRank, int offset, Rank expectedRank)
+        public void ShouldReturnCorrectRank_GivenRankAndOffsetToAdd(Rank baseRank, int offset, Rank expectedRank)
         {
             // Arrange
             // Act

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel;
 using Sue.Engine.OldModel.Chessboard;
 using Sue.Engine.OldModel.Chessboard.Internal;
@@ -47,7 +48,7 @@ namespace Sue.Engine.UnitTests.Common
         {
             var from = chessPiece.ChessboardField;
             var to = chessPiece.Chessboard.GetChessboardField(toFile, toRank);
-            return new Move(from, to);
+            return new Engine.OldModel.Internal.Move(from, to);
         }
     }
 }

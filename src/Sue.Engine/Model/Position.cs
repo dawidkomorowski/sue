@@ -1,5 +1,4 @@
 ﻿using System;
-using Sue.Engine.OldModel.Chessboard;
 
 namespace Sue.Engine.Model;
 

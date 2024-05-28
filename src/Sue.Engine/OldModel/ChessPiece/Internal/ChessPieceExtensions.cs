@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel.Chessboard;
-using Sue.Engine.OldModel.Internal;
 
 namespace Sue.Engine.OldModel.ChessPiece.Internal
 {
-    public static class ChessPieceExtensions
+    internal static class ChessPieceExtensions
     {
         public static bool IsOpponent(this IChessPiece thisChessPiece, IChessPiece chessPiece)
         {
@@ -18,7 +18,7 @@ namespace Sue.Engine.OldModel.ChessPiece.Internal
 
         private static IMove NewMove(this IChessPiece chessPiece, IChessboardField to)
         {
-            return new Move(chessPiece.ChessboardField, to);
+            return new OldModel.Internal.Move(chessPiece.ChessboardField, to);
         }
 
         public static void TryAddMove(this IChessPiece chessPiece, File file, Rank rank, IList<IMove> moves)

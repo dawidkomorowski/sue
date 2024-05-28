@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel.ChessPiece;
 
 namespace Sue.Engine.OldModel.Chessboard.Internal
 {
-    public abstract class ChessboardBase : ISettableChessboard
+    internal abstract class ChessboardBase : ISettableChessboard
     {
         public Color CurrentPlayer { get; set; }
         public bool WhiteKingsideCastlingAvailable { get; set; }

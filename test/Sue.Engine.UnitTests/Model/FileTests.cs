@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using Sue.Engine.OldModel.Chessboard;
+using Sue.Engine.Model;
 
-namespace Sue.Engine.UnitTests.OldModel.Chessboard
+namespace Sue.Engine.UnitTests.Model
 {
     [TestFixture]
     public class FileTests
@@ -14,7 +14,7 @@ namespace Sue.Engine.UnitTests.OldModel.Chessboard
         [TestCase(File.F, 5)]
         [TestCase(File.G, 6)]
         [TestCase(File.H, 7)]
-        public void ShouldReturnCorespondingIntegerIndexValue_GivenSomeFile(File file, int index)
+        public void ShouldReturnCorrespondingIntegerIndexValue_GivenFile(File file, int index)
         {
             // Arrange
             // Act
@@ -29,7 +29,7 @@ namespace Sue.Engine.UnitTests.OldModel.Chessboard
         [TestCase(File.A, 7, File.H)]
         [TestCase(File.H, -1, File.G)]
         [TestCase(File.H, -7, File.A)]
-        public void ShouldReturnCorrectFile_GivenSomeFileAndOffsetToAdd(File baseFile, int offset, File expectedFile)
+        public void ShouldReturnCorrectFile_GivenFileAndOffsetToAdd(File baseFile, int offset, File expectedFile)
         {
             // Arrange
             // Act

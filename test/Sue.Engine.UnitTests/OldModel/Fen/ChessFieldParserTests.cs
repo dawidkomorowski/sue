@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel.Chessboard;
 using Sue.Engine.OldModel.Fen.Internal;
 

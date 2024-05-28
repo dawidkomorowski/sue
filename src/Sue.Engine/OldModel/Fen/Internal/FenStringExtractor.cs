@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Sue.Engine.OldModel.Chessboard;
+using Sue.Engine.Model;
 
 namespace Sue.Engine.OldModel.Fen.Internal
 {

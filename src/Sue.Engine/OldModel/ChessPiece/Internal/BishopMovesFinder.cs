@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel.Chessboard;
 
 namespace Sue.Engine.OldModel.ChessPiece.Internal
 {
-    public class BishopMovesFinder : IBishopMovesFinder
+    internal class BishopMovesFinder : IBishopMovesFinder
     {
         public IEnumerable<IMove> FindMoves(IChessPiece chessPiece)
         {

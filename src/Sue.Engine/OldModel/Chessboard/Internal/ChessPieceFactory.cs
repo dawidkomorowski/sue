@@ -4,7 +4,7 @@ using Sue.Engine.OldModel.ChessPiece.Internal;
 
 namespace Sue.Engine.OldModel.Chessboard.Internal
 {
-    public class ChessPieceFactory : IChessPieceFactory
+    internal class ChessPieceFactory : IChessPieceFactory
     {
         private readonly IRookMovesFinder _rookMovesFinder;
         private readonly IBishopMovesFinder _bishopMovesFinder;

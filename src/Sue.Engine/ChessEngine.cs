@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel.Chessboard;
 using Sue.Engine.OldModel.Chessboard.Internal;
 using Sue.Engine.OldModel.ChessPiece.Internal;
 using Sue.Engine.OldModel.Fen;
 using Sue.Engine.OldModel.Fen.Internal;
-using Sue.Engine.OldModel.Internal;
+using Move = Sue.Engine.OldModel.Internal.Move;
 
 namespace Sue.Engine;
 

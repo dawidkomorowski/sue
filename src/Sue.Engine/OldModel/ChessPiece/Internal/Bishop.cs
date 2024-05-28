@@ -3,7 +3,7 @@ using Sue.Engine.OldModel.Chessboard.Internal;
 
 namespace Sue.Engine.OldModel.ChessPiece.Internal
 {
-    public class Bishop : ChessPiece
+    internal class Bishop : ChessPiece
     {
         private readonly IBishopMovesFinder _bishopMovesFinder;
 

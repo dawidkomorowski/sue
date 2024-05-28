@@ -1,6 +1,6 @@
 ﻿namespace Sue.Engine.Model;
 
-internal enum Promotion
+public enum Promotion
 {
     None,
     Queen,

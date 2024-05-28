@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel.ChessPiece;
 
 namespace Sue.Engine.OldModel.Chessboard
 {
-    public static class ChessboardExtensions
+    internal static class ChessboardExtensions
     {
         public static bool EqualsTo(this IChessboard thisChessboard, IChessboard otherChessboard)
         {

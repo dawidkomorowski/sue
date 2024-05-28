@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Sue.Engine.Model;
-using Sue.Engine.OldModel.Chessboard;
 
 namespace Sue.Engine.UnitTests.Model;
 
@@ -60,7 +59,7 @@ public class MoveTests
     [TestCase("f2f1n", File.F, Rank.Two, File.F, Rank.One, Promotion.Knight, false)]
     [TestCase("F2F1N", File.F, Rank.Two, File.F, Rank.One, Promotion.Knight, false)]
     [TestCase("  f2f1n    ", File.F, Rank.Two, File.F, Rank.One, Promotion.Knight, false)]
-    public void ParseUciMove_ShouldCreateMoveIfUciIsValid(string uciMove, File fileFrom, Rank rankFrom, File fileTo, Rank rankTo, object promotion,
+    public void ParseUciMove_ShouldCreateMoveIfUciIsValid(string uciMove, File fileFrom, Rank rankFrom, File fileTo, Rank rankTo, Promotion promotion,
         bool expectedException)
     {
         if (expectedException)
@@ -132,10 +131,10 @@ public class MoveTests
     [TestCase(File.A, Rank.Seven, File.A, Rank.Eight, Promotion.Rook, "a7a8r")]
     [TestCase(File.A, Rank.Seven, File.A, Rank.Eight, Promotion.Bishop, "a7a8b")]
     [TestCase(File.A, Rank.Seven, File.A, Rank.Eight, Promotion.Knight, "a7a8n")]
-    public void ToUci_ShouldReturnUciMove(File fileFrom, Rank rankFrom, File fileTo, Rank rankTo, object promotion, string uciMove)
+    public void ToUci_ShouldReturnUciMove(File fileFrom, Rank rankFrom, File fileTo, Rank rankTo, Promotion promotion, string uciMove)
     {
         // Arrange
-        var move = new Move(new Position(fileFrom, rankFrom), new Position(fileTo, rankTo), (Promotion)promotion);
+        var move = new Move(new Position(fileFrom, rankFrom), new Position(fileTo, rankTo), promotion);
 
         // Act
         var actual = move.ToUci();

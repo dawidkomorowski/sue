@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel.ChessPiece;
 
 namespace Sue.Engine.OldModel.Chessboard.Internal
 {
-    public class ArrayChessboard : ChessboardBase
+    internal class ArrayChessboard : ChessboardBase
     {
         private readonly ChessboardField[,] _chessBoard = new ChessboardField[8, 8];
         private readonly IChessPieceFactory _chessPieceFactory;

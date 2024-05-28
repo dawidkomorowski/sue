@@ -1,4 +1,6 @@
-﻿namespace Sue.Engine.OldModel.Chessboard.Internal
+﻿using Sue.Engine.Model;
+
+namespace Sue.Engine.OldModel.Chessboard.Internal
 {
     public interface ISettableChessboard : IChessboard
     {
