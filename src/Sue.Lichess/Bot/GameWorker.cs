@@ -5,7 +5,6 @@ using NLog;
 using Sue.Engine;
 using Sue.Lichess.Api;
 using Sue.Lichess.Api.GameEvents;
-using Sue.Lichess.Api.LichessEvents;
 
 namespace Sue.Lichess.Bot;
 
@@ -13,15 +12,17 @@ internal sealed class GameWorker
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
     private readonly LichessClient _lichessClient;
+    private readonly string _botId;
     private readonly string _gameId;
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     private string _initialFen = string.Empty;
     private bool _myColorIsWhite = false;
     private int _consecutiveErrorsCounter = 0;
 
-    public GameWorker(LichessClient lichessClient, string gameId)
+    public GameWorker(LichessClient lichessClient, string botId, string gameId)
     {
         _lichessClient = lichessClient;
+        _botId = botId;
         _gameId = gameId;
     }
 
@@ -35,6 +36,7 @@ internal sealed class GameWorker
     {
         Logger.Debug("Stop - gameId: {0}", _gameId);
         _cancellationTokenSource.Cancel();
+        // TODO CancellationTokenSource is not disposed!
     }
 
     private async Task Run()
@@ -116,7 +118,7 @@ internal sealed class GameWorker
     private async Task HandleEventAsync(GameFullEvent gameFullEvent)
     {
         _initialFen = gameFullEvent.InitialFen;
-        _myColorIsWhite = gameFullEvent.WhiteId == Constants.BotId;
+        _myColorIsWhite = gameFullEvent.WhiteId == _botId;
 
         await TryMakeMoveAsync(gameFullEvent.Moves);
     }

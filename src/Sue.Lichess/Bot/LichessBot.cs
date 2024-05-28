@@ -12,6 +12,7 @@ public sealed class LichessBot : IDisposable
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
     private readonly LichessClient _lichessClient;
     private readonly Dictionary<string, GameWorker> _gameWorkers = new();
+    private string _botId = string.Empty;
 
     public LichessBot(string apiToken)
     {
@@ -21,6 +22,9 @@ public sealed class LichessBot : IDisposable
     public async Task RunAsync()
     {
         Logger.Info("Connecting to Lichess.");
+
+        _botId = await _lichessClient.GetAccountId();
+        Logger.Info("Retrieved account id: {0}", _botId);
 
         using var eventStream = await _lichessClient.OpenEventStreamAsync();
 
@@ -66,7 +70,7 @@ public sealed class LichessBot : IDisposable
 
     private async Task HandleEventAsync(ChallengeEvent challengeEvent)
     {
-        if (challengeEvent.DestinationUserId == Constants.BotId && !challengeEvent.IsRated)
+        if (challengeEvent.DestinationUserId == _botId && !challengeEvent.IsRated)
         {
             await _lichessClient.AcceptChallengeAsync(challengeEvent.ChallengeId);
             Logger.Info("Challenge accepted: {0}", challengeEvent.ChallengeId);
@@ -85,7 +89,7 @@ public sealed class LichessBot : IDisposable
         }
         else
         {
-            var gameWorker = new GameWorker(_lichessClient, gameStartEvent.GameId);
+            var gameWorker = new GameWorker(_lichessClient, _botId, gameStartEvent.GameId);
             _gameWorkers.Add(gameStartEvent.GameId, gameWorker);
             gameWorker.Start();
         }
@@ -93,9 +97,9 @@ public sealed class LichessBot : IDisposable
 
     private async Task HandleEventAsync(GameFinishEvent gameFinishEvent)
     {
-        if (_gameWorkers.ContainsKey(gameFinishEvent.GameId))
+        if (_gameWorkers.TryGetValue(gameFinishEvent.GameId, out var gameWorker))
         {
-            _gameWorkers[gameFinishEvent.GameId].Stop();
+            gameWorker.Stop();
             _gameWorkers.Remove(gameFinishEvent.GameId);
         }
         else

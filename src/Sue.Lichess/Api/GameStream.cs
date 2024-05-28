@@ -31,7 +31,7 @@ internal sealed class GameStream : IDisposable
             return new PingGameEvent();
         }
 
-        var eventJson = JsonDocument.Parse(eventData);
+        using var eventJson = JsonDocument.Parse(eventData);
         if (!eventJson.RootElement.TryGetProperty("type", out var typeProperty))
         {
             return new UnknownGameEvent(eventData);

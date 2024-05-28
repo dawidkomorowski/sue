@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Reflection.Metadata;
+using System.Text.Json;
 using System.Threading.Tasks;
 using NLog;
 
@@ -17,6 +17,19 @@ internal sealed class LichessClient : IDisposable
         _httpClient = new HttpClient(new HttpClientHandler());
         _httpClient.BaseAddress = new Uri("https://lichess.org/");
         _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiToken}");
+    }
+
+    public async Task<string> GetAccountId()
+    {
+        Logger.Debug("GetAccountId.");
+
+        var response = await _httpClient.GetAsync(new Uri("api/account", UriKind.Relative));
+        var stringContent = await response.Content.ReadAsStringAsync();
+        Logger.Debug("Request response: {0}", stringContent);
+        response.EnsureSuccessStatusCode();
+
+        using var jsonDocument = JsonDocument.Parse(stringContent);
+        return jsonDocument.RootElement.GetProperty("id").GetString() ?? throw new InvalidOperationException("Missing 'id'.");
     }
 
     public async Task<EventStream> OpenEventStreamAsync()
