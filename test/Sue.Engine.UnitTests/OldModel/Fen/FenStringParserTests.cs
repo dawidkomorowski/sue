@@ -44,13 +44,13 @@ namespace Sue.Engine.UnitTests.OldModel.Fen
             Assert.That(chessboard.GetChessPiece(File.H, Rank.Eight), Is.TypeOf<Rook>());
             Assert.That(chessboard.GetChessPiece(File.H, Rank.Eight).Color, Is.EqualTo(Color.Black));
 
-            foreach (var file in FileExtensions.Enumerable())
+            foreach (var file in FileExtensions.Files())
             {
                 Assert.That(chessboard.GetChessPiece(file, Rank.Seven), Is.TypeOf<Pawn>());
                 Assert.That(chessboard.GetChessPiece(file, Rank.Seven).Color, Is.EqualTo(Color.Black));
             }
 
-            foreach (var file in FileExtensions.Enumerable())
+            foreach (var file in FileExtensions.Files())
             {
                 for (var i = 2; i < 6; i++)
                 {
@@ -58,7 +58,7 @@ namespace Sue.Engine.UnitTests.OldModel.Fen
                 }
             }
 
-            foreach (var file in FileExtensions.Enumerable())
+            foreach (var file in FileExtensions.Files())
             {
                 Assert.That(chessboard.GetChessPiece(file, Rank.Two), Is.TypeOf<Pawn>());
                 Assert.That(chessboard.GetChessPiece(file, Rank.Two).Color, Is.EqualTo(Color.White));

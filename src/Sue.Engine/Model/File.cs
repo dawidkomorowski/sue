@@ -17,6 +17,8 @@ public enum File
 
 internal static class FileExtensions
 {
+    public static IReadOnlyList<File> Files() => [File.A, File.B, File.C, File.D, File.E, File.F, File.G, File.H];
+
     public static char ToChar(this File file)
     {
         return file switch
@@ -48,8 +50,6 @@ internal static class FileExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(file), file, null)
         };
     }
-
-    public static IReadOnlyList<File> Enumerable() => [File.A, File.B, File.C, File.D, File.E, File.F, File.G, File.H];
 
     public static File Add(this File file, int offset)
     {

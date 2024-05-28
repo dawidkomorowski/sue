@@ -23,7 +23,7 @@ namespace Sue.Engine.UnitTests.OldModel.Fen
             // Assert
             Assert.That(extractedFenString.RankLines.Count(), Is.EqualTo(8));
             Assert.That(extractedFenString.RankLines.Select(r => r.Rank),
-                Is.EqualTo(RankExtensions.Enumerable().Reverse()));
+                Is.EqualTo(RankExtensions.Ranks().Reverse()));
             Assert.That(extractedFenString.RankLines.Select(r => r.String),
                 Is.EqualTo(new[] { "rnbqkbnr", "pppppppp", "8", "8", "8", "8", "PPPPPPPP", "RNBQKBNR" }));
         }

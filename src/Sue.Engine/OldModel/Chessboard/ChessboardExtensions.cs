@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Sue.Engine.Model;
-using Sue.Engine.OldModel.ChessPiece;
+﻿using Sue.Engine.Model;
 
 namespace Sue.Engine.OldModel.Chessboard
 {
@@ -89,9 +86,9 @@ namespace Sue.Engine.OldModel.Chessboard
 
             #region ChessPieces
 
-            foreach (var file in FileExtensions.Enumerable())
+            foreach (var file in FileExtensions.Files())
             {
-                foreach (var rank in RankExtensions.Enumerable())
+                foreach (var rank in RankExtensions.Ranks())
                 {
                     var thisChessboardField = thisChessboard.GetChessboardField(file, rank);
                     var otherChessboardField = otherChessboard.GetChessboardField(file, rank);
@@ -112,11 +109,6 @@ namespace Sue.Engine.OldModel.Chessboard
             #endregion
 
             return true;
-        }
-
-        public static IEnumerable<IChessPiece> GetChessPieces(this IChessboard chessboard)
-        {
-            return chessboard.GetChessPieces(Color.White).Concat(chessboard.GetChessPieces(Color.Black));
         }
     }
 }

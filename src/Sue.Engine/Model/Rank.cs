@@ -17,6 +17,8 @@ public enum Rank
 
 internal static class RankExtensions
 {
+    public static IReadOnlyList<Rank> Ranks() => [Rank.One, Rank.Two, Rank.Three, Rank.Four, Rank.Five, Rank.Six, Rank.Seven, Rank.Eight];
+
     public static char ToChar(this Rank rank)
     {
         return rank switch
@@ -48,8 +50,6 @@ internal static class RankExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(rank), rank, null)
         };
     }
-
-    public static IReadOnlyList<Rank> Enumerable() => [Rank.One, Rank.Two, Rank.Three, Rank.Four, Rank.Five, Rank.Six, Rank.Seven, Rank.Eight];
 
     public static Rank Add(this Rank rank, int offset)
     {
