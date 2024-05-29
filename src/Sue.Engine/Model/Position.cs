@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Sue.Engine.Model;
 
@@ -12,6 +13,23 @@ internal readonly struct Position : IEquatable<Position>
 
     public File File { get; }
     public Rank Rank { get; }
+
+    public static readonly IReadOnlyList<Position> All;
+
+    static Position()
+    {
+        var all = new List<Position>();
+
+        foreach (var file in FileExtensions.Files())
+        {
+            foreach (var rank in RankExtensions.Ranks())
+            {
+                all.Add(new Position(file, rank));
+            }
+        }
+
+        All = all.AsReadOnly();
+    }
 
     public override string ToString() => $"{nameof(File)}: {File}, {nameof(Rank)}: {Rank}";
 

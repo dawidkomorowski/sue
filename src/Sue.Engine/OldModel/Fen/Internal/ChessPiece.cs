@@ -1,4 +1,5 @@
-﻿using Sue.Engine.OldModel.Chessboard.Internal;
+﻿using Sue.Engine.Model;
+using Sue.Engine.OldModel.Chessboard.Internal;
 
 namespace Sue.Engine.OldModel.Fen.Internal
 {

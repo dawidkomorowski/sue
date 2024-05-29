@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sue.Engine.Model;
 
 namespace Sue.Engine.OldModel.Fen.Internal
 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel.ChessPiece;
 using Sue.Engine.OldModel.ChessPiece.Internal;
 

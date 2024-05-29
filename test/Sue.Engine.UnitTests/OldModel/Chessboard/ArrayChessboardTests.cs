@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using Sue.Engine.Model;
-using Sue.Engine.OldModel;
 using Sue.Engine.OldModel.Chessboard;
 using Sue.Engine.OldModel.Chessboard.Internal;
 using Sue.Engine.OldModel.ChessPiece.Internal;

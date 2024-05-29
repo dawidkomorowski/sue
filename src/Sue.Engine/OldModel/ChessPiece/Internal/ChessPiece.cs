@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel.Chessboard;
 using Sue.Engine.OldModel.Chessboard.Internal;
 
