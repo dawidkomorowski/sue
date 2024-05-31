@@ -70,14 +70,15 @@ public class FenTests
         Assert.That(fen.GetChessPiece(new Position(File.H, Rank.Eight)), Is.EqualTo(ChessPiece.BlackKing));
     }
 
+    // Start position
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
         Color.White, true, true, true, true, false, File.A, Rank.One, 0, 1)]
-    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1",
-        Color.White, false, false, false, false, false, File.A, Rank.One, 0, 1)]
+    // Color
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1",
         Color.White, false, false, false, false, false, File.A, Rank.One, 0, 1)]
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b - - 0 1",
         Color.Black, false, false, false, false, false, File.A, Rank.One, 0, 1)]
+    // Castling
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w K - 0 1",
         Color.White, true, false, false, false, false, File.A, Rank.One, 0, 1)]
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Q - 0 1",
@@ -94,6 +95,24 @@ public class FenTests
         Color.White, true, false, true, false, false, File.A, Rank.One, 0, 1)]
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Qq - 0 1",
         Color.White, false, true, false, true, false, File.A, Rank.One, 0, 1)]
+    // En passant
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a1 0 1",
+        Color.White, true, true, true, true, true, File.A, Rank.One, 0, 1)]
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq d4 0 1",
+        Color.White, true, true, true, true, true, File.D, Rank.Four, 0, 1)]
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq h8 0 1",
+        Color.White, true, true, true, true, true, File.H, Rank.Eight, 0, 1)]
+    // Half move clock
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 9 1",
+        Color.White, true, true, true, true, false, File.A, Rank.One, 9, 1)]
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 37 1",
+        Color.White, true, true, true, true, false, File.A, Rank.One, 37, 1)]
+    // Full move number
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 9",
+        Color.White, true, true, true, true, false, File.A, Rank.One, 0, 9)]
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 37",
+        Color.White, true, true, true, true, false, File.A, Rank.One, 0, 37)]
+    // Complex
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b K c4 12 37",
         Color.Black, true, false, false, false, true, File.C, Rank.Four, 12, 37)]
     public void FromString_ShouldCreateFenWithCorrect_Color_Castling_EnPassant_HalfMove_FullMove_GivenFenString(string fenString,
@@ -112,7 +131,7 @@ public class FenTests
 
         if (enPassantPresent)
         {
-            Assert.That(fen.EnPassantTargetField, Is.EqualTo(new Position(File.C, Rank.Four)));
+            Assert.That(fen.EnPassantTargetField, Is.EqualTo(new Position(enPassantFile, enPassantRank)));
         }
         else
         {
@@ -177,6 +196,102 @@ public class FenTests
         Assert.That(fen.GetChessPiece(new Position(File.F, Rank.One)), Is.EqualTo(ChessPiece.WhiteBishop));
         Assert.That(fen.GetChessPiece(new Position(File.G, Rank.One)), Is.EqualTo(ChessPiece.WhiteKnight));
         Assert.That(fen.GetChessPiece(new Position(File.H, Rank.One)), Is.EqualTo(ChessPiece.WhiteRook));
+
+        #endregion
+    }
+
+    [Test]
+    public void FromString_ShouldCreateFen_GivenFenStringWithComplexPosition()
+    {
+        // Arrange
+        const string fenString = "r1b2r2/1p1nq1b1/1np1p1kp/p7/3PN3/1P2B3/2Q1BPPP/2RR2K1 w - - 4 23";
+
+        // Act
+        var fen = Fen.FromString(fenString);
+
+        // Assert
+        Assert.That(fen.ActiveColor, Is.EqualTo(Color.White));
+        Assert.That(fen.WhiteKingSideCastlingAvailable, Is.False);
+        Assert.That(fen.WhiteQueenSideCastlingAvailable, Is.False);
+        Assert.That(fen.BlackKingSideCastlingAvailable, Is.False);
+        Assert.That(fen.BlackQueenSideCastlingAvailable, Is.False);
+        Assert.That(fen.EnPassantTargetField, Is.Null);
+        Assert.That(fen.HalfMoveClock, Is.EqualTo(4));
+        Assert.That(fen.FullMoveNumber, Is.EqualTo(23));
+
+        #region Chess Pieces Placement
+
+        Assert.That(fen.GetChessPiece(new Position(File.A, Rank.Eight)), Is.EqualTo(ChessPiece.BlackRook));
+        Assert.That(fen.GetChessPiece(new Position(File.B, Rank.Eight)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.C, Rank.Eight)), Is.EqualTo(ChessPiece.BlackBishop));
+        Assert.That(fen.GetChessPiece(new Position(File.D, Rank.Eight)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.E, Rank.Eight)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.F, Rank.Eight)), Is.EqualTo(ChessPiece.BlackRook));
+        Assert.That(fen.GetChessPiece(new Position(File.G, Rank.Eight)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.H, Rank.Eight)), Is.EqualTo(ChessPiece.None));
+
+        Assert.That(fen.GetChessPiece(new Position(File.A, Rank.Seven)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.B, Rank.Seven)), Is.EqualTo(ChessPiece.BlackPawn));
+        Assert.That(fen.GetChessPiece(new Position(File.C, Rank.Seven)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.D, Rank.Seven)), Is.EqualTo(ChessPiece.BlackKnight));
+        Assert.That(fen.GetChessPiece(new Position(File.E, Rank.Seven)), Is.EqualTo(ChessPiece.BlackQueen));
+        Assert.That(fen.GetChessPiece(new Position(File.F, Rank.Seven)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.G, Rank.Seven)), Is.EqualTo(ChessPiece.BlackBishop));
+        Assert.That(fen.GetChessPiece(new Position(File.H, Rank.Seven)), Is.EqualTo(ChessPiece.None));
+
+        Assert.That(fen.GetChessPiece(new Position(File.A, Rank.Six)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.B, Rank.Six)), Is.EqualTo(ChessPiece.BlackKnight));
+        Assert.That(fen.GetChessPiece(new Position(File.C, Rank.Six)), Is.EqualTo(ChessPiece.BlackPawn));
+        Assert.That(fen.GetChessPiece(new Position(File.D, Rank.Six)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.E, Rank.Six)), Is.EqualTo(ChessPiece.BlackPawn));
+        Assert.That(fen.GetChessPiece(new Position(File.F, Rank.Six)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.G, Rank.Six)), Is.EqualTo(ChessPiece.BlackKing));
+        Assert.That(fen.GetChessPiece(new Position(File.H, Rank.Six)), Is.EqualTo(ChessPiece.BlackPawn));
+
+        Assert.That(fen.GetChessPiece(new Position(File.A, Rank.Five)), Is.EqualTo(ChessPiece.BlackPawn));
+        Assert.That(fen.GetChessPiece(new Position(File.B, Rank.Five)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.C, Rank.Five)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.D, Rank.Five)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.E, Rank.Five)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.F, Rank.Five)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.G, Rank.Five)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.H, Rank.Five)), Is.EqualTo(ChessPiece.None));
+
+        Assert.That(fen.GetChessPiece(new Position(File.A, Rank.Four)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.B, Rank.Four)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.C, Rank.Four)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.D, Rank.Four)), Is.EqualTo(ChessPiece.WhitePawn));
+        Assert.That(fen.GetChessPiece(new Position(File.E, Rank.Four)), Is.EqualTo(ChessPiece.WhiteKnight));
+        Assert.That(fen.GetChessPiece(new Position(File.F, Rank.Four)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.G, Rank.Four)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.H, Rank.Four)), Is.EqualTo(ChessPiece.None));
+
+        Assert.That(fen.GetChessPiece(new Position(File.A, Rank.Three)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.B, Rank.Three)), Is.EqualTo(ChessPiece.WhitePawn));
+        Assert.That(fen.GetChessPiece(new Position(File.C, Rank.Three)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.D, Rank.Three)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.E, Rank.Three)), Is.EqualTo(ChessPiece.WhiteBishop));
+        Assert.That(fen.GetChessPiece(new Position(File.F, Rank.Three)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.G, Rank.Three)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.H, Rank.Three)), Is.EqualTo(ChessPiece.None));
+
+        Assert.That(fen.GetChessPiece(new Position(File.A, Rank.Two)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.B, Rank.Two)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.C, Rank.Two)), Is.EqualTo(ChessPiece.WhiteQueen));
+        Assert.That(fen.GetChessPiece(new Position(File.D, Rank.Two)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.E, Rank.Two)), Is.EqualTo(ChessPiece.WhiteBishop));
+        Assert.That(fen.GetChessPiece(new Position(File.F, Rank.Two)), Is.EqualTo(ChessPiece.WhitePawn));
+        Assert.That(fen.GetChessPiece(new Position(File.G, Rank.Two)), Is.EqualTo(ChessPiece.WhitePawn));
+        Assert.That(fen.GetChessPiece(new Position(File.H, Rank.Two)), Is.EqualTo(ChessPiece.WhitePawn));
+
+        Assert.That(fen.GetChessPiece(new Position(File.A, Rank.One)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.B, Rank.One)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.C, Rank.One)), Is.EqualTo(ChessPiece.WhiteRook));
+        Assert.That(fen.GetChessPiece(new Position(File.D, Rank.One)), Is.EqualTo(ChessPiece.WhiteRook));
+        Assert.That(fen.GetChessPiece(new Position(File.E, Rank.One)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.F, Rank.One)), Is.EqualTo(ChessPiece.None));
+        Assert.That(fen.GetChessPiece(new Position(File.G, Rank.One)), Is.EqualTo(ChessPiece.WhiteKing));
+        Assert.That(fen.GetChessPiece(new Position(File.H, Rank.One)), Is.EqualTo(ChessPiece.None));
 
         #endregion
     }
