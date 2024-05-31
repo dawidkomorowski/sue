@@ -1,10 +1,8 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using Sue.Engine.Model;
-using Sue.Engine.OldModel.Chessboard;
 using Sue.Engine.OldModel.Chessboard.Internal;
 using Sue.Engine.OldModel.ChessPiece.Internal;
-using Sue.Engine.OldModel.Fen;
 using Sue.Engine.UnitTests.Common;
 
 namespace Sue.Engine.UnitTests.OldModel.Chessboard
@@ -16,7 +14,7 @@ namespace Sue.Engine.UnitTests.OldModel.Chessboard
         public void ShouldGetChessPieceReturnNull_WhenChessboardEmpty()
         {
             // Arrange
-            var chessboard = ChessboardFactory.Create(FenString.Empty);
+            var chessboard = ChessboardFactory.Create(Fen.Empty);
 
             // Act
             var chessPiece = chessboard.GetChessPiece(File.A, Rank.One);
@@ -49,7 +47,7 @@ namespace Sue.Engine.UnitTests.OldModel.Chessboard
         public void ShouldGetChessboardFieldReturnTheSameField_LikeFieldOfChessPiece()
         {
             // Arrange
-            var chessboard = ChessboardFactory.Create(FenString.StartPos);
+            var chessboard = ChessboardFactory.Create(Fen.StartPos);
             var expectedChessboardField = chessboard.GetChessPiece(File.A, Rank.One).ChessboardField;
 
             // Act
@@ -63,7 +61,7 @@ namespace Sue.Engine.UnitTests.OldModel.Chessboard
         public void ShouldReturnNoChessPieces_WhenChessboardEmpty()
         {
             // Arrange
-            var chessboard = ChessboardFactory.Create(FenString.Empty);
+            var chessboard = ChessboardFactory.Create(Fen.Empty);
 
             // Act
             var whiteChessPieces = chessboard.GetChessPieces(Color.White);
@@ -78,7 +76,7 @@ namespace Sue.Engine.UnitTests.OldModel.Chessboard
         public void ShouldReturnAllWhiteChessPieces_WhenChessboardInInitialState()
         {
             // Arrange
-            var chessboard = ChessboardFactory.Create(FenString.StartPos);
+            var chessboard = ChessboardFactory.Create(Fen.StartPos);
 
             // Act
             var whiteChessPieces = chessboard.GetChessPieces(Color.White);

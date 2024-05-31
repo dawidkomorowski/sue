@@ -19,7 +19,7 @@ public class FenTests
         Assert.That(fen.WhiteQueenSideCastlingAvailable, Is.False);
         Assert.That(fen.BlackKingSideCastlingAvailable, Is.False);
         Assert.That(fen.BlackQueenSideCastlingAvailable, Is.False);
-        Assert.That(fen.EnPassantTargetField, Is.Null);
+        Assert.That(fen.EnPassantTargetPosition, Is.Null);
         Assert.That(fen.HalfMoveClock, Is.Zero);
         Assert.That(fen.FullMoveNumber, Is.EqualTo(1));
 
@@ -41,7 +41,7 @@ public class FenTests
         fen.WhiteQueenSideCastlingAvailable = true;
         fen.BlackKingSideCastlingAvailable = true;
         fen.BlackQueenSideCastlingAvailable = true;
-        fen.EnPassantTargetField = new Position(File.C, Rank.Three);
+        fen.EnPassantTargetPosition = new Position(File.C, Rank.Three);
         fen.HalfMoveClock = 2;
         fen.FullMoveNumber = 3;
 
@@ -58,7 +58,7 @@ public class FenTests
         Assert.That(fen.WhiteQueenSideCastlingAvailable, Is.True);
         Assert.That(fen.BlackKingSideCastlingAvailable, Is.True);
         Assert.That(fen.BlackQueenSideCastlingAvailable, Is.True);
-        Assert.That(fen.EnPassantTargetField, Is.EqualTo(new Position(File.C, Rank.Three)));
+        Assert.That(fen.EnPassantTargetPosition, Is.EqualTo(new Position(File.C, Rank.Three)));
         Assert.That(fen.HalfMoveClock, Is.EqualTo(2));
         Assert.That(fen.FullMoveNumber, Is.EqualTo(3));
 
@@ -68,6 +68,32 @@ public class FenTests
         Assert.That(fen.GetChessPiece(new Position(File.D, Rank.Five)), Is.EqualTo(ChessPiece.BlackKnight));
         Assert.That(fen.GetChessPiece(new Position(File.H, Rank.One)), Is.EqualTo(ChessPiece.BlackQueen));
         Assert.That(fen.GetChessPiece(new Position(File.H, Rank.Eight)), Is.EqualTo(ChessPiece.BlackKing));
+    }
+
+    [TestCase("Xnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "Invalid FEN string 'Xnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' at index 0.")]
+    [TestCase("9nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "Invalid FEN string '9nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' at index 0.")]
+    [TestCase("rnbqkbnrpppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "Invalid FEN string 'rnbqkbnrpppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' at index 8.")]
+    [TestCase("rnbqkbn5/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "Invalid FEN string 'rnbqkbn5/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' at index 7.")]
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR x KQkq - 0 1",
+        "Invalid FEN string 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR x KQkq - 0 1' at index 44.")]
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkX - 0 1",
+        "Invalid FEN string 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkX - 0 1' at index 49.")]
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c 0 1",
+        "Invalid FEN string 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c 0 1' at index 52.")]
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 5x 1",
+        "Invalid FEN string 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 5x 1' at index 54.")]
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 x",
+        "Invalid FEN string 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 x' at index 55.")]
+    public void FromString_ShouldThrowException_GivenInvalidFenString(string fenString, string exception)
+    {
+        // Arrange
+        // Act
+        // Assert
+        Assert.That(() => Fen.FromString(fenString), Throws.ArgumentException.With.Message.EqualTo(exception));
     }
 
     // Start position
@@ -131,11 +157,11 @@ public class FenTests
 
         if (enPassantPresent)
         {
-            Assert.That(fen.EnPassantTargetField, Is.EqualTo(new Position(enPassantFile, enPassantRank)));
+            Assert.That(fen.EnPassantTargetPosition, Is.EqualTo(new Position(enPassantFile, enPassantRank)));
         }
         else
         {
-            Assert.That(fen.EnPassantTargetField, Is.Null);
+            Assert.That(fen.EnPassantTargetPosition, Is.Null);
         }
 
         Assert.That(fen.HalfMoveClock, Is.EqualTo(halfMove));
@@ -155,7 +181,7 @@ public class FenTests
         Assert.That(fen.WhiteQueenSideCastlingAvailable, Is.True);
         Assert.That(fen.BlackKingSideCastlingAvailable, Is.True);
         Assert.That(fen.BlackQueenSideCastlingAvailable, Is.True);
-        Assert.That(fen.EnPassantTargetField, Is.Null);
+        Assert.That(fen.EnPassantTargetPosition, Is.Null);
         Assert.That(fen.HalfMoveClock, Is.EqualTo(0));
         Assert.That(fen.FullMoveNumber, Is.EqualTo(1));
 
@@ -215,7 +241,7 @@ public class FenTests
         Assert.That(fen.WhiteQueenSideCastlingAvailable, Is.False);
         Assert.That(fen.BlackKingSideCastlingAvailable, Is.False);
         Assert.That(fen.BlackQueenSideCastlingAvailable, Is.False);
-        Assert.That(fen.EnPassantTargetField, Is.Null);
+        Assert.That(fen.EnPassantTargetPosition, Is.Null);
         Assert.That(fen.HalfMoveClock, Is.EqualTo(4));
         Assert.That(fen.FullMoveNumber, Is.EqualTo(23));
 

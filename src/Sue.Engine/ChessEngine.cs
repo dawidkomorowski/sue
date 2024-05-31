@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Sue.Engine.Model;
+using Sue.Engine.OldModel;
 using Sue.Engine.OldModel.Chessboard;
 using Sue.Engine.OldModel.Chessboard.Internal;
 using Sue.Engine.OldModel.ChessPiece.Internal;
-using Sue.Engine.OldModel.Fen;
-using Sue.Engine.OldModel.Fen.Internal;
 using Move = Sue.Engine.OldModel.Internal.Move;
 
 namespace Sue.Engine;
@@ -14,22 +13,10 @@ public static class ChessEngine
 {
     public static string? FindMove(string fenString, string uciMoves)
     {
-        if (fenString == "startpos")
-        {
-            fenString = FenString.StartPos;
-        }
-
         IRookMovesFinder rookMovesFinder = new RookMovesFinder();
         IBishopMovesFinder bishopMovesFinder = new BishopMovesFinder();
         IChessPieceFactory chessPieceFactory = new ChessPieceFactory(rookMovesFinder, bishopMovesFinder);
-        IChessPieceParser chessPieceParser = new ChessPieceParser();
-        IRankLineParser rankLineParser = new RankLineParser(chessPieceParser);
-        IFenStringExtractor fenStringExtractor = new FenStringExtractor();
-        ICastlingAvailabilityParser castlingAvailabilityParser = new CastlingAvailabilityParser();
-        IChessFieldParser chessFieldParser = new ChessFieldParser();
-        IFenStringParser fenStringParser = new FenStringParser(rankLineParser, fenStringExtractor,
-            castlingAvailabilityParser, chessFieldParser);
-        var chessboardFactory = new ChessboardFactory(chessPieceFactory, fenStringParser);
+        var chessboardFactory = new ChessboardFactory(chessPieceFactory);
 
         var chessboard = chessboardFactory.Create(fenString);
         PlayUciMoves(chessboard, uciMoves);

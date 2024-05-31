@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sue.Engine.Model;
 
-internal readonly struct Position : IEquatable<Position>
+public readonly struct Position : IEquatable<Position>
 {
     public Position(File file, Rank rank)
     {

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NLog;
 using Sue.Engine;
+using Sue.Engine.Model;
 using Sue.Lichess.Api;
 using Sue.Lichess.Api.GameEvents;
 
@@ -117,7 +118,7 @@ internal sealed class GameWorker
 
     private async Task HandleEventAsync(GameFullEvent gameFullEvent)
     {
-        _initialFen = gameFullEvent.InitialFen;
+        _initialFen = gameFullEvent.InitialFen == "startpos" ? Fen.StartPos : gameFullEvent.InitialFen;
         _myColorIsWhite = gameFullEvent.WhiteId == _botId;
 
         await TryMakeMoveAsync(gameFullEvent.Moves);

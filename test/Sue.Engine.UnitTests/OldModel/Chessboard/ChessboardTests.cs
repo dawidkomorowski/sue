@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
+using Sue.Engine.Model;
 using Sue.Engine.OldModel.Chessboard;
-using Sue.Engine.OldModel.Fen;
 using Sue.Engine.UnitTests.Common;
 
 namespace Sue.Engine.UnitTests.OldModel.Chessboard
@@ -8,8 +8,8 @@ namespace Sue.Engine.UnitTests.OldModel.Chessboard
     [TestFixture]
     public class ChessboardTests : CommonTestsBase
     {
-        [TestCase(FenString.Empty, FenString.Empty, true)]
-        [TestCase(FenString.StartPos, FenString.StartPos, true)]
+        [TestCase(Fen.Empty, Fen.Empty, true)]
+        [TestCase(Fen.StartPos, Fen.StartPos, true)]
         [TestCase("8/8/8/8/8/8/8/8 w KQkq - 0 1", "8/8/8/8/8/8/8/8 b KQkq - 0 1", false)]
         [TestCase("8/8/8/8/8/8/8/8 w KQkq - 0 1", "8/8/8/8/8/8/8/8 w Qkq - 0 1", false)]
         [TestCase("8/8/8/8/8/8/8/8 w KQkq - 0 1", "8/8/8/8/8/8/8/8 w Kkq - 0 1", false)]
