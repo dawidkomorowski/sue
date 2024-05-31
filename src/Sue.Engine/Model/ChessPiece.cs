@@ -40,6 +40,34 @@ internal static class ChessPieceExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(chessPiece), chessPiece, null)
         };
     }
+
+    public static bool IsWhite(this ChessPiece chessPiece)
+    {
+        return chessPiece switch
+        {
+            ChessPiece.WhiteKing => true,
+            ChessPiece.WhiteQueen => true,
+            ChessPiece.WhiteRook => true,
+            ChessPiece.WhiteBishop => true,
+            ChessPiece.WhiteKnight => true,
+            ChessPiece.WhitePawn => true,
+            _ => false
+        };
+    }
+
+    public static bool IsBlack(this ChessPiece chessPiece)
+    {
+        return chessPiece switch
+        {
+            ChessPiece.BlackKing => true,
+            ChessPiece.BlackQueen => true,
+            ChessPiece.BlackRook => true,
+            ChessPiece.BlackBishop => true,
+            ChessPiece.BlackKnight => true,
+            ChessPiece.BlackPawn => true,
+            _ => false
+        };
+    }
 }
 
 internal static class CharExtensionsForChessPiece

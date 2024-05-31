@@ -1,4 +1,6 @@
-﻿namespace Sue.Engine.Model;
+﻿using System;
+
+namespace Sue.Engine.Model;
 
 internal sealed class Chessboard
 {
@@ -63,6 +65,66 @@ internal sealed class Chessboard
         fen.FullMoveNumber = FullMoveNumber;
 
         return fen;
+    }
+
+    public void MakeMove(Move move)
+    {
+        var cpFrom = GetChessPiece(move.From);
+        var cpTo = GetChessPiece(move.To);
+
+        if (move.IsWhiteKingSideCastling)
+        {
+            if (cpFrom is ChessPiece.WhiteKing && WhiteKingSideCastlingAvailable)
+            {
+                SetChessPiece(new Position(File.E, Rank.One), ChessPiece.None);
+                SetChessPiece(new Position(File.G, Rank.One), ChessPiece.WhiteKing);
+                SetChessPiece(new Position(File.H, Rank.One), ChessPiece.None);
+                SetChessPiece(new Position(File.F, Rank.One), ChessPiece.WhiteRook);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Invalid move '{move.ToUci()}' in position '{ToFen()}'.");
+            }
+        }
+        else
+        {
+            SetChessPiece(move.From, ChessPiece.None);
+            SetChessPiece(move.To, cpFrom);
+        }
+
+        if (cpFrom is ChessPiece.WhiteKing)
+        {
+            WhiteKingSideCastlingAvailable = false;
+            WhiteQueenSideCastlingAvailable = false;
+        }
+
+        if (cpFrom is ChessPiece.BlackKing)
+        {
+            BlackKingSideCastlingAvailable = false;
+            BlackQueenSideCastlingAvailable = false;
+        }
+
+        // Update HalfMoveClock
+        HalfMoveClock++;
+
+        if (cpFrom is ChessPiece.WhitePawn || cpFrom is ChessPiece.BlackPawn)
+        {
+            HalfMoveClock = 0;
+        }
+
+        if ((cpFrom.IsWhite() && cpTo.IsBlack()) || (cpFrom.IsBlack() && cpTo.IsWhite()))
+        {
+            HalfMoveClock = 0;
+        }
+
+        // Update FullMoveNumber
+        if (ActiveColor is Color.Black)
+        {
+            FullMoveNumber++;
+        }
+
+        // Update ActiveColor
+        ActiveColor = ActiveColor.Opposite();
     }
 
     private static int GetIndex(Position position)

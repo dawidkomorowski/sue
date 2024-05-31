@@ -183,7 +183,7 @@ public sealed class Fen
 
         while (fileIndex < 8)
         {
-            if (!validRankLineCharacters.Contains(fenString[index]))
+            if (fenString.Length <= index || !validRankLineCharacters.Contains(fenString[index]))
             {
                 throw CreateParsingError(fenString, index);
             }

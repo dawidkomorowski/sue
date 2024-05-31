@@ -17,6 +17,8 @@ internal readonly struct Move : IEquatable<Move>
     public Position To { get; }
     public Promotion Promotion { get; }
 
+    public bool IsWhiteKingSideCastling => From is { File: File.E, Rank: Rank.One } && To is { File: File.G, Rank: Rank.One };
+
     public static Move ParseUciMove(string uciMove)
     {
         uciMove = uciMove.Trim().ToLowerInvariant();
