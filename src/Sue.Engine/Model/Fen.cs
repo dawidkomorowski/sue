@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Sue.Engine.Model;
 
@@ -50,7 +51,103 @@ public sealed class Fen
 
     public override string ToString()
     {
-        throw new NotImplementedException("TODO");
+        var fenString = new StringBuilder();
+
+        foreach (var rank in new[] { Rank.Eight, Rank.Seven, Rank.Six, Rank.Five, Rank.Four, Rank.Three, Rank.Two, Rank.One })
+        {
+            var emptyFields = 0;
+            foreach (var file in FileExtensions.Files())
+            {
+                var chessPiece = GetChessPiece(new Position(file, rank));
+                if (chessPiece is ChessPiece.None)
+                {
+                    emptyFields++;
+                }
+                else
+                {
+                    if (emptyFields != 0)
+                    {
+                        fenString.Append(emptyFields);
+                        emptyFields = 0;
+                    }
+
+                    fenString.Append(chessPiece.ToChar());
+                }
+            }
+
+            if (emptyFields != 0)
+            {
+                fenString.Append(emptyFields);
+            }
+
+            if (rank is not Rank.One)
+            {
+                fenString.Append('/');
+            }
+        }
+
+        fenString.Append(' ');
+
+        switch (ActiveColor)
+        {
+            case Color.White:
+                fenString.Append('w');
+                break;
+            case Color.Black:
+                fenString.Append('b');
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        fenString.Append(' ');
+
+        if (WhiteKingSideCastlingAvailable is false && WhiteQueenSideCastlingAvailable is false && BlackKingSideCastlingAvailable is false &&
+            BlackQueenSideCastlingAvailable is false)
+        {
+            fenString.Append('-');
+        }
+        else
+        {
+            if (WhiteKingSideCastlingAvailable)
+            {
+                fenString.Append('K');
+            }
+
+            if (WhiteQueenSideCastlingAvailable)
+            {
+                fenString.Append('Q');
+            }
+
+            if (BlackKingSideCastlingAvailable)
+            {
+                fenString.Append('k');
+            }
+
+            if (BlackQueenSideCastlingAvailable)
+            {
+                fenString.Append('q');
+            }
+        }
+
+        fenString.Append(' ');
+
+        if (EnPassantTargetPosition.HasValue)
+        {
+            fenString.Append(EnPassantTargetPosition.Value.File.ToChar());
+            fenString.Append(EnPassantTargetPosition.Value.Rank.ToChar());
+        }
+        else
+        {
+            fenString.Append('-');
+        }
+
+        fenString.Append(' ');
+        fenString.Append(HalfMoveClock);
+        fenString.Append(' ');
+        fenString.Append(FullMoveNumber);
+
+        return fenString.ToString();
     }
 
     private static int GetIndex(Position position)

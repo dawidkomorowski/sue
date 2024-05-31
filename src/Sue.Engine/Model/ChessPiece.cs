@@ -19,6 +19,29 @@ public enum ChessPiece
     BlackPawn
 }
 
+internal static class ChessPieceExtensions
+{
+    public static char ToChar(this ChessPiece chessPiece)
+    {
+        return chessPiece switch
+        {
+            ChessPiece.WhiteKing => 'K',
+            ChessPiece.WhiteQueen => 'Q',
+            ChessPiece.WhiteRook => 'R',
+            ChessPiece.WhiteBishop => 'B',
+            ChessPiece.WhiteKnight => 'N',
+            ChessPiece.WhitePawn => 'P',
+            ChessPiece.BlackKing => 'k',
+            ChessPiece.BlackQueen => 'q',
+            ChessPiece.BlackRook => 'r',
+            ChessPiece.BlackBishop => 'b',
+            ChessPiece.BlackKnight => 'n',
+            ChessPiece.BlackPawn => 'p',
+            _ => throw new ArgumentOutOfRangeException(nameof(chessPiece), chessPiece, null)
+        };
+    }
+}
+
 internal static class CharExtensionsForChessPiece
 {
     public static ChessPiece ToChessPiece(this char c)
