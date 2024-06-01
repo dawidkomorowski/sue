@@ -111,6 +111,42 @@ public class ChessboardTests
         Assert.That(fen2.ToString(), Is.EqualTo(fenString));
     }
 
+    // White rook move makes white king side castling not available
+    [TestCase("rnbqkbnr/ppppppp1/8/7p/7P/8/PPPPPPP1/RNBQKBNR w KQkq - 0 2", "h1h3", "rnbqkbnr/ppppppp1/8/7p/7P/7R/PPPPPPP1/RNBQKBN1 b Qkq - 1 2")]
+    // White rook move makes white queen side castling not available
+    [TestCase("rnbqkbnr/1ppppppp/8/p7/P7/8/1PPPPPPP/RNBQKBNR w KQkq - 0 2", "a1a3", "rnbqkbnr/1ppppppp/8/p7/P7/R7/1PPPPPPP/1NBQKBNR b Kkq - 1 2")]
+    // White king move makes white castling not available
+    [TestCase("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2", "e1e2", "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPPKPPP/RNBQ1BNR b kq - 1 2")]
+    // White king side castling makes white castling not available
+    [TestCase("rnbqk2r/pppp1ppp/3bpn2/8/8/3BPN2/PPPP1PPP/RNBQK2R w KQkq - 4 4", "e1g1", "rnbqk2r/pppp1ppp/3bpn2/8/8/3BPN2/PPPP1PPP/RNBQ1RK1 b kq - 5 4")]
+    // White queen side castling makes white castling not available
+    [TestCase("r3kbnr/pp2pppp/n1ppb3/q7/Q7/N1PPB3/PP2PPPP/R3KBNR w KQkq - 6 6", "e1c1", "r3kbnr/pp2pppp/n1ppb3/q7/Q7/N1PPB3/PP2PPPP/2KR1BNR b kq - 7 6")]
+    // Black rook move makes black king side castling not available
+    [TestCase("rnbqkbnr/ppppppp1/8/7p/7P/6P1/PPPPPP2/RNBQKBNR b KQkq - 0 2", "h8h6", "rnbqkbn1/ppppppp1/7r/7p/7P/6P1/PPPPPP2/RNBQKBNR w KQq - 1 3")]
+    // Black rook move makes black queen side castling not available
+    [TestCase("rnbqkbnr/1ppppppp/8/p7/P7/1P6/2PPPPPP/RNBQKBNR b KQkq - 0 2", "a8a6", "1nbqkbnr/1ppppppp/r7/p7/P7/1P6/2PPPPPP/RNBQKBNR w KQk - 1 3")]
+    // Black king move makes black castling not available
+    [TestCase("rnbqkbnr/pppp1ppp/8/4p3/4P3/3P4/PPP2PPP/RNBQKBNR b KQkq - 0 2", "e8e7", "rnbq1bnr/ppppkppp/8/4p3/4P3/3P4/PPP2PPP/RNBQKBNR w KQ - 1 3")]
+    // Black king side castling makes black castling not available
+    [TestCase("rnbqk2r/ppppbppp/4pn2/8/8/3PPN2/PPP1BPPP/RNBQK2R b KQkq - 0 4", "e8g8", "rnbq1rk1/ppppbppp/4pn2/8/8/3PPN2/PPP1BPPP/RNBQK2R w KQ - 1 5")]
+    // Black queen side castling makes black castling not available
+    [TestCase("r3kbnr/pbqppppp/npp5/8/8/NPPP4/PBQ1PPPP/R3KBNR b KQkq - 0 6", "e8c8", "2kr1bnr/pbqppppp/npp5/8/8/NPPP4/PBQ1PPPP/R3KBNR w KQ - 1 7")]
+    // White pawn creates en passant on the left
+    [TestCase("rnbqkbnr/ppp1pppp/8/7P/3p4/8/PPPPPPP1/RNBQKBNR w KQkq - 0 3", "e2e4", "rnbqkbnr/ppp1pppp/8/7P/3pP3/8/PPPP1PP1/RNBQKBNR b KQkq e3 0 3")]
+    // White pawn creates en passant on the right
+    [TestCase("rnbqkbnr/ppp1pppp/8/7P/3p4/8/PPPPPPP1/RNBQKBNR w KQkq - 0 3", "c2c4", "rnbqkbnr/ppp1pppp/8/7P/2Pp4/8/PP1PPPP1/RNBQKBNR b KQkq c3 0 3")]
+    // White pawn captures en passant on the right
+    [TestCase("rnbqkbnr/pppp1pp1/8/3Pp2p/8/8/PPP1PPPP/RNBQKBNR w KQkq e6 0 3", "d5e6", "rnbqkbnr/pppp1pp1/4P3/7p/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 3")]
+    // White pawn captures en passant on the left
+    [TestCase("rnbqkbnr/pp1pppp1/8/2pP3p/8/8/PPP1PPPP/RNBQKBNR w KQkq c6 0 3", "d5c6", "rnbqkbnr/pp1pppp1/2P5/7p/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 3")]
+    // Black pawn creates en passant on the left
+    [TestCase("rnbqkbnr/ppppppp1/8/3P3p/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2", "e7e5", "rnbqkbnr/pppp1pp1/8/3Pp2p/8/8/PPP1PPPP/RNBQKBNR w KQkq e6 0 3")]
+    // Black pawn creates en passant on the right
+    [TestCase("rnbqkbnr/ppppppp1/8/3P3p/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2", "c7c5", "rnbqkbnr/pp1pppp1/8/2pP3p/8/8/PPP1PPPP/RNBQKBNR w KQkq c6 0 3")]
+    // Black pawn captures en passant on the right
+    [TestCase("rnbqkbnr/ppp1pppp/8/7P/3pP3/8/PPPP1PP1/RNBQKBNR b KQkq e3 0 3", "d4e3", "rnbqkbnr/ppp1pppp/8/7P/8/4p3/PPPP1PP1/RNBQKBNR w KQkq - 0 4")]
+    // Black pawn captures en passant on the left
+    [TestCase("rnbqkbnr/ppp1pppp/8/7P/2Pp4/8/PP1PPPP1/RNBQKBNR b KQkq c3 0 3", "d4c3", "rnbqkbnr/ppp1pppp/8/7P/8/2p5/PP1PPPP1/RNBQKBNR w KQkq - 0 4")]
     // Chess game: https://lichess.org/wHn35ZRJ
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "e2e4", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")]
     [TestCase("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", "e7e6", "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")]

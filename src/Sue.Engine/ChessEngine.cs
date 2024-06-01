@@ -13,47 +13,30 @@ public static class ChessEngine
 {
     public static string? FindMove(string fenString, string uciMoves)
     {
+        var fen = Fen.FromString(fenString);
+        var moves = Model.Move.ParseUciMoves(uciMoves);
+        var chessboard = Chessboard.FromFen(fen);
+
+        foreach (var move in moves)
+        {
+            chessboard.MakeMove(move);
+        }
+
         IRookMovesFinder rookMovesFinder = new RookMovesFinder();
         IBishopMovesFinder bishopMovesFinder = new BishopMovesFinder();
         IChessPieceFactory chessPieceFactory = new ChessPieceFactory(rookMovesFinder, bishopMovesFinder);
         var chessboardFactory = new ChessboardFactory(chessPieceFactory);
+        var chessboardOld = chessboardFactory.Create(chessboard.ToFen().ToString());
 
-        var chessboard = chessboardFactory.Create(fenString);
-        PlayUciMoves(chessboard, uciMoves);
+        var availableMoves = chessboardOld.GetChessPieces(chessboardOld.CurrentPlayer).SelectMany(cp => cp.Moves).ToList();
+        var bestMove = availableMoves.MinBy(_ => Guid.NewGuid());
 
-        var availableMoves = chessboard.GetChessPieces(chessboard.CurrentPlayer).SelectMany(cp => cp.Moves).ToList();
-        var move = availableMoves.MinBy(_ => Guid.NewGuid());
-
-        if (move == null)
+        if (bestMove == null)
         {
             return null;
         }
 
-        var p0 = move.From.File.ToString().ToLower();
-        var p1 = (move.From.Rank.Index() + 1).ToString();
-        var p2 = move.To.File.ToString().ToLower();
-        var p3 = (move.To.Rank.Index() + 1).ToString();
-
-        return $"{p0}{p1}{p2}{p3}";
-    }
-
-    private static void PlayUciMoves(IChessboard chessboard, string uciMoves)
-    {
-        if (string.IsNullOrWhiteSpace(uciMoves))
-        {
-            return;
-        }
-
-        var moves = uciMoves.Split(" ");
-        foreach (var move in moves)
-        {
-            if (move.Length != 4)
-            {
-                throw new InvalidOperationException($"Unsupported UCI move: {move}");
-            }
-
-            var chessPiece = chessboard.GetChessPiece(move[0].ToFile(), move[1].ToRank());
-            chessPiece.MakeMove(new Move(chessPiece.ChessboardField, chessboard.GetChessboardField(move[2].ToFile(), move[3].ToRank())));
-        }
+        var bm = new Model.Move(new Position(bestMove.From.File, bestMove.From.Rank), new Position(bestMove.To.File, bestMove.To.Rank));
+        return bm.ToUci();
     }
 }
