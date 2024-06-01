@@ -149,11 +149,7 @@ internal sealed class GameWorker
 
     private bool IsItMyTurn(string moves)
     {
-        if (string.IsNullOrWhiteSpace(moves))
-        {
-            return _myColorIsWhite;
-        }
-
-        return (moves.Split(" ").Length % 2 == 0) == _myColorIsWhite;
+        var activeColor = ChessEngine.GetActiveColor(_initialFen, moves);
+        return (_myColorIsWhite && activeColor is Color.White) || (!_myColorIsWhite && activeColor is Color.Black);
     }
 }
