@@ -90,6 +90,8 @@ internal sealed class Chessboard
         {
             SetChessPiece(move.From, ChessPiece.None);
             SetChessPiece(move.To, cpFrom);
+
+            EnPassantTargetPosition = null;
         }
 
         if (cpFrom is ChessPiece.WhiteKing)
@@ -102,6 +104,31 @@ internal sealed class Chessboard
         {
             BlackKingSideCastlingAvailable = false;
             BlackQueenSideCastlingAvailable = false;
+        }
+
+        if (cpFrom is ChessPiece.WhitePawn && move.From.Rank is Rank.Two && move.To.Rank is Rank.Four)
+        {
+            var fileIndex = move.To.File.Index();
+            var left = fileIndex - 1;
+            var right = fileIndex + 1;
+
+            if (left >= 0)
+            {
+                var cpLeft = GetChessPiece(new Position(left.ToFile(), Rank.Four));
+                if (cpLeft is ChessPiece.BlackPawn)
+                {
+                    EnPassantTargetPosition = new Position(move.From.File, Rank.Three);
+                }
+            }
+
+            if (right < 8)
+            {
+                var cpRight = GetChessPiece(new Position(right.ToFile(), Rank.Four));
+                if (cpRight is ChessPiece.BlackPawn)
+                {
+                    EnPassantTargetPosition = new Position(move.From.File, Rank.Three);
+                }
+            }
         }
 
         // Update HalfMoveClock
