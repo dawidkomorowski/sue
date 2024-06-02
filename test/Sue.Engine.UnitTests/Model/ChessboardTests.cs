@@ -147,6 +147,8 @@ public class ChessboardTests
     [TestCase("rnbqkbnr/ppp1pppp/8/7P/3pP3/8/PPPP1PP1/RNBQKBNR b KQkq e3 0 3", "d4e3", "rnbqkbnr/ppp1pppp/8/7P/8/4p3/PPPP1PP1/RNBQKBNR w KQkq - 0 4")]
     // Black pawn captures en passant on the left
     [TestCase("rnbqkbnr/ppp1pppp/8/7P/2Pp4/8/PP1PPPP1/RNBQKBNR b KQkq c3 0 3", "d4c3", "rnbqkbnr/ppp1pppp/8/7P/8/2p5/PP1PPPP1/RNBQKBNR w KQkq - 0 4")]
+    // Move pattern looks like castling but it is not TODO Add rest of such cases
+    [TestCase("rnbqr3/ppppk2p/3b3n/4ppp1/4PPP1/3B3N/PPPPK2P/RNBQR3 w - - 8 8", "e1g1", "rnbqr3/ppppk2p/3b3n/4ppp1/4PPP1/3B3N/PPPPK2P/RNBQ2R1 b - - 9 8")]
     // White pawn promotion without capture
     [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7h8q", "rnbqkbnQ/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
     [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7h8r", "rnbqkbnR/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
