@@ -72,6 +72,11 @@ internal sealed class Chessboard
         var cpFrom = GetChessPiece(move.From);
         var cpTo = GetChessPiece(move.To);
 
+        if (cpFrom is ChessPiece.None)
+        {
+            throw CreateInvalidMoveError(move);
+        }
+
         if (ActiveColor is Color.White && cpFrom.IsBlack())
         {
             throw CreateInvalidMoveError(move);
@@ -82,7 +87,43 @@ internal sealed class Chessboard
             throw CreateInvalidMoveError(move);
         }
 
-        // Perform move
+        if (cpFrom.IsWhite() && cpTo.IsWhite())
+        {
+            throw CreateInvalidMoveError(move);
+        }
+
+        if (cpFrom.IsBlack() && cpTo.IsBlack())
+        {
+            throw CreateInvalidMoveError(move);
+        }
+
+        PerformMove(move, cpFrom);
+        UpdateCastlingAvailability(move, cpFrom);
+        UpdateEnPassantTargetPosition(move, cpFrom);
+        UpdateHalfMoveClock(cpFrom, cpTo);
+
+        // Update FullMoveNumber
+        if (ActiveColor is Color.Black)
+        {
+            FullMoveNumber++;
+        }
+
+        // Update ActiveColor
+        ActiveColor = ActiveColor.Opposite();
+    }
+
+    private static int GetIndex(Position position)
+    {
+        return position.File.Index() * 8 + position.Rank.Index();
+    }
+
+    private InvalidOperationException CreateInvalidMoveError(Move move)
+    {
+        return new InvalidOperationException($"Invalid move '{move.ToUci()}' in position '{ToFen()}'.");
+    }
+
+    private void PerformMove(Move move, ChessPiece cpFrom)
+    {
         if (move.IsWhiteKingSideCastling)
         {
             if (cpFrom is ChessPiece.WhiteKing && WhiteKingSideCastlingAvailable)
@@ -151,13 +192,41 @@ internal sealed class Chessboard
             SetChessPiece(move.To, cpFrom);
             SetChessPiece(new Position(EnPassantTargetPosition.Value.File, EnPassantTargetPosition.Value.Rank.Add(1)), ChessPiece.None);
         }
+        else if (cpFrom is ChessPiece.WhitePawn && move.Promotion is not Promotion.None)
+        {
+            SetChessPiece(move.From, ChessPiece.None);
+            var cpPromoted = move.Promotion switch
+            {
+                Promotion.Queen => ChessPiece.WhiteQueen,
+                Promotion.Rook => ChessPiece.WhiteRook,
+                Promotion.Bishop => ChessPiece.WhiteBishop,
+                Promotion.Knight => ChessPiece.WhiteKnight,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            SetChessPiece(move.To, cpPromoted);
+        }
+        else if (cpFrom is ChessPiece.BlackPawn && move.Promotion is not Promotion.None)
+        {
+            SetChessPiece(move.From, ChessPiece.None);
+            var cpPromoted = move.Promotion switch
+            {
+                Promotion.Queen => ChessPiece.BlackQueen,
+                Promotion.Rook => ChessPiece.BlackRook,
+                Promotion.Bishop => ChessPiece.BlackBishop,
+                Promotion.Knight => ChessPiece.BlackKnight,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            SetChessPiece(move.To, cpPromoted);
+        }
         else
         {
             SetChessPiece(move.From, ChessPiece.None);
             SetChessPiece(move.To, cpFrom);
         }
+    }
 
-        // Update castling availability
+    private void UpdateCastlingAvailability(Move move, ChessPiece cpFrom)
+    {
         if (cpFrom is ChessPiece.WhiteRook && move.From is { File: File.H, Rank: Rank.One })
         {
             WhiteKingSideCastlingAvailable = false;
@@ -189,8 +258,10 @@ internal sealed class Chessboard
             BlackKingSideCastlingAvailable = false;
             BlackQueenSideCastlingAvailable = false;
         }
+    }
 
-        // Update EnPassantTargetPosition
+    private void UpdateEnPassantTargetPosition(Move move, ChessPiece cpFrom)
+    {
         EnPassantTargetPosition = null;
 
         if (cpFrom is ChessPiece.WhitePawn && move.From.Rank is Rank.Two && move.To.Rank is Rank.Four)
@@ -242,11 +313,13 @@ internal sealed class Chessboard
                 }
             }
         }
+    }
 
-        // Update HalfMoveClock
+    private void UpdateHalfMoveClock(ChessPiece cpFrom, ChessPiece cpTo)
+    {
         HalfMoveClock++;
 
-        if (cpFrom is ChessPiece.WhitePawn || cpFrom is ChessPiece.BlackPawn)
+        if (cpFrom is ChessPiece.WhitePawn or ChessPiece.BlackPawn)
         {
             HalfMoveClock = 0;
         }
@@ -255,24 +328,5 @@ internal sealed class Chessboard
         {
             HalfMoveClock = 0;
         }
-
-        // Update FullMoveNumber
-        if (ActiveColor is Color.Black)
-        {
-            FullMoveNumber++;
-        }
-
-        // Update ActiveColor
-        ActiveColor = ActiveColor.Opposite();
-    }
-
-    private static int GetIndex(Position position)
-    {
-        return position.File.Index() * 8 + position.Rank.Index();
-    }
-
-    private InvalidOperationException CreateInvalidMoveError(Move move)
-    {
-        return new InvalidOperationException($"Invalid move '{move.ToUci()}' in position '{ToFen()}'.");
     }
 }

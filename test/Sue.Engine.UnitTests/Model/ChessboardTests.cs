@@ -147,6 +147,26 @@ public class ChessboardTests
     [TestCase("rnbqkbnr/ppp1pppp/8/7P/3pP3/8/PPPP1PP1/RNBQKBNR b KQkq e3 0 3", "d4e3", "rnbqkbnr/ppp1pppp/8/7P/8/4p3/PPPP1PP1/RNBQKBNR w KQkq - 0 4")]
     // Black pawn captures en passant on the left
     [TestCase("rnbqkbnr/ppp1pppp/8/7P/2Pp4/8/PP1PPPP1/RNBQKBNR b KQkq c3 0 3", "d4c3", "rnbqkbnr/ppp1pppp/8/7P/8/2p5/PP1PPPP1/RNBQKBNR w KQkq - 0 4")]
+    // White pawn promotion without capture
+    [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7h8q", "rnbqkbnQ/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
+    [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7h8r", "rnbqkbnR/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
+    [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7h8b", "rnbqkbnB/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
+    [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7h8n", "rnbqkbnN/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
+    // White pawn promotion with capture
+    [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7g8q", "rnbqkbQ1/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
+    [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7g8r", "rnbqkbR1/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
+    [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7g8b", "rnbqkbB1/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
+    [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7g8n", "rnbqkbN1/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
+    // Black pawn promotion without capture
+    [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2a1q", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/qNBQKBNR w Kkq - 0 6")]
+    [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2a1r", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/rNBQKBNR w Kkq - 0 6")]
+    [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2a1b", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/bNBQKBNR w Kkq - 0 6")]
+    [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2a1n", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/nNBQKBNR w Kkq - 0 6")]
+    // Black pawn promotion with capture
+    [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2b1q", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/1qBQKBNR w Kkq - 0 6")]
+    [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2b1r", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/1rBQKBNR w Kkq - 0 6")]
+    [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2b1b", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/1bBQKBNR w Kkq - 0 6")]
+    [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2b1n", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/1nBQKBNR w Kkq - 0 6")]
     // Chess game: https://lichess.org/wHn35ZRJ
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "e2e4", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")]
     [TestCase("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", "e7e6", "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")]
