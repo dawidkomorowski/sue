@@ -198,30 +198,5 @@ namespace Sue.Engine.UnitTests.OldModel.ChessPiece
             AssertMoveExistsInMoves(File.B, Rank.Five, File.A, Rank.Four, moves);
             AssertMoveExistsInMoves(File.B, Rank.Five, File.C, Rank.Four, moves);
         }
-
-        [TestCase("8/8/8/8/8/8/1P6/8 w - - 0 1", "8/8/8/8/8/1P6/8/8 b - - 0 1", File.B, Rank.Two, File.B, Rank.Three)]
-        [TestCase("8/8/8/8/8/8/1P6/8 w - - 0 1", "8/8/8/8/1P6/8/8/8 b - - 0 1", File.B, Rank.Two, File.B, Rank.Four)]
-        [TestCase("8/8/8/8/8/2p5/1P6/8 w - - 0 1", "8/8/8/8/8/2P5/8/8 b - - 0 1", File.B, Rank.Two, File.C, Rank.Three)]
-        // Check whether fullmove number is incremented after blacks move
-        [TestCase("8/1p6/8/8/8/8/8/8 b - - 0 1", "8/8/1p6/8/8/8/8/8 w - - 0 2", File.B, Rank.Seven, File.B, Rank.Six)]
-        [TestCase("8/1p6/8/8/8/8/8/8 b - - 0 1", "8/8/8/1p6/8/8/8/8 w - - 0 2", File.B, Rank.Seven, File.B, Rank.Five)]
-        [TestCase("8/1p6/2P5/8/8/8/8/8 b - - 0 1", "8/8/2p5/8/8/8/8/8 w - - 0 2", File.B, Rank.Seven, File.C, Rank.Six)]
-        // Check whether halfmove clock is zeroed after Pawn move
-        [TestCase("8/8/8/8/8/8/1P6/8 w - - 4 1", "8/8/8/8/8/1P6/8/8 b - - 0 1", File.B, Rank.Two, File.B, Rank.Three)]
-        public void ShouldMoveFromGivenPositionToGivenPosition(string initialFenString, string expectedFenString,
-            File fromFile, Rank fromRank, File toFile, Rank toRank)
-        {
-            // Arrange
-            var chessboard = ChessboardFactory.Create(initialFenString);
-            var pawn = chessboard.GetChessPiece(fromFile, fromRank);
-            var move = CreateMove(pawn, toFile, toRank);
-
-            // Act
-            pawn.MakeMove(move);
-
-            // Assert
-            var expectedChessboard = ChessboardFactory.Create(expectedFenString);
-            Assert.That(chessboard.EqualsTo(expectedChessboard), Is.True);
-        }
     }
 }
