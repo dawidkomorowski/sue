@@ -172,6 +172,22 @@ public class ChessboardTests
     [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2b1r", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/1rBQKBNR w Kkq - 0 6")]
     [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2b1b", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/1bBQKBNR w Kkq - 0 6")]
     [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2b1n", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/1nBQKBNR w Kkq - 0 6")]
+    // Half move clock is incremented after white knight move
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "b1c3", "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1")]
+    // Half move clock is incremented after black knight move
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1", "b8c6", "r1bqkbnr/pppppppp/2n5/8/8/2N5/PPPPPPPP/R1BQKBNR w KQkq - 2 2")]
+    // Half move clock is reset after white pawn move
+    [TestCase("r1bqkbnr/pppppppp/2n5/8/8/2N5/PPPPPPPP/R1BQKBNR w KQkq - 2 2", "e2e4", "r1bqkbnr/pppppppp/2n5/8/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 2")]
+    // Half move clock is reset after black pawn move
+    [TestCase("r1bqkbnr/pppppppp/2n5/8/8/2N2N2/PPPPPPPP/R1BQKB1R b KQkq - 3 2", "e7e6", "r1bqkbnr/pppp1ppp/2n1p3/8/8/2N2N2/PPPPPPPP/R1BQKB1R w KQkq - 0 3")]
+    // Half move clock is reset after white capture
+    [TestCase("r1bqkb1r/pppppppp/5n2/3Nn3/8/5N2/PPPPPPPP/R1BQKB1R w KQkq - 6 4", "f3e5", "r1bqkb1r/pppppppp/5n2/3NN3/8/8/PPPPPPPP/R1BQKB1R b KQkq - 0 4")]
+    // Half move clock is reset after black capture
+    [TestCase("r1bqkb1r/pppppppp/2n2n2/3N4/8/5N2/PPPPPPPP/R1BQKB1R b KQkq - 5 3", "f6d5", "r1bqkb1r/pppppppp/2n5/3n4/8/5N2/PPPPPPPP/R1BQKB1R w KQkq - 0 4")]
+    // Full move number is not incremented after white move
+    [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "e2e4", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")]
+    // Full move number is incremented after black move
+    [TestCase("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", "e7e5", "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")]
     // Chess game: https://lichess.org/wHn35ZRJ
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "e2e4", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")]
     [TestCase("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", "e7e6", "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")]
