@@ -384,18 +384,27 @@ internal sealed class Chessboard
         if (pawn.IsWhite())
         {
             var front = position.MoveUp();
-            var front2 = front.MoveUp();
 
-            if (position.Rank is Rank.Two && GetChessPiece(front) is ChessPiece.None && GetChessPiece(front2) is ChessPiece.None)
-            {
-                moves.Add(new Move(position, front2));
-            }
-
-            if (position.Rank is not Rank.Seven)
+            if (position.Rank is Rank.Seven)
             {
                 if (GetChessPiece(front) is ChessPiece.None)
                 {
-                    moves.Add(new Move(position, front));
+                    moves.Add(new Move(position, front, Promotion.Queen));
+                    moves.Add(new Move(position, front, Promotion.Rook));
+                    moves.Add(new Move(position, front, Promotion.Bishop));
+                    moves.Add(new Move(position, front, Promotion.Knight));
+                }
+
+                if (position.File is not File.A)
+                {
+                    var frontLeft = front.MoveLeft();
+                    if (GetChessPiece(frontLeft).IsBlack())
+                    {
+                        moves.Add(new Move(position, frontLeft, Promotion.Queen));
+                        moves.Add(new Move(position, frontLeft, Promotion.Rook));
+                        moves.Add(new Move(position, frontLeft, Promotion.Bishop));
+                        moves.Add(new Move(position, frontLeft, Promotion.Knight));
+                    }
                 }
 
                 if (position.File is not File.H)
@@ -403,8 +412,25 @@ internal sealed class Chessboard
                     var frontRight = front.MoveRight();
                     if (GetChessPiece(frontRight).IsBlack())
                     {
-                        moves.Add(new Move(position, frontRight));
+                        moves.Add(new Move(position, frontRight, Promotion.Queen));
+                        moves.Add(new Move(position, frontRight, Promotion.Rook));
+                        moves.Add(new Move(position, frontRight, Promotion.Bishop));
+                        moves.Add(new Move(position, frontRight, Promotion.Knight));
                     }
+                }
+            }
+            else
+            {
+                var front2 = front.MoveUp();
+
+                if (position.Rank is Rank.Two && GetChessPiece(front) is ChessPiece.None && GetChessPiece(front2) is ChessPiece.None)
+                {
+                    moves.Add(new Move(position, front2));
+                }
+
+                if (GetChessPiece(front) is ChessPiece.None)
+                {
+                    moves.Add(new Move(position, front));
                 }
 
                 if (position.File is not File.A)
@@ -413,6 +439,15 @@ internal sealed class Chessboard
                     if (GetChessPiece(frontLeft).IsBlack())
                     {
                         moves.Add(new Move(position, frontLeft));
+                    }
+                }
+
+                if (position.File is not File.H)
+                {
+                    var frontRight = front.MoveRight();
+                    if (GetChessPiece(frontRight).IsBlack())
+                    {
+                        moves.Add(new Move(position, frontRight));
                     }
                 }
             }

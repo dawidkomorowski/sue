@@ -331,22 +331,64 @@ public class ChessboardTests
 
     #region White pawn test cases
 
-    // White pawn on rank 2
+    // White pawn on D2
     [TestCase("8/8/8/8/8/8/3P4/8 w KQkq - 0 1", "d2d3 d2d4")]
-    // White pawn on rank 2 and enemy piece can be captured on the right
-    [TestCase("8/8/8/8/8/4p3/3P4/8 w KQkq - 0 1", "d2d3 d2d4 d2e3")]
-    // White pawn on rank 2 and enemy piece can be captured on the left
+    // White pawn on D2 and black pawn on D3
+    [TestCase("8/8/8/8/8/3p4/3P4/8 w KQkq - 0 1", "")]
+    // White pawn on D2 and black pawn on D4
+    [TestCase("8/8/8/8/3p4/8/3P4/8 w KQkq - 0 1", "d2d3")]
+    // White pawn on D2 and black pawn on C3
     [TestCase("8/8/8/8/8/2p5/3P4/8 w KQkq - 0 1", "d2d3 d2d4 d2c3")]
-    // White pawn on rank 2 and enemy piece can be captured on the left and on the right
+    // White pawn on D2 and black pawn on E3
+    [TestCase("8/8/8/8/8/4p3/3P4/8 w KQkq - 0 1", "d2d3 d2d4 d2e3")]
+    // White pawn on D2 and black pawns on C3 and E3
     [TestCase("8/8/8/8/8/2p1p3/3P4/8 w KQkq - 0 1", "d2d3 d2d4 d2c3 d2e3")]
+    // White pawn on D2 and black pawns on C3, D3 and E3
+    [TestCase("8/8/8/8/8/2ppp3/3P4/8 w KQkq - 0 1", "d2c3 d2e3")]
     // White pawn on A2
     [TestCase("8/8/8/8/8/8/P7/8 w KQkq - 0 1", "a2a3 a2a4")]
-    // White pawn on H2
-    [TestCase("8/8/8/8/8/8/7P/8 w KQkq - 0 1", "h2h3 h2h4")]
     // White pawn on A2 and black pawn on B3
     [TestCase("8/8/8/8/8/1p6/P7/8 w KQkq - 0 1", "a2a3 a2a4 a2b3")]
+    // White pawn on H2
+    [TestCase("8/8/8/8/8/8/7P/8 w KQkq - 0 1", "h2h3 h2h4")]
     // White pawn on H2 and black pawn on G3
     [TestCase("8/8/8/8/8/6p1/7P/8 w KQkq - 0 1", "h2h3 h2h4 h2g3")]
+    // White pawn on D4
+    [TestCase("8/8/8/8/3P4/8/8/8 w KQkq - 0 1", "d4d5")]
+    // White pawn on D4 and black pawn on C5
+    [TestCase("8/8/8/2p5/3P4/8/8/8 w KQkq - 0 1", "d4d5 d4c5")]
+    // White pawn on D4 and black pawn on E5
+    [TestCase("8/8/8/4p3/3P4/8/8/8 w KQkq - 0 1", "d4d5 d4e5")]
+    // White pawn on D4 and black pawn on C5 and E5
+    [TestCase("8/8/8/2p1p3/3P4/8/8/8 w KQkq - 0 1", "d4d5 d4c5 d4e5")]
+    // White pawn on A4
+    [TestCase("8/8/8/8/P7/8/8/8 w KQkq - 0 1", "a4a5")]
+    // White pawn on A4 and black pawn on B5
+    [TestCase("8/8/8/1p6/P7/8/8/8 w KQkq - 0 1", "a4a5 a4b5")]
+    // White pawn on H4
+    [TestCase("8/8/8/8/7P/8/8/8 w KQkq - 0 1", "h4h5")]
+    // White pawn on H4 and black pawn on G5
+    [TestCase("8/8/8/6p1/7P/8/8/8 w KQkq - 0 1", "h4h5 h4g5")]
+    // White pawn on D7
+    [TestCase("8/3P4/8/8/8/8/8/8 w KQkq - 0 1", "d7d8q d7d8r d7d8b d7d8n")]
+    // White pawn on D7 and black rook on D8
+    [TestCase("3r4/3P4/8/8/8/8/8/8 w KQkq - 0 1", "")]
+    // White pawn on D7 and black rook on C8
+    [TestCase("2r5/3P4/8/8/8/8/8/8 w KQkq - 0 1", "d7d8q d7d8r d7d8b d7d8n d7c8q d7c8r d7c8b d7c8n")]
+    // White pawn on D7 and black rook on E8
+    [TestCase("4r3/3P4/8/8/8/8/8/8 w KQkq - 0 1", "d7d8q d7d8r d7d8b d7d8n d7e8q d7e8r d7e8b d7e8n")]
+    // White pawn on D7 and black rook on C8 and E8
+    [TestCase("2r1r3/3P4/8/8/8/8/8/8 w KQkq - 0 1", "d7d8q d7d8r d7d8b d7d8n d7c8q d7c8r d7c8b d7c8n d7e8q d7e8r d7e8b d7e8n")]
+    // White pawn on D7 and black rook on C8, D8 and E8
+    [TestCase("2rrr3/3P4/8/8/8/8/8/8 w KQkq - 0 1", "d7c8q d7c8r d7c8b d7c8n d7e8q d7e8r d7e8b d7e8n")]
+    // White pawn on A7
+    [TestCase("8/P7/8/8/8/8/8/8 w KQkq - 0 1", "a7a8q a7a8r a7a8b a7a8n")]
+    // White pawn on A7 and black rook on B8
+    [TestCase("1r6/P7/8/8/8/8/8/8 w KQkq - 0 1", "a7a8q a7a8r a7a8b a7a8n a7b8q a7b8r a7b8b a7b8n")]
+    // White pawn on H7
+    [TestCase("8/7P/8/8/8/8/8/8 w KQkq - 0 1", "h7h8q h7h8r h7h8b h7h8n")]
+    // White pawn on H7 and black rook on G8
+    [TestCase("6r1/7P/8/8/8/8/8/8 w KQkq - 0 1", "h7h8q h7h8r h7h8b h7h8n h7g8q h7g8r h7g8b h7g8n")]
 
     #endregion
 
@@ -356,6 +398,9 @@ public class ChessboardTests
         var fen = Fen.FromString(fenString);
         var chessboard = Chessboard.FromFen(fen);
         var expectedMoves = Move.ParseUciMoves(uciMoves);
+
+        // Assume
+        Assert.That(expectedMoves, Is.Unique);
 
         // Act
         var moves = chessboard.GetMoveCandidates();
