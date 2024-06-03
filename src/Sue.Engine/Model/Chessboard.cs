@@ -124,9 +124,9 @@ internal sealed class Chessboard
 
     private void PerformMove(Move move, ChessPiece cpFrom)
     {
-        if (move.IsWhiteKingSideCastling)
+        if (cpFrom is ChessPiece.WhiteKing && move.From is { File: File.E, Rank: Rank.One } && move.To is { File: File.G, Rank: Rank.One })
         {
-            if (cpFrom is ChessPiece.WhiteKing && WhiteKingSideCastlingAvailable)
+            if (WhiteKingSideCastlingAvailable)
             {
                 SetChessPiece(new Position(File.E, Rank.One), ChessPiece.None);
                 SetChessPiece(new Position(File.G, Rank.One), ChessPiece.WhiteKing);
@@ -138,9 +138,9 @@ internal sealed class Chessboard
                 throw CreateInvalidMoveError(move);
             }
         }
-        else if (move.IsWhiteQueenSideCastling)
+        else if (cpFrom is ChessPiece.WhiteKing && move.From is { File: File.E, Rank: Rank.One } && move.To is { File: File.C, Rank: Rank.One })
         {
-            if (cpFrom is ChessPiece.WhiteKing && WhiteQueenSideCastlingAvailable)
+            if (WhiteQueenSideCastlingAvailable)
             {
                 SetChessPiece(new Position(File.E, Rank.One), ChessPiece.None);
                 SetChessPiece(new Position(File.C, Rank.One), ChessPiece.WhiteKing);
@@ -152,9 +152,9 @@ internal sealed class Chessboard
                 throw CreateInvalidMoveError(move);
             }
         }
-        else if (move.IsBlackKingSideCastling)
+        else if (cpFrom is ChessPiece.BlackKing && move.From is { File: File.E, Rank: Rank.Eight } && move.To is { File: File.G, Rank: Rank.Eight })
         {
-            if (cpFrom is ChessPiece.BlackKing && BlackKingSideCastlingAvailable)
+            if (BlackKingSideCastlingAvailable)
             {
                 SetChessPiece(new Position(File.E, Rank.Eight), ChessPiece.None);
                 SetChessPiece(new Position(File.G, Rank.Eight), ChessPiece.BlackKing);
@@ -166,9 +166,9 @@ internal sealed class Chessboard
                 throw CreateInvalidMoveError(move);
             }
         }
-        else if (move.IsBlackQueenSideCastling)
+        else if (cpFrom is ChessPiece.BlackKing && move.From is { File: File.E, Rank: Rank.Eight } && move.To is { File: File.C, Rank: Rank.Eight })
         {
-            if (cpFrom is ChessPiece.BlackKing && BlackQueenSideCastlingAvailable)
+            if (BlackQueenSideCastlingAvailable)
             {
                 SetChessPiece(new Position(File.E, Rank.Eight), ChessPiece.None);
                 SetChessPiece(new Position(File.C, Rank.Eight), ChessPiece.BlackKing);
