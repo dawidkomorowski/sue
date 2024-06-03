@@ -31,6 +31,11 @@ public readonly struct Position : IEquatable<Position>
         All = all.AsReadOnly();
     }
 
+    public Position MoveUp() => new(File, Rank.Add(1));
+    public Position MoveDown() => new(File, Rank.Add(-1));
+    public Position MoveRight() => new(File.Add(1), Rank);
+    public Position MoveLeft() => new(File.Add(-1), Rank);
+
     public override string ToString() => $"{nameof(File)}: {File}, {nameof(Rank)}: {Rank}";
 
     public bool Equals(Position other) => File == other.File && Rank == other.Rank;

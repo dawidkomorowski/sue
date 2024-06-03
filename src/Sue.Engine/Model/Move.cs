@@ -83,7 +83,7 @@ internal readonly struct Move : IEquatable<Move>
         return uciMove;
     }
 
-    public override string ToString() => $"{nameof(From)}: {From}, {nameof(To)}: {To}, {nameof(Promotion)}: {Promotion}";
+    public override string ToString() => ToUci();
 
     public bool Equals(Move other) => From.Equals(other.From) && To.Equals(other.To) && Promotion == other.Promotion;
     public override bool Equals(object? obj) => obj is Move other && Equals(other);

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Sue.Engine.Model;
 
@@ -112,10 +114,7 @@ internal sealed class Chessboard
         ActiveColor = ActiveColor.Opposite();
     }
 
-    private static int GetIndex(Position position)
-    {
-        return position.File.Index() * 8 + position.Rank.Index();
-    }
+    #region MakeMove implementation
 
     private InvalidOperationException CreateInvalidMoveError(Move move)
     {
@@ -328,5 +327,103 @@ internal sealed class Chessboard
         {
             HalfMoveClock = 0;
         }
+    }
+
+    #endregion
+
+    public IReadOnlyList<Move> GetMoveCandidates()
+    {
+        var moves = new List<Move>();
+
+        foreach (var position in Position.All)
+        {
+            var chessPiece = GetChessPiece(position);
+            if (ActiveColor is Color.White && chessPiece.IsWhite() || ActiveColor is Color.Black && chessPiece.IsBlack())
+            {
+                AppendMoves(position, moves);
+            }
+        }
+
+        return moves.AsReadOnly();
+    }
+
+    private void AppendMoves(Position position, List<Move> moves)
+    {
+        var chessPiece = GetChessPiece(position);
+        switch (chessPiece)
+        {
+            case ChessPiece.WhiteKing:
+            case ChessPiece.BlackKing:
+                break;
+            case ChessPiece.WhiteQueen:
+            case ChessPiece.BlackQueen:
+                break;
+            case ChessPiece.WhiteRook:
+            case ChessPiece.BlackRook:
+                break;
+            case ChessPiece.WhiteBishop:
+            case ChessPiece.BlackBishop:
+                break;
+            case ChessPiece.WhiteKnight:
+            case ChessPiece.BlackKnight:
+                break;
+            case ChessPiece.WhitePawn:
+            case ChessPiece.BlackPawn:
+                AppendPawnMoves(position, moves);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    private void AppendPawnMoves(Position position, List<Move> moves)
+    {
+        var pawn = GetChessPiece(position);
+        Debug.Assert(pawn is ChessPiece.WhitePawn or ChessPiece.BlackPawn, "pawn is ChessPiece.WhitePawn or ChessPiece.BlackPawn");
+
+        if (pawn.IsWhite())
+        {
+            var front = position.MoveUp();
+            var front2 = front.MoveUp();
+
+            if (position.Rank is Rank.Two && GetChessPiece(front) is ChessPiece.None && GetChessPiece(front2) is ChessPiece.None)
+            {
+                moves.Add(new Move(position, front2));
+            }
+
+            if (position.Rank is not Rank.Seven)
+            {
+                if (GetChessPiece(front) is ChessPiece.None)
+                {
+                    moves.Add(new Move(position, front));
+                }
+
+                if (position.File is not File.H)
+                {
+                    var frontRight = front.MoveRight();
+                    if (GetChessPiece(frontRight).IsBlack())
+                    {
+                        moves.Add(new Move(position, frontRight));
+                    }
+                }
+
+                if (position.File is not File.A)
+                {
+                    var frontLeft = front.MoveLeft();
+                    if (GetChessPiece(frontLeft).IsBlack())
+                    {
+                        moves.Add(new Move(position, frontLeft));
+                    }
+                }
+            }
+        }
+        else
+        {
+        }
+    }
+
+    private static int GetIndex(Position position)
+    {
+        return position.File.Index() * 8 + position.Rank.Index();
     }
 }

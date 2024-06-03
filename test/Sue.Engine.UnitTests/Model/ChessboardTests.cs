@@ -111,6 +111,8 @@ public class ChessboardTests
         Assert.That(fen2.ToString(), Is.EqualTo(fenString));
     }
 
+    #region Castling test cases
+
     // White rook move makes white king side castling not available
     [TestCase("rnbqkbnr/ppppppp1/8/7p/7P/8/PPPPPPP1/RNBQKBNR w KQkq - 0 2", "h1h3", "rnbqkbnr/ppppppp1/8/7p/7P/7R/PPPPPPP1/RNBQKBN1 b Qkq - 1 2")]
     // White rook move makes white queen side castling not available
@@ -131,6 +133,11 @@ public class ChessboardTests
     [TestCase("rnbqk2r/ppppbppp/4pn2/8/8/3PPN2/PPP1BPPP/RNBQK2R b KQkq - 0 4", "e8g8", "rnbq1rk1/ppppbppp/4pn2/8/8/3PPN2/PPP1BPPP/RNBQK2R w KQ - 1 5")]
     // Black queen side castling makes black castling not available
     [TestCase("r3kbnr/pbqppppp/npp5/8/8/NPPP4/PBQ1PPPP/R3KBNR b KQkq - 0 6", "e8c8", "2kr1bnr/pbqppppp/npp5/8/8/NPPP4/PBQ1PPPP/R3KBNR w KQ - 1 7")]
+
+    #endregion
+
+    #region En passant test cases
+
     // White pawn creates en passant on the left
     [TestCase("rnbqkbnr/ppp1pppp/8/7P/3p4/8/PPPPPPP1/RNBQKBNR w KQkq - 0 3", "e2e4", "rnbqkbnr/ppp1pppp/8/7P/3pP3/8/PPPP1PP1/RNBQKBNR b KQkq e3 0 3")]
     // White pawn creates en passant on the right
@@ -147,11 +154,21 @@ public class ChessboardTests
     [TestCase("rnbqkbnr/ppp1pppp/8/7P/3pP3/8/PPPP1PP1/RNBQKBNR b KQkq e3 0 3", "d4e3", "rnbqkbnr/ppp1pppp/8/7P/8/4p3/PPPP1PP1/RNBQKBNR w KQkq - 0 4")]
     // Black pawn captures en passant on the left
     [TestCase("rnbqkbnr/ppp1pppp/8/7P/2Pp4/8/PP1PPPP1/RNBQKBNR b KQkq c3 0 3", "d4c3", "rnbqkbnr/ppp1pppp/8/7P/8/2p5/PP1PPPP1/RNBQKBNR w KQkq - 0 4")]
+
+    #endregion
+
+    #region Move pattern looks like castling, but it is not test cases
+
     // Move pattern looks like castling, but it is not
     [TestCase("rnbqr3/ppppk2p/3b3n/4ppp1/4PPP1/3B3N/PPPPK2P/RNBQR3 w - - 8 8", "e1g1", "rnbqr3/ppppk2p/3b3n/4ppp1/4PPP1/3B3N/PPPPK2P/RNBQ2R1 b - - 9 8")]
     [TestCase("4rbnr/p2kpppp/n2qb3/1ppp4/1PPP4/N2QB3/P2KPPPP/4RBNR w - - 10 9", "e1c1", "4rbnr/p2kpppp/n2qb3/1ppp4/1PPP4/N2QB3/P2KPPPP/2R2BNR b - - 11 9")]
     [TestCase("rnbqr3/pppppk2/5n1b/5ppp/PPPPPPPP/8/8/RNBQKBNR b KQ - 0 8", "e8g8", "rnbq2r1/pppppk2/5n1b/5ppp/PPPPPPPP/8/8/RNBQKBNR w KQ - 1 9")]
     [TestCase("4rbnr/p2kpppp/n2qb3/1ppp4/PPPPPPPP/8/4K3/RNBQ1BNR b - - 2 9", "e8c8", "2r2bnr/p2kpppp/n2qb3/1ppp4/PPPPPPPP/8/4K3/RNBQ1BNR w - - 3 10")]
+
+    #endregion
+
+    #region Promotion test cases
+
     // White pawn promotion without capture
     [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7h8q", "rnbqkbnQ/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
     [TestCase("rnbqkbn1/pppppppP/8/8/r6P/8/PPPPPP2/RNBQKBNR w KQq - 1 6", "h7h8r", "rnbqkbnR/ppppppp1/8/8/r6P/8/PPPPPP2/RNBQKBNR b KQq - 0 6")]
@@ -172,6 +189,11 @@ public class ChessboardTests
     [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2b1r", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/1rBQKBNR w Kkq - 0 6")]
     [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2b1b", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/1bBQKBNR w Kkq - 0 6")]
     [TestCase("rnbqkbnr/p1pppppp/8/7R/8/8/pPPPPPPP/1NBQKBNR b Kkq - 1 5", "a2b1n", "rnbqkbnr/p1pppppp/8/7R/8/8/1PPPPPPP/1nBQKBNR w Kkq - 0 6")]
+
+    #endregion
+
+    #region Half move clock and full move number test cases
+
     // Half move clock is incremented after white knight move
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "b1c3", "rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1")]
     // Half move clock is incremented after black knight move
@@ -188,6 +210,11 @@ public class ChessboardTests
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "e2e4", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")]
     // Full move number is incremented after black move
     [TestCase("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", "e7e5", "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")]
+
+    #endregion
+
+    #region Chess game test cases
+
     // Chess game: https://lichess.org/wHn35ZRJ
     [TestCase("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "e2e4", "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")]
     [TestCase("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", "e7e6", "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")]
@@ -284,6 +311,9 @@ public class ChessboardTests
     [TestCase("8/5p2/P5k1/7n/8/4Q3/1P4PK/r7 w - - 5 47", "a6a7", "8/P4p2/6k1/7n/8/4Q3/1P4PK/r7 b - - 0 47")]
     [TestCase("8/P4p2/6k1/7n/8/4Q3/1P4PK/r7 b - - 0 47", "a1a6", "8/P4p2/r5k1/7n/8/4Q3/1P4PK/8 w - - 1 48")]
     [TestCase("8/P4p2/r5k1/7n/8/4Q3/1P4PK/8 w - - 1 48", "e3d3", "8/P4p2/r5k1/7n/8/3Q4/1P4PK/8 b - - 2 48")]
+
+    #endregion
+
     public void MakeMove_ShouldChangeChessboardStateAccordingToRequestedMove(string fenString, string uciMove, string fenStringAfterMove)
     {
         // Arrange
@@ -297,5 +327,41 @@ public class ChessboardTests
         // Assert
         var fenAfterMove = chessboard.ToFen();
         Assert.That(fenAfterMove.ToString(), Is.EqualTo(fenStringAfterMove));
+    }
+
+    #region White pawn test cases
+
+    // White pawn on rank 2
+    [TestCase("8/8/8/8/8/8/3P4/8 w KQkq - 0 1", "d2d3 d2d4")]
+    // White pawn on rank 2 and enemy piece can be captured on the right
+    [TestCase("8/8/8/8/8/4p3/3P4/8 w KQkq - 0 1", "d2d3 d2d4 d2e3")]
+    // White pawn on rank 2 and enemy piece can be captured on the left
+    [TestCase("8/8/8/8/8/2p5/3P4/8 w KQkq - 0 1", "d2d3 d2d4 d2c3")]
+    // White pawn on rank 2 and enemy piece can be captured on the left and on the right
+    [TestCase("8/8/8/8/8/2p1p3/3P4/8 w KQkq - 0 1", "d2d3 d2d4 d2c3 d2e3")]
+    // White pawn on A2
+    [TestCase("8/8/8/8/8/8/P7/8 w KQkq - 0 1", "a2a3 a2a4")]
+    // White pawn on H2
+    [TestCase("8/8/8/8/8/8/7P/8 w KQkq - 0 1", "h2h3 h2h4")]
+    // White pawn on A2 and black pawn on B3
+    [TestCase("8/8/8/8/8/1p6/P7/8 w KQkq - 0 1", "a2a3 a2a4 a2b3")]
+    // White pawn on H2 and black pawn on G3
+    [TestCase("8/8/8/8/8/6p1/7P/8 w KQkq - 0 1", "h2h3 h2h4 h2g3")]
+
+    #endregion
+
+    public void GetMoveCandidates_ShouldReturnMovesThatAreCandidatesForValidMoves(string fenString, string uciMoves)
+    {
+        // Arrange
+        var fen = Fen.FromString(fenString);
+        var chessboard = Chessboard.FromFen(fen);
+        var expectedMoves = Move.ParseUciMoves(uciMoves);
+
+        // Act
+        var moves = chessboard.GetMoveCandidates();
+
+        // Assert
+        Assert.That(moves, Is.Unique);
+        Assert.That(moves, Is.EquivalentTo(expectedMoves));
     }
 }
