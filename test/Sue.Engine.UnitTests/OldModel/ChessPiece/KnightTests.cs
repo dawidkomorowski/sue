@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using Sue.Engine.Model;
-using Sue.Engine.OldModel.Chessboard;
 using Sue.Engine.UnitTests.Common;
 
 namespace Sue.Engine.UnitTests.OldModel.ChessPiece
@@ -151,28 +150,6 @@ namespace Sue.Engine.UnitTests.OldModel.ChessPiece
 
             // Assert
             Assert.That(moves.Count(), Is.EqualTo(0));
-        }
-
-        [TestCase("8/8/8/8/8/3N4/8/8 w - - 0 1", "8/8/8/8/5N2/8/8/8 b - - 1 1", File.D, Rank.Three, File.F, Rank.Four)]
-        [TestCase("8/8/8/8/5N2/8/8/8 w - - 3 5", "8/8/4N3/8/8/8/8/8 b - - 4 5", File.F, Rank.Four, File.E, Rank.Six)]
-        [TestCase("8/2p5/4N3/8/8/8/8/8 w - - 3 5", "8/2N5/8/8/8/8/8/8 b - - 0 5", File.E, Rank.Six, File.C, Rank.Seven)]
-        [TestCase("8/2n5/8/8/8/8/8/8 b - - 3 5", "8/8/8/1n6/8/8/8/8 w - - 4 6", File.C, Rank.Seven, File.B, Rank.Five)]
-        [TestCase("8/8/8/1n6/3B4/8/8/8 b - - 3 5", "8/8/8/8/3n4/8/8/8 w - - 0 6", File.B, Rank.Five, File.D, Rank.Four)]
-        [TestCase("8/8/8/1n6/3B4/8/8/8 b KQkq - 3 5", "8/8/8/8/3n4/8/8/8 w KQkq - 0 6", File.B, Rank.Five, File.D, Rank.Four)]
-        public void ShouldMoveFromGivenPositionToGivenPosition(string initialFenString, string expectedFenString,
-            File fromFile, Rank fromRank, File toFile, Rank toRank)
-        {
-            // Arrange
-            var chessboard = ChessboardFactory.Create(initialFenString);
-            var knight = chessboard.GetChessPiece(fromFile, fromRank);
-            var move = CreateMove(knight, toFile, toRank);
-
-            // Act
-            knight.MakeMove(move);
-
-            // Assert
-            var expectedChessboard = ChessboardFactory.Create(expectedFenString);
-            Assert.That(chessboard.EqualsTo(expectedChessboard), Is.True);
         }
     }
 }

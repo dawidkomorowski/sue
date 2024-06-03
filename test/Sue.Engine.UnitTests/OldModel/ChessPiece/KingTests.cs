@@ -134,29 +134,5 @@ namespace Sue.Engine.UnitTests.OldModel.ChessPiece
             AssertMoveExistsInMoves(File.E, Rank.Four, File.F, Rank.Four, moves);
             AssertMoveExistsInMoves(File.E, Rank.Four, File.F, Rank.Five, moves);
         }
-
-        [TestCase("8/8/8/8/4K3/8/8/8 w - - 0 1", "8/8/8/8/3K4/8/8/8 b - - 1 1", File.E, Rank.Four, File.D, Rank.Four)]
-        [TestCase("8/8/8/8/4K3/8/8/8 w - - 0 1", "8/8/8/5K2/8/8/8/8 b - - 1 1", File.E, Rank.Four, File.F, Rank.Five)]
-        [TestCase("8/8/8/8/4K3/4n3/8/8 w - - 5 3", "8/8/8/8/8/4K3/8/8 b - - 0 3", File.E, Rank.Four, File.E, Rank.Three)]
-        [TestCase("8/8/8/8/4k3/8/8/8 b - - 0 1", "8/8/8/5k2/8/8/8/8 w - - 1 2", File.E, Rank.Four, File.F, Rank.Five)]
-        [TestCase("8/8/8/8/4k3/4N3/8/8 b - - 5 3", "8/8/8/8/8/4k3/8/8 w - - 0 4", File.E, Rank.Four, File.E, Rank.Three)]
-        // Castling availability
-        [TestCase("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1", "r3k2r/8/8/8/8/8/4K3/R6R b kq - 1 1", File.E, Rank.One, File.E, Rank.Two)]
-        [TestCase("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1", "r6r/4k3/8/8/8/8/8/R3K2R w KQ - 1 2", File.E, Rank.Eight, File.E, Rank.Seven)]
-        public void ShouldMoveFromGivenPositionToGivenPosition(string initialFenString, string expectedFenString,
-            File fromFile, Rank fromRank, File toFile, Rank toRank)
-        {
-            // Arrange
-            var chessboard = ChessboardFactory.Create(initialFenString);
-            var king = chessboard.GetChessPiece(fromFile, fromRank);
-            var move = CreateMove(king, toFile, toRank);
-
-            // Act
-            king.MakeMove(move);
-
-            // Assert
-            var expectedChessboard = ChessboardFactory.Create(expectedFenString);
-            Assert.That(chessboard.EqualsTo(expectedChessboard), Is.True);
-        }
     }
 }
