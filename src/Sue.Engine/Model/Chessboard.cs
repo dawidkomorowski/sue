@@ -356,6 +356,7 @@ internal sealed class Chessboard
                         break;
                     case ChessPiece.WhiteKnight:
                     case ChessPiece.BlackKnight:
+                        AppendKnightMoves(position, moves);
                         break;
                     case ChessPiece.WhitePawn:
                         AppendWhitePawnMoves(position, moves);
@@ -520,6 +521,30 @@ internal sealed class Chessboard
                 {
                     moves.Add(new Move(position, frontRight));
                 }
+            }
+        }
+    }
+
+    private void AppendKnightMoves(Position position, List<Move> moves)
+    {
+        var knight = GetChessPiece(position);
+        Debug.Assert(knight is ChessPiece.WhiteKnight or ChessPiece.BlackKnight, "knight is ChessPiece.WhiteKnight or ChessPiece.BlackKnight");
+
+        ReadOnlySpan<(int right, int up)> offsets = [(-1, 2), (1, 2), (-1, -2), (1, -2), (-2, 1), (-2, -1), (2, 1), (2, -1)];
+        foreach (var (right, up) in offsets)
+        {
+            var fileIndex = position.File.Index() + right;
+            var rankIndex = position.Rank.Index() + up;
+            if (fileIndex < 0 || fileIndex > 7 || rankIndex < 0 || rankIndex > 7)
+            {
+                continue;
+            }
+
+            var targetPosition = position.Move(right, up);
+            var chessPiece = GetChessPiece(targetPosition);
+            if ((knight.IsWhite() && !chessPiece.IsWhite()) || (knight.IsBlack() && !chessPiece.IsBlack()))
+            {
+                moves.Add(new Move(position, targetPosition));
             }
         }
     }
