@@ -455,6 +455,27 @@ public class ChessboardTests
 
     #endregion
 
+    #region Knight test cases
+
+    // White knight on D4
+    [TestCase("8/8/8/8/3N4/8/8/8 w KQkq - 0 1", "d4b3 d4b5 d4c2 d4c6 d4e2 d4e6 d4f3 d4f5")]
+    // Black knight on D4
+    [TestCase("8/8/8/8/3n4/8/8/8 b KQkq - 0 1", "d4b3 d4b5 d4c2 d4c6 d4e2 d4e6 d4f3 d4f5")]
+    // White knight on D4 and black pawn on B3, B5, C2, C6, E2, E6, F3, F5
+    [TestCase("8/8/2p1p3/1p3p2/3N4/1p3p2/2p1p3/8 w KQkq - 0 1", "d4b3 d4b5 d4c2 d4c6 d4e2 d4e6 d4f3 d4f5")]
+    // Black knight on D4 and white pawn on B3, B5, C2, C6, E2, E6, F3, F5
+    [TestCase("8/8/2P1P3/1P3P2/3n4/1P3P2/2P1P3/8 b KQkq - 0 1", "d4b3 d4b5 d4c2 d4c6 d4e2 d4e6 d4f3 d4f5")]
+    // White knight on D4 and white pawn on C3, C4, C5, D3, D5, E3, E4, E5
+    [TestCase("8/8/8/2PPP3/2PNP3/2PPP3/8/8 w KQkq - 0 1", "d4b3 d4b5 d4c2 d4c6 d4e2 d4e6 d4f3 d4f5")]
+    // Black knight on D4 and black pawn on C3, C4, C5, D3, D5, E3, E4, E5
+    [TestCase("8/8/8/2ppp3/2pnp3/2ppp3/8/8 b KQkq - 0 1", "d4b3 d4b5 d4c2 d4c6 d4e2 d4e6 d4f3 d4f5")]
+    // White knight on D4 and white pawn on B3, B5, C2, C6, E2, E6, F3, F5
+    [TestCase("8/8/2P1P3/1P3P2/3N4/1P3P2/2P1P3/8 w KQkq - 0 1", "")]
+    // Black knight on D4 and black pawn on B3, B5, C2, C6, E2, E6, F3, F5
+    [TestCase("8/8/2p1p3/1p3p2/3n4/1p3p2/2p1p3/8 b KQkq - 0 1", "")]
+
+    #endregion
+
     public void GetMoveCandidates_ShouldReturnMovesThatAreCandidatesForValidMoves(string fenString, string uciMoves)
     {
         // Arrange
