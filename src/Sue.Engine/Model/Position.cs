@@ -31,11 +31,11 @@ public readonly struct Position : IEquatable<Position>
         All = all.AsReadOnly();
     }
 
-    public Position MoveUp() => new(File, Rank.Add(1));
-    public Position MoveDown() => new(File, Rank.Add(-1));
-    public Position MoveRight() => new(File.Add(1), Rank);
-    public Position MoveLeft() => new(File.Add(-1), Rank);
-    public Position Move(int right, int up) => new(File.Add(right), Rank.Add(up));
+    internal Position MoveUp() => new(File, Rank.Add(1));
+    internal Position MoveDown() => new(File, Rank.Add(-1));
+    internal Position MoveRight() => new(File.Add(1), Rank);
+    internal Position MoveLeft() => new(File.Add(-1), Rank);
+    internal Position MoveBy(int right, int up) => new(File.Add(right), Rank.Add(up));
 
     public override string ToString() => $"{nameof(File)}: {File}, {nameof(Rank)}: {Rank}";
 

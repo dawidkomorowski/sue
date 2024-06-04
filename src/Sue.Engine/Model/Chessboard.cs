@@ -540,7 +540,7 @@ internal sealed class Chessboard
                 continue;
             }
 
-            var targetPosition = position.Move(right, up);
+            var targetPosition = position.MoveBy(right, up);
             var chessPiece = GetChessPiece(targetPosition);
             if ((knight.IsWhite() && !chessPiece.IsWhite()) || (knight.IsBlack() && !chessPiece.IsBlack()))
             {
