@@ -340,122 +340,191 @@ internal sealed class Chessboard
             var chessPiece = GetChessPiece(position);
             if (ActiveColor is Color.White && chessPiece.IsWhite() || ActiveColor is Color.Black && chessPiece.IsBlack())
             {
-                AppendMoves(position, moves);
+                switch (chessPiece)
+                {
+                    case ChessPiece.WhiteKing:
+                    case ChessPiece.BlackKing:
+                        break;
+                    case ChessPiece.WhiteQueen:
+                    case ChessPiece.BlackQueen:
+                        break;
+                    case ChessPiece.WhiteRook:
+                    case ChessPiece.BlackRook:
+                        break;
+                    case ChessPiece.WhiteBishop:
+                    case ChessPiece.BlackBishop:
+                        break;
+                    case ChessPiece.WhiteKnight:
+                    case ChessPiece.BlackKnight:
+                        break;
+                    case ChessPiece.WhitePawn:
+                        AppendWhitePawnMoves(position, moves);
+                        break;
+                    case ChessPiece.BlackPawn:
+                        AppendBlackPawnMoves(position, moves);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
         return moves.AsReadOnly();
     }
 
-    private void AppendMoves(Position position, List<Move> moves)
-    {
-        var chessPiece = GetChessPiece(position);
-        switch (chessPiece)
-        {
-            case ChessPiece.WhiteKing:
-            case ChessPiece.BlackKing:
-                break;
-            case ChessPiece.WhiteQueen:
-            case ChessPiece.BlackQueen:
-                break;
-            case ChessPiece.WhiteRook:
-            case ChessPiece.BlackRook:
-                break;
-            case ChessPiece.WhiteBishop:
-            case ChessPiece.BlackBishop:
-                break;
-            case ChessPiece.WhiteKnight:
-            case ChessPiece.BlackKnight:
-                break;
-            case ChessPiece.WhitePawn:
-            case ChessPiece.BlackPawn:
-                AppendPawnMoves(position, moves);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
+    #region GetMoveCandidates implementation
 
-    private void AppendPawnMoves(Position position, List<Move> moves)
+    private void AppendWhitePawnMoves(Position position, List<Move> moves)
     {
         var pawn = GetChessPiece(position);
-        Debug.Assert(pawn is ChessPiece.WhitePawn or ChessPiece.BlackPawn, "pawn is ChessPiece.WhitePawn or ChessPiece.BlackPawn");
+        Debug.Assert(pawn is ChessPiece.WhitePawn, "pawn is ChessPiece.WhitePawn");
 
-        if (pawn.IsWhite())
+        var front = position.MoveUp();
+
+        if (position.Rank is Rank.Seven)
         {
-            var front = position.MoveUp();
-
-            if (position.Rank is Rank.Seven)
+            if (GetChessPiece(front) is ChessPiece.None)
             {
-                if (GetChessPiece(front) is ChessPiece.None)
-                {
-                    moves.Add(new Move(position, front, Promotion.Queen));
-                    moves.Add(new Move(position, front, Promotion.Rook));
-                    moves.Add(new Move(position, front, Promotion.Bishop));
-                    moves.Add(new Move(position, front, Promotion.Knight));
-                }
+                moves.Add(new Move(position, front, Promotion.Queen));
+                moves.Add(new Move(position, front, Promotion.Rook));
+                moves.Add(new Move(position, front, Promotion.Bishop));
+                moves.Add(new Move(position, front, Promotion.Knight));
+            }
 
-                if (position.File is not File.A)
+            if (position.File is not File.A)
+            {
+                var frontLeft = front.MoveLeft();
+                if (GetChessPiece(frontLeft).IsBlack())
                 {
-                    var frontLeft = front.MoveLeft();
-                    if (GetChessPiece(frontLeft).IsBlack())
-                    {
-                        moves.Add(new Move(position, frontLeft, Promotion.Queen));
-                        moves.Add(new Move(position, frontLeft, Promotion.Rook));
-                        moves.Add(new Move(position, frontLeft, Promotion.Bishop));
-                        moves.Add(new Move(position, frontLeft, Promotion.Knight));
-                    }
-                }
-
-                if (position.File is not File.H)
-                {
-                    var frontRight = front.MoveRight();
-                    if (GetChessPiece(frontRight).IsBlack())
-                    {
-                        moves.Add(new Move(position, frontRight, Promotion.Queen));
-                        moves.Add(new Move(position, frontRight, Promotion.Rook));
-                        moves.Add(new Move(position, frontRight, Promotion.Bishop));
-                        moves.Add(new Move(position, frontRight, Promotion.Knight));
-                    }
+                    moves.Add(new Move(position, frontLeft, Promotion.Queen));
+                    moves.Add(new Move(position, frontLeft, Promotion.Rook));
+                    moves.Add(new Move(position, frontLeft, Promotion.Bishop));
+                    moves.Add(new Move(position, frontLeft, Promotion.Knight));
                 }
             }
-            else
+
+            if (position.File is not File.H)
             {
-                var front2 = front.MoveUp();
-
-                if (position.Rank is Rank.Two && GetChessPiece(front) is ChessPiece.None && GetChessPiece(front2) is ChessPiece.None)
+                var frontRight = front.MoveRight();
+                if (GetChessPiece(frontRight).IsBlack())
                 {
-                    moves.Add(new Move(position, front2));
-                }
-
-                if (GetChessPiece(front) is ChessPiece.None)
-                {
-                    moves.Add(new Move(position, front));
-                }
-
-                if (position.File is not File.A)
-                {
-                    var frontLeft = front.MoveLeft();
-                    if (GetChessPiece(frontLeft).IsBlack())
-                    {
-                        moves.Add(new Move(position, frontLeft));
-                    }
-                }
-
-                if (position.File is not File.H)
-                {
-                    var frontRight = front.MoveRight();
-                    if (GetChessPiece(frontRight).IsBlack())
-                    {
-                        moves.Add(new Move(position, frontRight));
-                    }
+                    moves.Add(new Move(position, frontRight, Promotion.Queen));
+                    moves.Add(new Move(position, frontRight, Promotion.Rook));
+                    moves.Add(new Move(position, frontRight, Promotion.Bishop));
+                    moves.Add(new Move(position, frontRight, Promotion.Knight));
                 }
             }
         }
         else
         {
+            var front2 = front.MoveUp();
+
+            if (position.Rank is Rank.Two && GetChessPiece(front) is ChessPiece.None && GetChessPiece(front2) is ChessPiece.None)
+            {
+                moves.Add(new Move(position, front2));
+            }
+
+            if (GetChessPiece(front) is ChessPiece.None)
+            {
+                moves.Add(new Move(position, front));
+            }
+
+            if (position.File is not File.A)
+            {
+                var frontLeft = front.MoveLeft();
+                if (GetChessPiece(frontLeft).IsBlack())
+                {
+                    moves.Add(new Move(position, frontLeft));
+                }
+            }
+
+            if (position.File is not File.H)
+            {
+                var frontRight = front.MoveRight();
+                if (GetChessPiece(frontRight).IsBlack())
+                {
+                    moves.Add(new Move(position, frontRight));
+                }
+            }
         }
     }
+
+    private void AppendBlackPawnMoves(Position position, List<Move> moves)
+    {
+        var pawn = GetChessPiece(position);
+        Debug.Assert(pawn is ChessPiece.BlackPawn, "pawn is ChessPiece.BlackPawn");
+
+        var front = position.MoveDown();
+
+        if (position.Rank is Rank.Two)
+        {
+            if (GetChessPiece(front) is ChessPiece.None)
+            {
+                moves.Add(new Move(position, front, Promotion.Queen));
+                moves.Add(new Move(position, front, Promotion.Rook));
+                moves.Add(new Move(position, front, Promotion.Bishop));
+                moves.Add(new Move(position, front, Promotion.Knight));
+            }
+
+            if (position.File is not File.A)
+            {
+                var frontLeft = front.MoveLeft();
+                if (GetChessPiece(frontLeft).IsWhite())
+                {
+                    moves.Add(new Move(position, frontLeft, Promotion.Queen));
+                    moves.Add(new Move(position, frontLeft, Promotion.Rook));
+                    moves.Add(new Move(position, frontLeft, Promotion.Bishop));
+                    moves.Add(new Move(position, frontLeft, Promotion.Knight));
+                }
+            }
+
+            if (position.File is not File.H)
+            {
+                var frontRight = front.MoveRight();
+                if (GetChessPiece(frontRight).IsWhite())
+                {
+                    moves.Add(new Move(position, frontRight, Promotion.Queen));
+                    moves.Add(new Move(position, frontRight, Promotion.Rook));
+                    moves.Add(new Move(position, frontRight, Promotion.Bishop));
+                    moves.Add(new Move(position, frontRight, Promotion.Knight));
+                }
+            }
+        }
+        else
+        {
+            var front2 = front.MoveDown();
+
+            if (position.Rank is Rank.Seven && GetChessPiece(front) is ChessPiece.None && GetChessPiece(front2) is ChessPiece.None)
+            {
+                moves.Add(new Move(position, front2));
+            }
+
+            if (GetChessPiece(front) is ChessPiece.None)
+            {
+                moves.Add(new Move(position, front));
+            }
+
+            if (position.File is not File.A)
+            {
+                var frontLeft = front.MoveLeft();
+                if (GetChessPiece(frontLeft).IsWhite())
+                {
+                    moves.Add(new Move(position, frontLeft));
+                }
+            }
+
+            if (position.File is not File.H)
+            {
+                var frontRight = front.MoveRight();
+                if (GetChessPiece(frontRight).IsWhite())
+                {
+                    moves.Add(new Move(position, frontRight));
+                }
+            }
+        }
+    }
+
+    #endregion
 
     private static int GetIndex(Position position)
     {

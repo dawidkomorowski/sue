@@ -341,9 +341,9 @@ public class ChessboardTests
     [TestCase("8/8/8/8/8/2p5/3P4/8 w KQkq - 0 1", "d2d3 d2d4 d2c3")]
     // White pawn on D2 and black pawn on E3
     [TestCase("8/8/8/8/8/4p3/3P4/8 w KQkq - 0 1", "d2d3 d2d4 d2e3")]
-    // White pawn on D2 and black pawns on C3 and E3
+    // White pawn on D2 and black pawn on C3 and E3
     [TestCase("8/8/8/8/8/2p1p3/3P4/8 w KQkq - 0 1", "d2d3 d2d4 d2c3 d2e3")]
-    // White pawn on D2 and black pawns on C3, D3 and E3
+    // White pawn on D2 and black pawn on C3, D3 and E3
     [TestCase("8/8/8/8/8/2ppp3/3P4/8 w KQkq - 0 1", "d2c3 d2e3")]
     // White pawn on A2
     [TestCase("8/8/8/8/8/8/P7/8 w KQkq - 0 1", "a2a3 a2a4")]
@@ -389,6 +389,69 @@ public class ChessboardTests
     [TestCase("8/7P/8/8/8/8/8/8 w KQkq - 0 1", "h7h8q h7h8r h7h8b h7h8n")]
     // White pawn on H7 and black rook on G8
     [TestCase("6r1/7P/8/8/8/8/8/8 w KQkq - 0 1", "h7h8q h7h8r h7h8b h7h8n h7g8q h7g8r h7g8b h7g8n")]
+
+    #endregion
+
+    #region Black pawn test cases
+
+    // Black pawn on D7
+    [TestCase("8/3p4/8/8/8/8/8/8 b KQkq - 0 1", "d7d6 d7d5")]
+    // Black pawn on D7 and white pawn on D6
+    [TestCase("8/3p4/3P4/8/8/8/8/8 b KQkq - 0 1", "")]
+    // Black pawn on D7 and white pawn on D5
+    [TestCase("8/3p4/8/3P4/8/8/8/8 b KQkq - 0 1", "d7d6")]
+    // Black pawn on D7 and white pawn on C6
+    [TestCase("8/3p4/2P5/8/8/8/8/8 b KQkq - 0 1", "d7d6 d7d5 d7c6")]
+    // Black pawn on D7 and white pawn on E6
+    [TestCase("8/3p4/4P3/8/8/8/8/8 b KQkq - 0 1", "d7d6 d7d5 d7e6")]
+    // Black pawn on D7 and white pawn on C6 and E6
+    [TestCase("8/3p4/2P1P3/8/8/8/8/8 b KQkq - 0 1", "d7d6 d7d5 d7c6 d7e6")]
+    // Black pawn on D7 and white pawn on C6, D6 and E6
+    [TestCase("8/3p4/2PPP3/8/8/8/8/8 b KQkq - 0 1", "d7c6 d7e6")]
+    // Black pawn on A7
+    [TestCase("8/p7/8/8/8/8/8/8 b KQkq - 0 1", "a7a6 a7a5")]
+    // Black pawn on A7 and white pawn on B6
+    [TestCase("8/p7/1P6/8/8/8/8/8 b KQkq - 0 1", "a7a6 a7a5 a7b6")]
+    // Black pawn on H7
+    [TestCase("8/7p/8/8/8/8/8/8 b KQkq - 0 1", "h7h6 h7h5")]
+    // Black pawn on H7 and white pawn on G6
+    [TestCase("8/7p/6P1/8/8/8/8/8 b KQkq - 0 1", "h7h6 h7h5 h7g6")]
+    // Black pawn on D5
+    [TestCase("8/8/8/3p4/8/8/8/8 b KQkq - 0 1", "d5d4")]
+    // Black pawn on D5 and white pawn on C4
+    [TestCase("8/8/8/3p4/2P5/8/8/8 b KQkq - 0 1", "d5d4 d5c4")]
+    // Black pawn on D5 and white pawn on E4
+    [TestCase("8/8/8/3p4/4P3/8/8/8 b KQkq - 0 1", "d5d4 d5e4")]
+    // Black pawn on D5 and white pawn on C4 and E4
+    [TestCase("8/8/8/3p4/2P1P3/8/8/8 b KQkq - 0 1", "d5d4 d5c4 d5e4")]
+    // Black pawn on A5
+    [TestCase("8/8/8/p7/8/8/8/8 b KQkq - 0 1", "a5a4")]
+    // Black pawn on A5 and white pawn on B4
+    [TestCase("8/8/8/p7/1P6/8/8/8 b KQkq - 0 1", "a5a4 a5b4")]
+    // Black pawn on H5
+    [TestCase("8/8/8/7p/8/8/8/8 b KQkq - 0 1", "h5h4")]
+    // Black pawn on H5 and white pawn on G4
+    [TestCase("8/8/8/7p/6P1/8/8/8 b KQkq - 0 1", "h5h4 h5g4")]
+    // Black pawn on D2
+    [TestCase("8/8/8/8/8/8/3p4/8 b KQkq - 0 1", "d2d1q d2d1r d2d1b d2d1n")]
+    // Black pawn on D2 and white rook on D1
+    [TestCase("8/8/8/8/8/8/3p4/3R4 b KQkq - 0 1", "")]
+    // Black pawn on D2 and white rook on C1
+    [TestCase("8/8/8/8/8/8/3p4/2R5 b KQkq - 0 1", "d2d1q d2d1r d2d1b d2d1n d2c1q d2c1r d2c1b d2c1n")]
+    // Black pawn on D2 and white rook on E1
+    [TestCase("8/8/8/8/8/8/3p4/4R3 b KQkq - 0 1", "d2d1q d2d1r d2d1b d2d1n d2e1q d2e1r d2e1b d2e1n")]
+    // Black pawn on D2 and white rook on C1 and E1
+    [TestCase("8/8/8/8/8/8/3p4/2R1R3 b KQkq - 0 1", "d2d1q d2d1r d2d1b d2d1n d2c1q d2c1r d2c1b d2c1n d2e1q d2e1r d2e1b d2e1n")]
+    // Black pawn on D2 and white rook on C1, D1 and E1
+    [TestCase("8/8/8/8/8/8/3p4/2RRR3 b KQkq - 0 1", "d2c1q d2c1r d2c1b d2c1n d2e1q d2e1r d2e1b d2e1n")]
+    // Black pawn on A2
+    [TestCase("8/8/8/8/8/8/p7/8 b KQkq - 0 1", "a2a1q a2a1r a2a1b a2a1n")]
+    // Black pawn on A2 and white rook on B1
+    [TestCase("8/8/8/8/8/8/p7/1R6 b KQkq - 0 1", "a2a1q a2a1r a2a1b a2a1n a2b1q a2b1r a2b1b a2b1n")]
+    // Black pawn on H2
+    [TestCase("8/8/8/8/8/8/7p/8 b KQkq - 0 1", "h2h1q h2h1r h2h1b h2h1n")]
+    // Black pawn on H2 and white rook on G1
+    [TestCase("8/8/8/8/8/8/7p/6R1 b KQkq - 0 1", "h2h1q h2h1r h2h1b h2h1n h2g1q h2g1r h2g1b h2g1n")]
 
     #endregion
 
