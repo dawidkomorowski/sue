@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Diagnostics;
+using System.Linq;
+using NUnit.Framework;
 using Sue.Engine.Model;
 
 namespace Sue.Engine.UnitTests.Model;
@@ -334,7 +336,7 @@ public class ChessboardTests
     // White pawn on D2
     [TestCase("8/8/8/8/8/8/3P4/8 w KQkq - 0 1", "d2d3 d2d4")]
     // White pawn on D2 and black pawn on D3
-    [TestCase("8/8/8/8/8/3p4/3P4/8 w KQkq - 0 1", "")]
+    [TestCase("8/8/8/8/8/3p4/3P4/8 w KQkq - 0 1", "", File.D, Rank.Two)]
     // White pawn on D2 and black pawn on D4
     [TestCase("8/8/8/8/3p4/8/3P4/8 w KQkq - 0 1", "d2d3")]
     // White pawn on D2 and black pawn on C3
@@ -372,7 +374,7 @@ public class ChessboardTests
     // White pawn on D7
     [TestCase("8/3P4/8/8/8/8/8/8 w KQkq - 0 1", "d7d8q d7d8r d7d8b d7d8n")]
     // White pawn on D7 and black rook on D8
-    [TestCase("3r4/3P4/8/8/8/8/8/8 w KQkq - 0 1", "")]
+    [TestCase("3r4/3P4/8/8/8/8/8/8 w KQkq - 0 1", "", File.D, Rank.Seven)]
     // White pawn on D7 and black rook on C8
     [TestCase("2r5/3P4/8/8/8/8/8/8 w KQkq - 0 1", "d7d8q d7d8r d7d8b d7d8n d7c8q d7c8r d7c8b d7c8n")]
     // White pawn on D7 and black rook on E8
@@ -397,7 +399,7 @@ public class ChessboardTests
     // Black pawn on D7
     [TestCase("8/3p4/8/8/8/8/8/8 b KQkq - 0 1", "d7d6 d7d5")]
     // Black pawn on D7 and white pawn on D6
-    [TestCase("8/3p4/3P4/8/8/8/8/8 b KQkq - 0 1", "")]
+    [TestCase("8/3p4/3P4/8/8/8/8/8 b KQkq - 0 1", "", File.D, Rank.Seven)]
     // Black pawn on D7 and white pawn on D5
     [TestCase("8/3p4/8/3P4/8/8/8/8 b KQkq - 0 1", "d7d6")]
     // Black pawn on D7 and white pawn on C6
@@ -435,7 +437,7 @@ public class ChessboardTests
     // Black pawn on D2
     [TestCase("8/8/8/8/8/8/3p4/8 b KQkq - 0 1", "d2d1q d2d1r d2d1b d2d1n")]
     // Black pawn on D2 and white rook on D1
-    [TestCase("8/8/8/8/8/8/3p4/3R4 b KQkq - 0 1", "")]
+    [TestCase("8/8/8/8/8/8/3p4/3R4 b KQkq - 0 1", "", File.D, Rank.Two)]
     // Black pawn on D2 and white rook on C1
     [TestCase("8/8/8/8/8/8/3p4/2R5 b KQkq - 0 1", "d2d1q d2d1r d2d1b d2d1n d2c1q d2c1r d2c1b d2c1n")]
     // Black pawn on D2 and white rook on E1
@@ -470,13 +472,30 @@ public class ChessboardTests
     // Black knight on D4 and black pawn on C3, C4, C5, D3, D5, E3, E4, E5
     [TestCase("8/8/8/2ppp3/2pnp3/2ppp3/8/8 b KQkq - 0 1", "d4b3 d4b5 d4c2 d4c6 d4e2 d4e6 d4f3 d4f5")]
     // White knight on D4 and white pawn on B3, B5, C2, C6, E2, E6, F3, F5
-    [TestCase("8/8/2P1P3/1P3P2/3N4/1P3P2/2P1P3/8 w KQkq - 0 1", "")]
+    [TestCase("8/8/2P1P3/1P3P2/3N4/1P3P2/2P1P3/8 w KQkq - 0 1", "", File.D, Rank.Four)]
     // Black knight on D4 and black pawn on B3, B5, C2, C6, E2, E6, F3, F5
-    [TestCase("8/8/2p1p3/1p3p2/3n4/1p3p2/2p1p3/8 b KQkq - 0 1", "")]
+    [TestCase("8/8/2p1p3/1p3p2/3n4/1p3p2/2p1p3/8 b KQkq - 0 1", "", File.D, Rank.Four)]
+    // White knight on D4 and black pawn on B3, B5, C2, C6 and white pawn on E2, E6, F3, F5
+    [TestCase("8/8/2p1P3/1p3P2/3N4/1p3P2/2p1P3/8 w KQkq - 0 1", "d4b3 d4b5 d4c2 d4c6")]
+    // White knight on D4 and white pawn on B3, B5, C2, C6 and black pawn on E2, E6, F3, F5
+    [TestCase("8/8/2P1p3/1P3p2/3N4/1P3p2/2P1p3/8 w KQkq - 0 1", "d4e2 d4e6 d4f3 d4f5")]
+    // Black knight on D4 and white pawn on B3, B5, C2, C6 and black pawn on E2, E6, F3, F5
+    [TestCase("8/8/2P1p3/1P3p2/3n4/1P3p2/2P1p3/8 b KQkq - 0 1", "d4b3 d4b5 d4c2 d4c6")]
+    // Black knight on D4 and black pawn on B3, B5, C2, C6 and white pawn on E2, E6, F3, F5
+    [TestCase("8/8/2p1P3/1p3P2/3n4/1p3P2/2p1P3/8 b KQkq - 0 1", "d4e2 d4e6 d4f3 d4f5")]
+    // White knight on A1
+    [TestCase("8/8/8/8/8/8/8/N7 w KQkq - 0 1", "a1b3 a1c2")]
+    // White knight on A8
+    [TestCase("N7/8/8/8/8/8/8/8 w KQkq - 0 1", "a8b6 a8c7")]
+    // White knight on H1
+    [TestCase("8/8/8/8/8/8/8/7N w KQkq - 0 1", "h1f2 h1g3")]
+    // White knight on H8
+    [TestCase("7N/8/8/8/8/8/8/8 w KQkq - 0 1", "h8f7 h8g6")]
 
     #endregion
 
-    public void GetMoveCandidates_ShouldReturnMovesThatAreCandidatesForValidMoves(string fenString, string uciMoves)
+    public void GetMoveCandidates_ShouldReturnMovesThatAreCandidatesForValidMoves_AssertSingleChessPiece(string fenString, string uciMoves,
+        File? noMovesFile = null, Rank? noMovesRank = null)
     {
         // Arrange
         var fen = Fen.FromString(fenString);
@@ -485,12 +504,35 @@ public class ChessboardTests
 
         // Assume
         Assert.That(expectedMoves, Is.Unique);
+        var distinctExpectedMoves = expectedMoves.DistinctBy(m => m.From).ToList();
+        Assert.That(distinctExpectedMoves, Has.Exactly(0).Items.Or.Exactly(1).Items,
+            "All expected moves must originate from the same position.");
+        var expectNoMoves = distinctExpectedMoves.Count == 0;
+        if (expectNoMoves)
+        {
+            Assert.That(noMovesFile, Is.Not.Null, "Provide a file of position from which no moves are allowed.");
+            Assert.That(noMovesRank, Is.Not.Null, "Provide a rank of position from which no moves are allowed.");
+        }
 
         // Act
         var moves = chessboard.GetMoveCandidates();
 
         // Assert
         Assert.That(moves, Is.Unique);
-        Assert.That(moves, Is.EquivalentTo(expectedMoves));
+
+        if (expectNoMoves)
+        {
+            Debug.Assert(noMovesFile != null, nameof(noMovesFile) + " != null");
+            Debug.Assert(noMovesRank != null, nameof(noMovesRank) + " != null");
+            var noMovesFrom = new Position(noMovesFile.Value, noMovesRank.Value);
+            Assert.That(moves.Where(m => m.From == noMovesFrom), Is.Empty);
+        }
+        else
+        {
+            var from = distinctExpectedMoves.Single().From;
+            Assert.That(moves.Where(m => m.From == from), Is.EquivalentTo(expectedMoves));
+        }
+
+        Assert.That(moves, Is.SupersetOf(expectedMoves));
     }
 }
