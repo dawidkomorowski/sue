@@ -136,7 +136,7 @@ internal sealed class GameWorker
             return;
         }
 
-        var move = ChessEngine.FindMove(_initialFen, moves);
+        var move = ChessEngine.FindBestMove(_initialFen, moves);
         if (move != null)
         {
             await _lichessClient.MakeMoveAsync(_gameId, move);
