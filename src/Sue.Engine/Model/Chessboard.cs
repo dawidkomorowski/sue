@@ -1,6 +1,10 @@
-﻿using System;
+﻿using Sue.Engine.OldModel.Chessboard.Internal;
+using Sue.Engine.OldModel.Chessboard;
+using Sue.Engine.OldModel.ChessPiece.Internal;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Sue.Engine.OldModel.ChessPiece;
 
 namespace Sue.Engine.Model;
 
@@ -433,6 +437,7 @@ internal sealed class Chessboard
                         break;
                     case ChessPiece.WhiteRook:
                     case ChessPiece.BlackRook:
+                        AppendRookMoves(position, moves);
                         break;
                     case ChessPiece.WhiteBishop:
                     case ChessPiece.BlackBishop:
@@ -674,6 +679,44 @@ internal sealed class Chessboard
         {
             var targetPosition = position.MoveBy(-offset, -offset);
             if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moves))
+            {
+                break;
+            }
+        }
+    }
+
+    private void AppendRookMoves(Position position, List<Move> moves)
+    {
+        var rook = GetChessPiece(position);
+        Debug.Assert(rook is ChessPiece.WhiteRook or ChessPiece.BlackRook, "rook is ChessPiece.WhiteRook or ChessPiece.BlackRook");
+
+        for (var fileIndex = position.File.Index() + 1; fileIndex <= File.H.Index(); fileIndex++)
+        {
+            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(fileIndex.ToFile(), position.Rank), moves))
+            {
+                break;
+            }
+        }
+
+        for (var fileIndex = position.File.Index() - 1; fileIndex >= File.A.Index(); fileIndex--)
+        {
+            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(fileIndex.ToFile(), position.Rank), moves))
+            {
+                break;
+            }
+        }
+
+        for (var rankIndex = position.Rank.Index() + 1; rankIndex <= Rank.Eight.Index(); rankIndex++)
+        {
+            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(position.File, rankIndex.ToRank()), moves))
+            {
+                break;
+            }
+        }
+
+        for (var rankIndex = position.Rank.Index() - 1; rankIndex >= Rank.One.Index(); rankIndex--)
+        {
+            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(position.File, rankIndex.ToRank()), moves))
             {
                 break;
             }

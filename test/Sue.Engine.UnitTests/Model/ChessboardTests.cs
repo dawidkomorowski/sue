@@ -581,6 +581,39 @@ public class ChessboardTests
 
     #endregion
 
+    #region Rook test cases
+
+    // White rook on D4
+    [TestCase("8/8/8/8/3R4/8/8/8 w KQkq - 0 1", "d4c4 d4b4 d4a4 d4d3 d4d2 d4d1 d4e4 d4f4 d4g4 d4h4 d4d5 d4d6 d4d7 d4d8")]
+    // Black rook on D4
+    [TestCase("8/8/8/8/3r4/8/8/8 b KQkq - 0 1", "d4c4 d4b4 d4a4 d4d3 d4d2 d4d1 d4e4 d4f4 d4g4 d4h4 d4d5 d4d6 d4d7 d4d8")]
+    // White rook on D4 and black pawn on C4, D3, D5, E4
+    [TestCase("8/8/8/3p4/2pRp3/3p4/8/8 w KQkq - 0 1", "d4c4 d4d3 d4e4 d4d5")]
+    // Black rook on D4 and white pawn on C4, D3, D5, E4
+    [TestCase("8/8/8/3P4/2PrP3/3P4/8/8 b KQkq - 0 1", "d4c4 d4d3 d4e4 d4d5")]
+    // White rook on D4 and white pawn on C4, D3, D5, E4
+    [TestCase("8/8/8/3P4/2PRP3/3P4/8/8 w KQkq - 0 1", "", File.D, Rank.Four)]
+    // Black rook on D4 and black pawn on C4, D3, D5, E4
+    [TestCase("8/8/8/3p4/2prp3/3p4/8/8 b KQkq - 0 1", "", File.D, Rank.Four)]
+    // White rook on D4 and white pawn on A4, D2 and black pawn on D7, G4
+    [TestCase("8/3p4/8/8/P2R2p1/8/3P4/8 w KQkq - 0 1", "d4c4 d4b4 d4d3 d4e4 d4f4 d4g4 d4d5 d4d6 d4d7")]
+    // White rook on D4 and black pawn on A4, D2 and white pawn on D7, G4
+    [TestCase("8/3P4/8/8/p2R2P1/8/3p4/8 w KQkq - 0 1", "d4c4 d4b4 d4a4 d4d3 d4d2 d4e4 d4f4 d4d5 d4d6")]
+    // Black rook on D4 and black pawn on A4, D2 and white pawn on D7, G4
+    [TestCase("8/3P4/8/8/p2r2P1/8/3p4/8 b KQkq - 0 1", "d4c4 d4b4 d4d3 d4e4 d4f4 d4g4 d4d5 d4d6 d4d7")]
+    // Black rook on D4 and white pawn on A4, D2 and black pawn on D7, G4
+    [TestCase("8/3p4/8/8/P2r2p1/8/3P4/8 b KQkq - 0 1", "d4c4 d4b4 d4a4 d4d3 d4d2 d4e4 d4f4 d4d5 d4d6")]
+    // White rook on A1
+    [TestCase("8/8/8/8/8/8/8/R7 w KQkq - 0 1", "a1a2 a1a3 a1a4 a1a5 a1a6 a1a7 a1a8 a1b1 a1c1 a1d1 a1e1 a1f1 a1g1 a1h1")]
+    // White rook on A8
+    [TestCase("R7/8/8/8/8/8/8/8 w KQkq - 0 1", "a8a7 a8a6 a8a5 a8a4 a8a3 a8a2 a8a1 a8b8 a8c8 a8d8 a8e8 a8f8 a8g8 a8h8")]
+    // White rook on H1
+    [TestCase("8/8/8/8/8/8/8/7R w KQkq - 0 1", "h1g1 h1f1 h1e1 h1d1 h1c1 h1b1 h1a1 h1h2 h1h3 h1h4 h1h5 h1h6 h1h7 h1h8")]
+    // White rook on H8
+    [TestCase("7R/8/8/8/8/8/8/8 w KQkq - 0 1", "h8g8 h8f8 h8e8 h8d8 h8c8 h8b8 h8a8 h8h7 h8h6 h8h5 h8h4 h8h3 h8h2 h8h1")]
+
+    #endregion
+
     public void GetMoveCandidates_ShouldReturnMovesThatAreCandidatesForValidMoves_AssertSingleChessPiece(string fenString, string uciMoves,
         File? noMovesFile = null, Rank? noMovesRank = null)
     {
