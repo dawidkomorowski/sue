@@ -436,6 +436,7 @@ internal sealed class Chessboard
                         break;
                     case ChessPiece.WhiteBishop:
                     case ChessPiece.BlackBishop:
+                        AppendBishopMoves(position, moves);
                         break;
                     case ChessPiece.WhiteKnight:
                     case ChessPiece.BlackKnight:
@@ -630,6 +631,12 @@ internal sealed class Chessboard
                 moves.Add(new Move(position, targetPosition));
             }
         }
+    }
+
+    private void AppendBishopMoves(Position position, List<Move> moves)
+    {
+        var bishop = GetChessPiece(position);
+        Debug.Assert(bishop is ChessPiece.WhiteBishop or ChessPiece.BlackBishop, "bishop is ChessPiece.WhiteBishop or ChessPiece.BlackBishop");
     }
 
     #endregion
