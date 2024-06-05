@@ -637,6 +637,62 @@ internal sealed class Chessboard
     {
         var bishop = GetChessPiece(position);
         Debug.Assert(bishop is ChessPiece.WhiteBishop or ChessPiece.BlackBishop, "bishop is ChessPiece.WhiteBishop or ChessPiece.BlackBishop");
+
+        var topRightMaximumOffset = Math.Min(File.H.Index() - position.File.Index(), Rank.Eight.Index() - position.Rank.Index());
+        var topLeftMaximumOffset = Math.Min(position.File.Index() - File.A.Index(), Rank.Eight.Index() - position.Rank.Index());
+        var bottomRightMaximumOffset = Math.Min(File.H.Index() - position.File.Index(), position.Rank.Index() - Rank.One.Index());
+        var bottomLeftMaximumOffset = Math.Min(position.File.Index() - File.A.Index(), position.Rank.Index() - Rank.One.Index());
+
+        for (var offset = 1; offset <= topRightMaximumOffset; offset++)
+        {
+            var targetPosition = position.MoveBy(offset, offset);
+            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moves))
+            {
+                break;
+            }
+        }
+
+        for (var offset = 1; offset <= topLeftMaximumOffset; offset++)
+        {
+            var targetPosition = position.MoveBy(-offset, offset);
+            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moves))
+            {
+                break;
+            }
+        }
+
+        for (var offset = 1; offset <= bottomRightMaximumOffset; offset++)
+        {
+            var targetPosition = position.MoveBy(offset, -offset);
+            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moves))
+            {
+                break;
+            }
+        }
+
+        for (var offset = 1; offset <= bottomLeftMaximumOffset; offset++)
+        {
+            var targetPosition = position.MoveBy(-offset, -offset);
+            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moves))
+            {
+                break;
+            }
+        }
+    }
+
+    private bool ShouldBreak_AndAlso_TryAddMove(Position position, Position targetPosition, List<Move> moves)
+    {
+        var myChessPiece = GetChessPiece(position);
+        var chessPiece = GetChessPiece(targetPosition);
+
+        if ((myChessPiece.IsWhite() && chessPiece.IsWhite()) || (myChessPiece.IsBlack() && chessPiece.IsBlack()))
+        {
+            return true;
+        }
+
+        moves.Add(new Move(position, targetPosition));
+
+        return chessPiece is not ChessPiece.None;
     }
 
     #endregion
