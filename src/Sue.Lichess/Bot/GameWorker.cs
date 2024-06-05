@@ -136,7 +136,7 @@ internal sealed class GameWorker
             return;
         }
 
-        var move = ChessEngine.FindBestMove(_initialFen, moves, SearchStrategy.Random);
+        var move = ChessEngine.FindBestMove(_initialFen, moves, SearchStrategy.PureMonteCarlo);
         if (move != null)
         {
             await _lichessClient.MakeMoveAsync(_gameId, move);

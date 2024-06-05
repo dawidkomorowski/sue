@@ -6,7 +6,7 @@ namespace Sue.Engine.Search;
 
 internal sealed class PureMonteCarloSearch : ISearch
 {
-    private const int PlayOutsPerMove = 1;
+    private const int PlayOutsPerMove = 100;
     private const int MovesLimit = 200;
 
     public Move? FindBestMove(Chessboard chessboard)
