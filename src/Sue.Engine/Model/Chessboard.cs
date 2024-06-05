@@ -7,6 +7,7 @@ namespace Sue.Engine.Model;
 internal sealed class Chessboard
 {
     private readonly ChessPiece[] _chessboard = new ChessPiece[64];
+    private readonly Stack<RevertMoveData> _revertMoveStack = new();
 
     public Color ActiveColor { get; set; }
     public bool WhiteKingSideCastlingAvailable { get; set; }
@@ -99,7 +100,8 @@ internal sealed class Chessboard
             throw CreateInvalidMoveError(move);
         }
 
-        PerformMove(move, cpFrom);
+        var revertMoveData = CaptureRevertMoveData(move, cpFrom, cpTo);
+        PerformMove(move, cpFrom, ref revertMoveData);
         UpdateCastlingAvailability(move, cpFrom);
         UpdateEnPassantTargetPosition(move, cpFrom);
         UpdateHalfMoveClock(cpFrom, cpTo);
@@ -112,6 +114,9 @@ internal sealed class Chessboard
 
         // Update ActiveColor
         ActiveColor = ActiveColor.Opposite();
+
+        // Push revert move data onto stack
+        _revertMoveStack.Push(revertMoveData);
     }
 
     #region MakeMove implementation
@@ -121,12 +126,36 @@ internal sealed class Chessboard
         return new InvalidOperationException($"Invalid move '{move.ToUci()}' in position '{ToFen()}'.");
     }
 
-    private void PerformMove(Move move, ChessPiece cpFrom)
+    private RevertMoveData CaptureRevertMoveData(Move move, ChessPiece cpFrom, ChessPiece cpTo)
+    {
+        return new RevertMoveData
+        {
+            Position1 = move.From,
+            ChessPiece1 = cpFrom,
+            Position2 = move.To,
+            ChessPiece2 = cpTo,
+            ActiveColor = ActiveColor,
+            WhiteKingSideCastlingAvailable = WhiteKingSideCastlingAvailable,
+            WhiteQueenSideCastlingAvailable = WhiteQueenSideCastlingAvailable,
+            BlackKingSideCastlingAvailable = BlackKingSideCastlingAvailable,
+            BlackQueenSideCastlingAvailable = BlackQueenSideCastlingAvailable,
+            EnPassantTargetPosition = EnPassantTargetPosition,
+            HalfMoveClock = HalfMoveClock,
+            FullMoveNumber = FullMoveNumber
+        };
+    }
+
+    private void PerformMove(Move move, ChessPiece cpFrom, ref RevertMoveData revertMoveData)
     {
         if (cpFrom is ChessPiece.WhiteKing && move.From is { File: File.E, Rank: Rank.One } && move.To is { File: File.G, Rank: Rank.One })
         {
             if (WhiteKingSideCastlingAvailable)
             {
+                revertMoveData.Position3 = new Position(File.H, Rank.One);
+                revertMoveData.ChessPiece3 = GetChessPiece(revertMoveData.Position3.Value);
+                revertMoveData.Position4 = new Position(File.F, Rank.One);
+                revertMoveData.ChessPiece4 = GetChessPiece(revertMoveData.Position4.Value);
+
                 SetChessPiece(new Position(File.E, Rank.One), ChessPiece.None);
                 SetChessPiece(new Position(File.G, Rank.One), ChessPiece.WhiteKing);
                 SetChessPiece(new Position(File.H, Rank.One), ChessPiece.None);
@@ -141,6 +170,11 @@ internal sealed class Chessboard
         {
             if (WhiteQueenSideCastlingAvailable)
             {
+                revertMoveData.Position3 = new Position(File.A, Rank.One);
+                revertMoveData.ChessPiece3 = GetChessPiece(revertMoveData.Position3.Value);
+                revertMoveData.Position4 = new Position(File.D, Rank.One);
+                revertMoveData.ChessPiece4 = GetChessPiece(revertMoveData.Position4.Value);
+
                 SetChessPiece(new Position(File.E, Rank.One), ChessPiece.None);
                 SetChessPiece(new Position(File.C, Rank.One), ChessPiece.WhiteKing);
                 SetChessPiece(new Position(File.A, Rank.One), ChessPiece.None);
@@ -155,6 +189,11 @@ internal sealed class Chessboard
         {
             if (BlackKingSideCastlingAvailable)
             {
+                revertMoveData.Position3 = new Position(File.H, Rank.Eight);
+                revertMoveData.ChessPiece3 = GetChessPiece(revertMoveData.Position3.Value);
+                revertMoveData.Position4 = new Position(File.F, Rank.Eight);
+                revertMoveData.ChessPiece4 = GetChessPiece(revertMoveData.Position4.Value);
+
                 SetChessPiece(new Position(File.E, Rank.Eight), ChessPiece.None);
                 SetChessPiece(new Position(File.G, Rank.Eight), ChessPiece.BlackKing);
                 SetChessPiece(new Position(File.H, Rank.Eight), ChessPiece.None);
@@ -169,6 +208,11 @@ internal sealed class Chessboard
         {
             if (BlackQueenSideCastlingAvailable)
             {
+                revertMoveData.Position3 = new Position(File.A, Rank.Eight);
+                revertMoveData.ChessPiece3 = GetChessPiece(revertMoveData.Position3.Value);
+                revertMoveData.Position4 = new Position(File.D, Rank.Eight);
+                revertMoveData.ChessPiece4 = GetChessPiece(revertMoveData.Position4.Value);
+
                 SetChessPiece(new Position(File.E, Rank.Eight), ChessPiece.None);
                 SetChessPiece(new Position(File.C, Rank.Eight), ChessPiece.BlackKing);
                 SetChessPiece(new Position(File.A, Rank.Eight), ChessPiece.None);
@@ -181,12 +225,20 @@ internal sealed class Chessboard
         }
         else if (cpFrom is ChessPiece.WhitePawn && EnPassantTargetPosition.HasValue && move.To == EnPassantTargetPosition.Value)
         {
+            var capturedPosition = new Position(EnPassantTargetPosition.Value.File, EnPassantTargetPosition.Value.Rank.Add(-1));
+            revertMoveData.Position3 = capturedPosition;
+            revertMoveData.ChessPiece3 = GetChessPiece(revertMoveData.Position3.Value);
+
             SetChessPiece(move.From, ChessPiece.None);
             SetChessPiece(move.To, cpFrom);
-            SetChessPiece(new Position(EnPassantTargetPosition.Value.File, EnPassantTargetPosition.Value.Rank.Add(-1)), ChessPiece.None);
+            SetChessPiece(capturedPosition, ChessPiece.None);
         }
         else if (cpFrom is ChessPiece.BlackPawn && EnPassantTargetPosition.HasValue && move.To == EnPassantTargetPosition.Value)
         {
+            var capturedPosition = new Position(EnPassantTargetPosition.Value.File, EnPassantTargetPosition.Value.Rank.Add(1));
+            revertMoveData.Position3 = capturedPosition;
+            revertMoveData.ChessPiece3 = GetChessPiece(revertMoveData.Position3.Value);
+
             SetChessPiece(move.From, ChessPiece.None);
             SetChessPiece(move.To, cpFrom);
             SetChessPiece(new Position(EnPassantTargetPosition.Value.File, EnPassantTargetPosition.Value.Rank.Add(1)), ChessPiece.None);
@@ -330,6 +382,37 @@ internal sealed class Chessboard
     }
 
     #endregion
+
+    public void RevertMove()
+    {
+        if (_revertMoveStack.Count == 0)
+        {
+            throw new InvalidOperationException("There are no moves to revert.");
+        }
+
+        var data = _revertMoveStack.Pop();
+        SetChessPiece(data.Position1, data.ChessPiece1);
+        SetChessPiece(data.Position2, data.ChessPiece2);
+
+        if (data.Position3.HasValue)
+        {
+            SetChessPiece(data.Position3.Value, data.ChessPiece3);
+        }
+
+        if (data.Position4.HasValue)
+        {
+            SetChessPiece(data.Position4.Value, data.ChessPiece4);
+        }
+
+        ActiveColor = data.ActiveColor;
+        WhiteKingSideCastlingAvailable = data.WhiteKingSideCastlingAvailable;
+        WhiteQueenSideCastlingAvailable = data.WhiteQueenSideCastlingAvailable;
+        BlackKingSideCastlingAvailable = data.BlackKingSideCastlingAvailable;
+        BlackQueenSideCastlingAvailable = data.BlackQueenSideCastlingAvailable;
+        EnPassantTargetPosition = data.EnPassantTargetPosition;
+        HalfMoveClock = data.HalfMoveClock;
+        FullMoveNumber = data.FullMoveNumber;
+    }
 
     public IReadOnlyList<Move> GetMoveCandidates()
     {
@@ -554,5 +637,27 @@ internal sealed class Chessboard
     private static int GetIndex(Position position)
     {
         return position.File.Index() * 8 + position.Rank.Index();
+    }
+
+    private struct RevertMoveData
+    {
+        public Position Position1 { get; set; }
+        public ChessPiece ChessPiece1 { get; set; }
+        public Position Position2 { get; set; }
+        public ChessPiece ChessPiece2 { get; set; }
+
+        public Position? Position3 { get; set; }
+        public ChessPiece ChessPiece3 { get; set; }
+        public Position? Position4 { get; set; }
+        public ChessPiece ChessPiece4 { get; set; }
+
+        public Color ActiveColor { get; set; }
+        public bool WhiteKingSideCastlingAvailable { get; set; }
+        public bool WhiteQueenSideCastlingAvailable { get; set; }
+        public bool BlackKingSideCastlingAvailable { get; set; }
+        public bool BlackQueenSideCastlingAvailable { get; set; }
+        public Position? EnPassantTargetPosition { get; set; }
+        public int HalfMoveClock { get; set; }
+        public int FullMoveNumber { get; set; }
     }
 }

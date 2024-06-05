@@ -316,7 +316,8 @@ public class ChessboardTests
 
     #endregion
 
-    public void MakeMove_ShouldChangeChessboardStateAccordingToRequestedMove(string fenString, string uciMove, string fenStringAfterMove)
+    public void MakeMove_ShouldChangeChessboardStateAccordingToRequestedMove_AndThen_RevertMove_ShouldRestoreOriginalChessboardState(string fenString,
+        string uciMove, string fenStringAfterMove)
     {
         // Arrange
         var fen = Fen.FromString(fenString);
@@ -325,10 +326,63 @@ public class ChessboardTests
 
         // Act
         chessboard.MakeMove(move);
+        var fenAfterMove = chessboard.ToFen();
+
+        chessboard.RevertMove();
+        var fenAfterRevert = chessboard.ToFen();
 
         // Assert
-        var fenAfterMove = chessboard.ToFen();
         Assert.That(fenAfterMove.ToString(), Is.EqualTo(fenStringAfterMove));
+        Assert.That(fenAfterRevert.ToString(), Is.EqualTo(fenString));
+    }
+
+    [Test]
+    public void RevertMove_ShouldThrowException_GivenNoMoreMovesToRevert()
+    {
+        // Arrange
+        var fen = Fen.FromString(Fen.StartPos);
+        var chessboard = Chessboard.FromFen(fen);
+
+        // Act
+        // Assert
+        Assert.That(() => chessboard.RevertMove(), Throws.InvalidOperationException);
+    }
+
+    [Test]
+    public void RevertMove_ShouldRevertSequenceOfMoves()
+    {
+        // Arrange
+        var fen = Fen.FromString(Fen.StartPos);
+        var chessboard = Chessboard.FromFen(fen);
+        chessboard.MakeMove(Move.ParseUciMove("e2e4"));
+        chessboard.MakeMove(Move.ParseUciMove("e7e6"));
+        chessboard.MakeMove(Move.ParseUciMove("g1f3"));
+        chessboard.MakeMove(Move.ParseUciMove("d7d5"));
+        chessboard.MakeMove(Move.ParseUciMove("e4d5"));
+        chessboard.MakeMove(Move.ParseUciMove("e6d5"));
+
+        // Assume
+        Assert.That(chessboard.ToFen().ToString(), Is.EqualTo("rnbqkbnr/ppp2ppp/8/3p4/8/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4"));
+
+        // Act
+        // Assert
+        chessboard.RevertMove();
+        Assert.That(chessboard.ToFen().ToString(), Is.EqualTo("rnbqkbnr/ppp2ppp/4p3/3P4/8/5N2/PPPP1PPP/RNBQKB1R b KQkq - 0 3"));
+
+        chessboard.RevertMove();
+        Assert.That(chessboard.ToFen().ToString(), Is.EqualTo("rnbqkbnr/ppp2ppp/4p3/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3"));
+
+        chessboard.RevertMove();
+        Assert.That(chessboard.ToFen().ToString(), Is.EqualTo("rnbqkbnr/pppp1ppp/4p3/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"));
+
+        chessboard.RevertMove();
+        Assert.That(chessboard.ToFen().ToString(), Is.EqualTo("rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"));
+
+        chessboard.RevertMove();
+        Assert.That(chessboard.ToFen().ToString(), Is.EqualTo("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"));
+
+        chessboard.RevertMove();
+        Assert.That(chessboard.ToFen().ToString(), Is.EqualTo(Fen.StartPos));
     }
 
     #region White pawn test cases
