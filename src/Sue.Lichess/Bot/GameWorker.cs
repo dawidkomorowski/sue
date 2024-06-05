@@ -136,14 +136,17 @@ internal sealed class GameWorker
             return;
         }
 
+        Logger.Debug("Starting search for best move, gameId: {0}", _gameId);
+
         var move = ChessEngine.FindBestMove(_initialFen, moves, SearchStrategy.PureMonteCarlo);
         if (move != null)
         {
+            Logger.Debug("Best move: {0}, gameId: {1}", move, _gameId);
             await _lichessClient.MakeMoveAsync(_gameId, move);
         }
         else
         {
-            Logger.Error("Did not find any move!");
+            Logger.Error("Did not find any move! gameId: {0}", _gameId);
         }
     }
 

@@ -548,6 +548,39 @@ public class ChessboardTests
 
     #endregion
 
+    #region Bishop test cases
+
+    // White bishop on D4
+    [TestCase("8/8/8/8/3B4/8/8/8 w KQkq - 0 1", "d4c3 d4b2 d4a1 d4e3 d4f2 d4g1 d4c5 d4b6 d4a7 d4e5 d4f6 d4g7 d4h8")]
+    // Black bishop on D4
+    [TestCase("8/8/8/8/3b4/8/8/8 b KQkq - 0 1", "d4c3 d4b2 d4a1 d4e3 d4f2 d4g1 d4c5 d4b6 d4a7 d4e5 d4f6 d4g7 d4h8")]
+    // White bishop on D4 and black pawn on C3, C5, E3, E5
+    [TestCase("8/8/8/2p1p3/3B4/2p1p3/8/8 w KQkq - 0 1", "d4c3 d4c5 d4e3 d4e5")]
+    // Black bishop on D4 and white pawn on C3, C5, E3, E5
+    [TestCase("8/8/8/2P1P3/3b4/2P1P3/8/8 b KQkq - 0 1", "d4c3 d4c5 d4e3 d4e5")]
+    // White bishop on D4 and white pawn on C3, C5, E3, E5
+    [TestCase("8/8/8/2P1P3/3B4/2P1P3/8/8 w KQkq - 0 1", "", File.D, Rank.Four)]
+    // Black bishop on D4 and black pawn on C3, C5, E3, E5
+    [TestCase("8/8/8/2p1p3/3b4/2p1p3/8/8 b KQkq - 0 1", "", File.D, Rank.Four)]
+    // White bishop on D4 and white pawn on B2, A7 and black pawn on F2, G7
+    [TestCase("8/P5p1/8/8/3B4/8/1P3p2/8 w KQkq - 0 1", "d4c3 d4c5 d4b6 d4e3 d4f2 d4e5 d4f6 d4g7")]
+    // White bishop on D4 and black pawn on B2, A7 and white pawn on F2, G7
+    [TestCase("8/p5P1/8/8/3B4/8/1p3P2/8 w KQkq - 0 1", "d4c3 d4b2 d4c5 d4b6 d4a7 d4e3 d4e5 d4f6")]
+    // Black bishop on D4 and black pawn on B2, A7 and white pawn on F2, G7
+    [TestCase("8/p5P1/8/8/3b4/8/1p3P2/8 b KQkq - 0 1", "d4c3 d4c5 d4b6 d4e3 d4f2 d4e5 d4f6 d4g7")]
+    // Black bishop on D4 and white pawn on B2, A7 and black pawn on F2, G7
+    [TestCase("8/P5p1/8/8/3b4/8/1P3p2/8 b KQkq - 0 1", "d4c3 d4b2 d4c5 d4b6 d4a7 d4e3 d4e5 d4f6")]
+    // White bishop on A1
+    [TestCase("8/8/8/8/8/8/8/B7 w KQkq - 0 1", "a1b2 a1c3 a1d4 a1e5 a1f6 a1g7 a1h8")]
+    // White bishop on A8
+    [TestCase("B7/8/8/8/8/8/8/8 w KQkq - 0 1", "a8b7 a8c6 a8d5 a8e4 a8f3 a8g2 a8h1")]
+    // White bishop on H1
+    [TestCase("8/8/8/8/8/8/8/7B w KQkq - 0 1", "h1g2 h1f3 h1e4 h1d5 h1c6 h1b7 h1a8")]
+    // White bishop on H8
+    [TestCase("7B/8/8/8/8/8/8/8 w KQkq - 0 1", "h8g7 h8f6 h8e5 h8d4 h8c3 h8b2 h8a1")]
+
+    #endregion
+
     public void GetMoveCandidates_ShouldReturnMovesThatAreCandidatesForValidMoves_AssertSingleChessPiece(string fenString, string uciMoves,
         File? noMovesFile = null, Rank? noMovesRank = null)
     {
