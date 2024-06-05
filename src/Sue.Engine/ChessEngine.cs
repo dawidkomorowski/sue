@@ -1,5 +1,6 @@
 ﻿using System;
 using Sue.Engine.Model;
+using Sue.Engine.Search;
 
 namespace Sue.Engine;
 
@@ -19,7 +20,7 @@ public static class ChessEngine
         return chessboard.ActiveColor;
     }
 
-    public static string? FindBestMove(string fenString, string uciMoves)
+    public static string? FindBestMove(string fenString, string uciMoves, SearchStrategy strategy)
     {
         var fen = Fen.FromString(fenString);
         var moves = Move.ParseUciMoves(uciMoves);
@@ -30,31 +31,17 @@ public static class ChessEngine
             chessboard.MakeMove(move);
         }
 
-        var moveCandidates = chessboard.GetMoveCandidates();
+        var search = CreateSearch(strategy);
+        var bestMove = search.FindBestMove(chessboard);
+        return bestMove?.ToUci();
+    }
 
-        if (moveCandidates.Count == 0)
+    private static ISearch CreateSearch(SearchStrategy strategy)
+    {
+        return strategy switch
         {
-            return null;
-        }
-
-        var bestMove = moveCandidates[Random.Shared.Next(moveCandidates.Count)];
-
-        //IRookMovesFinder rookMovesFinder = new RookMovesFinder();
-        //IBishopMovesFinder bishopMovesFinder = new BishopMovesFinder();
-        //IChessPieceFactory chessPieceFactory = new ChessPieceFactory(rookMovesFinder, bishopMovesFinder);
-        //var chessboardFactory = new ChessboardFactory(chessPieceFactory);
-        //var chessboardOld = chessboardFactory.Create(chessboard.ToFen().ToString());
-
-        //var availableMoves = chessboardOld.GetChessPieces(chessboardOld.CurrentPlayer).SelectMany(cp => cp.Moves).ToList();
-        //var bestMove = availableMoves.MinBy(_ => Guid.NewGuid());
-
-        //if (bestMove == null)
-        //{
-        //    return null;
-        //}
-
-        //var bm = new Move(new Position(bestMove.From.File, bestMove.From.Rank), new Position(bestMove.To.File, bestMove.To.Rank));
-
-        return bestMove.ToUci();
+            SearchStrategy.Random => new RandomSearch(),
+            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, "Unknown search strategy.")
+        };
     }
 }
