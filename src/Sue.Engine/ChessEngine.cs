@@ -41,6 +41,7 @@ public static class ChessEngine
         return strategy switch
         {
             SearchStrategy.Random => new RandomSearch(),
+            SearchStrategy.PureMonteCarlo => new PureMonteCarloSearch(),
             _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, "Unknown search strategy.")
         };
     }

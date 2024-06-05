@@ -2,5 +2,6 @@
 
 public enum SearchStrategy
 {
-    Random
+    Random,
+    PureMonteCarlo
 }
