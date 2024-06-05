@@ -6,11 +6,11 @@ namespace Sue.Engine.Search;
 
 internal sealed class PureMonteCarloSearch : ISearch
 {
-    private const int PlayOutsPerMove = 100;
-    private const int MovesLimit = 200;
+    private const int PlayOutsPerMove = 5000;
 
     public Move? FindBestMove(Chessboard chessboard)
     {
+        var myColor = chessboard.ActiveColor;
         var moveCandidates = chessboard.GetMoveCandidates();
 
         if (moveCandidates.Count == 0)
@@ -28,7 +28,7 @@ internal sealed class PureMonteCarloSearch : ISearch
             var score = 0;
             for (var i = 0; i < PlayOutsPerMove; i++)
             {
-                var won = PlayOut(chessboard, chessboard.ActiveColor);
+                var won = PlayOut(chessboard, myColor);
 
                 if (won)
                 {
@@ -45,6 +45,9 @@ internal sealed class PureMonteCarloSearch : ISearch
             chessboard.RevertMove();
         }
 
+        // TODO
+        Console.WriteLine("SCORE: " + bestScore);
+
         return bestMove;
     }
 
@@ -55,9 +58,10 @@ internal sealed class PureMonteCarloSearch : ISearch
 
         while (true)
         {
-            if (movesPlayed > MovesLimit)
+            if (chessboard.HalfMoveClock >= 100)
             {
-                throw new InvalidOperationException("Moves limit reached.");
+                won = false;
+                break;
             }
 
             var moveCandidates = chessboard.GetMoveCandidates();
