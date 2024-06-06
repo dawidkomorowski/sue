@@ -649,6 +649,40 @@ public class ChessboardTests
 
     #endregion
 
+    #region King test cases
+
+    // White king on D4
+    [TestCase("8/8/8/8/3K4/8/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // Black king on D4
+    [TestCase("8/8/8/8/3k4/8/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // White king on D4 and black pawn on C3, C4, C5, D3, D5, E3, E4, E5
+    [TestCase("8/8/8/2ppp3/2pKp3/2ppp3/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // Black king on D4 and white pawn on C3, C4, C5, D3, D5, E3, E4, E5
+    [TestCase("8/8/8/2PPP3/2PkP3/2PPP3/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // White king on D4 and white pawn on C3, C4, C5, D3, D5, E3, E4, E5
+    [TestCase("8/8/8/2PPP3/2PKP3/2PPP3/8/8 w - - 0 1", "", File.D, Rank.Four)]
+    // Black king on D4 and black pawn on C3, C4, C5, D3, D5, E3, E4, E5
+    [TestCase("8/8/8/2ppp3/2pkp3/2ppp3/8/8 b - - 0 1", "", File.D, Rank.Four)]
+    // White king on D4 and white pawn on C4, D3, D5, E4 and black pawn on C3, C5, E3, E5
+    [TestCase("8/8/8/2pPp3/2PKP3/2pPp3/8/8 w - - 0 1", "d4c3 d4c5 d4e3 d4e5")]
+    // White king on D4 and black pawn on C4, D3, D5, E4 and white pawn on C3, C5, E3, E5
+    [TestCase("8/8/8/2PpP3/2pKp3/2PpP3/8/8 w - - 0 1", "d4c4 d4d3 d4d5 d4e4")]
+    // Black king on D4 and black pawn on C4, D3, D5, E4 and white pawn on C3, C5, E3, E5
+    [TestCase("8/8/8/2PpP3/2pkp3/2PpP3/8/8 b - - 0 1", "d4c3 d4c5 d4e3 d4e5")]
+    // Black king on D4 and white pawn on C4, D3, D5, E4 and black pawn on C3, C5, E3, E5
+    [TestCase("8/8/8/2pPp3/2PkP3/2pPp3/8/8 b - - 0 1", "d4c4 d4d3 d4d5 d4e4")]
+    // White king on A1
+    [TestCase("8/8/8/8/8/8/8/K7 w - - 0 1", "a1a2 a1b2 a1b1")]
+    // White king on A8
+    [TestCase("K7/8/8/8/8/8/8/8 w - - 0 1", "a8a7 a8b7 a8b8")]
+    // White king on H1
+    [TestCase("8/8/8/8/8/8/8/7K w - - 0 1", "h1g1 h1g2 h1h2")]
+    // White king on H8
+    [TestCase("7K/8/8/8/8/8/8/8 w - - 0 1", "h8g8 h8g7 h8h7")]
+    // TODO Add castling scenarios
+
+    #endregion
+
     public void GetMoveCandidates_ShouldReturnMovesThatAreCandidatesForValidMoves_AssertSingleChessPiece(string fenString, string uciMoves,
         File? noMovesFile = null, Rank? noMovesRank = null)
     {
