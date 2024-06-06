@@ -52,6 +52,7 @@ internal sealed class MiniMaxSearch : ISearch
 
     private int ScoreMove(Chessboard chessboard, int ply)
     {
+        // TODO Stop search if king is gone.
         if (ply == 0)
         {
             return Eval(chessboard);

@@ -614,6 +614,17 @@ public class ChessboardTests
 
     #endregion
 
+    #region Queen test cases
+
+    // White queen on D4
+    [TestCase("8/8/8/8/3Q4/8/8/8 w KQkq - 0 1",
+        "d4c4 d4b4 d4a4 d4c3 d4b2 d4a1 d4d3 d4d2 d4d1 d4e3 d4f2 d4g1 d4e4 d4f4 d4g4 d4h4 d4e5 d4f6 d4g7 d4h8 d4d5 d4d6 d4d7 d4d8 d4c5 d4b6 d4a7")]
+    // Black queen on D4
+    [TestCase("8/8/8/8/3q4/8/8/8 b KQkq - 0 1",
+        "d4c4 d4b4 d4a4 d4c3 d4b2 d4a1 d4d3 d4d2 d4d1 d4e3 d4f2 d4g1 d4e4 d4f4 d4g4 d4h4 d4e5 d4f6 d4g7 d4h8 d4d5 d4d6 d4d7 d4d8 d4c5 d4b6 d4a7")]
+
+    #endregion
+
     public void GetMoveCandidates_ShouldReturnMovesThatAreCandidatesForValidMoves_AssertSingleChessPiece(string fenString, string uciMoves,
         File? noMovesFile = null, Rank? noMovesRank = null)
     {

@@ -1,10 +1,6 @@
-﻿using Sue.Engine.OldModel.Chessboard.Internal;
-using Sue.Engine.OldModel.Chessboard;
-using Sue.Engine.OldModel.ChessPiece.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Sue.Engine.OldModel.ChessPiece;
 
 namespace Sue.Engine.Model;
 
