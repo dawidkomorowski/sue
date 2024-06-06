@@ -50,10 +50,9 @@ internal sealed class MiniMaxSearch : ISearch
         return bestMove;
     }
 
-    private int ScoreMove(Chessboard chessboard, int ply)
+    private static int ScoreMove(Chessboard chessboard, int ply)
     {
-        // TODO Stop search if king is gone.
-        if (ply == 0)
+        if (ply == 0 || KingIsGone(chessboard))
         {
             return Eval(chessboard);
         }
@@ -93,7 +92,7 @@ internal sealed class MiniMaxSearch : ISearch
         return chessboard.ActiveColor is Color.White ? max : min;
     }
 
-    private int Eval(Chessboard chessboard)
+    private static int Eval(Chessboard chessboard)
     {
         var score = 0;
 
@@ -121,5 +120,28 @@ internal sealed class MiniMaxSearch : ISearch
         }
 
         return score;
+    }
+
+    private static bool KingIsGone(Chessboard chessboard)
+    {
+        var whiteKingIsGone = true;
+        var blackKingIsGone = true;
+
+        foreach (var position in Position.All)
+        {
+            var chessPiece = chessboard.GetChessPiece(position);
+
+            if (chessPiece is ChessPiece.WhiteKing)
+            {
+                whiteKingIsGone = false;
+            }
+
+            if (chessPiece is ChessPiece.BlackKing)
+            {
+                blackKingIsGone = false;
+            }
+        }
+
+        return whiteKingIsGone || blackKingIsGone;
     }
 }
