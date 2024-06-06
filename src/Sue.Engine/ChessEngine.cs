@@ -42,6 +42,7 @@ public static class ChessEngine
         {
             SearchStrategy.Random => new RandomSearch(),
             SearchStrategy.PureMonteCarlo => new PureMonteCarloSearch(),
+            SearchStrategy.MiniMax => new MiniMaxSearch(),
             _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, "Unknown search strategy.")
         };
     }

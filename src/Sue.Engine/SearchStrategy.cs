@@ -3,5 +3,6 @@
 public enum SearchStrategy
 {
     Random,
-    PureMonteCarlo
+    PureMonteCarlo,
+    MiniMax
 }

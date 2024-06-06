@@ -138,7 +138,7 @@ internal sealed class GameWorker
 
         Logger.Debug("Starting search for best move, gameId: {0}", _gameId);
 
-        var move = ChessEngine.FindBestMove(_initialFen, moves, SearchStrategy.PureMonteCarlo);
+        var move = ChessEngine.FindBestMove(_initialFen, moves, SearchStrategy.MiniMax);
         if (move != null)
         {
             Logger.Debug("Best move: {0}, gameId: {1}", move, _gameId);
