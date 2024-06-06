@@ -430,6 +430,8 @@ internal sealed class Chessboard
                         break;
                     case ChessPiece.WhiteQueen:
                     case ChessPiece.BlackQueen:
+                        AppendRookMoves(position, moves);
+                        AppendBishopMoves(position, moves);
                         break;
                     case ChessPiece.WhiteRook:
                     case ChessPiece.BlackRook:
@@ -636,9 +638,6 @@ internal sealed class Chessboard
 
     private void AppendBishopMoves(Position position, List<Move> moves)
     {
-        var bishop = GetChessPiece(position);
-        Debug.Assert(bishop is ChessPiece.WhiteBishop or ChessPiece.BlackBishop, "bishop is ChessPiece.WhiteBishop or ChessPiece.BlackBishop");
-
         var topRightMaximumOffset = Math.Min(File.H.Index() - position.File.Index(), Rank.Eight.Index() - position.Rank.Index());
         var topLeftMaximumOffset = Math.Min(position.File.Index() - File.A.Index(), Rank.Eight.Index() - position.Rank.Index());
         var bottomRightMaximumOffset = Math.Min(File.H.Index() - position.File.Index(), position.Rank.Index() - Rank.One.Index());
@@ -683,9 +682,6 @@ internal sealed class Chessboard
 
     private void AppendRookMoves(Position position, List<Move> moves)
     {
-        var rook = GetChessPiece(position);
-        Debug.Assert(rook is ChessPiece.WhiteRook or ChessPiece.BlackRook, "rook is ChessPiece.WhiteRook or ChessPiece.BlackRook");
-
         for (var fileIndex = position.File.Index() + 1; fileIndex <= File.H.Index(); fileIndex++)
         {
             if (ShouldBreak_AndAlso_TryAddMove(position, new Position(fileIndex.ToFile(), position.Rank), moves))

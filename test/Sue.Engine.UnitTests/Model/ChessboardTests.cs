@@ -622,6 +622,30 @@ public class ChessboardTests
     // Black queen on D4
     [TestCase("8/8/8/8/3q4/8/8/8 b KQkq - 0 1",
         "d4c4 d4b4 d4a4 d4c3 d4b2 d4a1 d4d3 d4d2 d4d1 d4e3 d4f2 d4g1 d4e4 d4f4 d4g4 d4h4 d4e5 d4f6 d4g7 d4h8 d4d5 d4d6 d4d7 d4d8 d4c5 d4b6 d4a7")]
+    // White queen on D4 and black pawn on C3, C4, C5, D3, D5, E3, E4, E5
+    [TestCase("8/8/8/2ppp3/2pQp3/2ppp3/8/8 w KQkq - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // Black queen on D4 and white pawn on C3, C4, C5, D3, D5, E3, E4, E5
+    [TestCase("8/8/8/2PPP3/2PqP3/2PPP3/8/8 b KQkq - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // White queen on D4 and white pawn on C3, C4, C5, D3, D5, E3, E4, E5
+    [TestCase("8/8/8/2PPP3/2PQP3/2PPP3/8/8 w KQkq - 0 1", "", File.D, Rank.Four)]
+    // Black queen on D4 and black pawn on C3, C4, C5, D3, D5, E3, E4, E5
+    [TestCase("8/8/8/2ppp3/2pqp3/2ppp3/8/8 b KQkq - 0 1", "", File.D, Rank.Four)]
+    // White queen on D4 and white pawn on A4, D2, D7, G4 and black pawn on A7, B2, F2, G7
+    [TestCase("8/p2P2p1/8/8/P2Q2P1/8/1p1P1p2/8 w KQkq - 0 1", "d4c4 d4b4 d4c3 d4b2 d4d3 d4e3 d4f2 d4e4 d4f4 d4e5 d4f6 d4g7 d4d5 d4d6 d4c5 d4b6 d4a7")]
+    // White queen on D4 and black pawn on A4, D2, D7, G4 and white pawn on A7, B2, F2, G7
+    [TestCase("8/P2p2P1/8/8/p2Q2p1/8/1P1p1P2/8 w KQkq - 0 1", "d4c4 d4b4 d4a4 d4c3 d4d3 d4d2 d4e3 d4e4 d4f4 d4g4 d4e5 d4f6 d4d5 d4d6 d4d7 d4c5 d4b6")]
+    // Black queen on D4 and black pawn on A4, D2, D7, G4 and white pawn on A7, B2, F2, G7
+    [TestCase("8/P2p2P1/8/8/p2q2p1/8/1P1p1P2/8 b KQkq - 0 1", "d4c4 d4b4 d4c3 d4b2 d4d3 d4e3 d4f2 d4e4 d4f4 d4e5 d4f6 d4g7 d4d5 d4d6 d4c5 d4b6 d4a7")]
+    // Black queen on D4 and white pawn on A4, D2, D7, G4 and black pawn on A7, B2, F2, G7
+    [TestCase("8/p2P2p1/8/8/P2q2P1/8/1p1P1p2/8 b KQkq - 0 1", "d4c4 d4b4 d4a4 d4c3 d4d3 d4d2 d4e3 d4e4 d4f4 d4g4 d4e5 d4f6 d4d5 d4d6 d4d7 d4c5 d4b6")]
+    // White queen on A1
+    [TestCase("8/8/8/8/8/8/8/Q7 w KQkq - 0 1", "a1b1 a1c1 a1d1 a1e1 a1f1 a1g1 a1h1 a1a2 a1a3 a1a4 a1a5 a1a6 a1a7 a1a8 a1b2 a1c3 a1d4 a1e5 a1f6 a1g7 a1h8")]
+    // White queen on A8
+    [TestCase("Q7/8/8/8/8/8/8/8 w KQkq - 0 1", "a8b8 a8c8 a8d8 a8e8 a8f8 a8g8 a8h8 a8a7 a8a6 a8a5 a8a4 a8a3 a8a2 a8a1 a8b7 a8c6 a8d5 a8e4 a8f3 a8g2 a8h1")]
+    // White queen on H1
+    [TestCase("8/8/8/8/8/8/8/7Q w KQkq - 0 1", "h1g1 h1f1 h1e1 h1d1 h1c1 h1b1 h1a1 h1h2 h1h3 h1h4 h1h5 h1h6 h1h7 h1h8 h1g2 h1f3 h1e4 h1d5 h1c6 h1b7 h1a8")]
+    // White queen on H8
+    [TestCase("7Q/8/8/8/8/8/8/8 w KQkq - 0 1", "h8g8 h8f8 h8e8 h8d8 h8c8 h8b8 h8a8 h8h7 h8h6 h8h5 h8h4 h8h3 h8h2 h8h1 h8g7 h8f6 h8e5 h8d4 h8c3 h8b2 h8a1")]
 
     #endregion
 
