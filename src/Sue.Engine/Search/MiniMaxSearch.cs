@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Sue.Engine.Model;
 
 namespace Sue.Engine.Search;
@@ -15,6 +16,10 @@ internal sealed class MiniMaxSearch : ISearch
         {
             return null;
         }
+
+        var shuffledMoves = moveCandidates.ToArray();
+        Random.Shared.Shuffle(shuffledMoves);
+        moveCandidates = shuffledMoves;
 
         var min = int.MaxValue;
         var max = int.MinValue;
