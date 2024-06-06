@@ -26,14 +26,25 @@ public sealed class LichessBot : IDisposable
         _botId = await _lichessClient.GetAccountId();
         Logger.Info("Retrieved account id: {0}", _botId);
 
-        using var eventStream = await _lichessClient.OpenEventStreamAsync();
-
-        while (!eventStream.EndOfStream)
+        while (true)
         {
-            var lichessEvent = await eventStream.ReadEventAsync();
-            Logger.Info("Event received: {0}", lichessEvent);
+            try
+            {
+                using var eventStream = await _lichessClient.OpenEventStreamAsync();
 
-            await DispatchEventAsync(lichessEvent);
+                while (!eventStream.EndOfStream)
+                {
+                    var lichessEvent = await eventStream.ReadEventAsync();
+                    Logger.Info("Event received: {0}", lichessEvent);
+
+                    await DispatchEventAsync(lichessEvent);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                Logger.Warn("Reconnecting to Lichess.");
+            }
         }
     }
 
