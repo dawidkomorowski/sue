@@ -9,4 +9,8 @@
     <InternalsVisibleTo Include="Sue.Engine.UnitTests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NLog" />
+  </ItemGroup>
+
 </Project>

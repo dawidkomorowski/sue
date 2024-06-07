@@ -1,4 +1,5 @@
 ﻿using System;
+using NLog;
 using Sue.Engine.Model;
 using Sue.Engine.Search;
 
@@ -6,6 +7,8 @@ namespace Sue.Engine;
 
 public static class ChessEngine
 {
+    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+
     public static Color GetActiveColor(string fenString, string uciMoves)
     {
         var fen = Fen.FromString(fenString);
@@ -22,6 +25,8 @@ public static class ChessEngine
 
     public static string? FindBestMove(string fenString, string uciMoves, SearchStrategy strategy)
     {
+        Logger.Trace("FindBestMove - fen '{0}' moves '{1}'", fenString, uciMoves);
+
         var fen = Fen.FromString(fenString);
         var moves = Move.ParseUciMoves(uciMoves);
         var chessboard = Chessboard.FromFen(fen);
@@ -31,8 +36,13 @@ public static class ChessEngine
             chessboard.MakeMove(move);
         }
 
+        Logger.Trace("Finding move for position: '{0}'", chessboard.ToFen());
+
         var search = CreateSearch(strategy);
         var bestMove = search.FindBestMove(chessboard);
+
+        Logger.Trace("Best move for position: '{0}' move {1}", chessboard.ToFen(), bestMove?.ToUci());
+
         return bestMove?.ToUci();
     }
 
