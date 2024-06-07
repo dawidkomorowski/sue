@@ -12,6 +12,7 @@ namespace Sue.Lichess.Bot;
 internal sealed class GameWorker
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+    private const string GameIdLogProperty = "gameId";
     private readonly LichessClient _lichessClient;
     private readonly string _botId;
     private readonly string _gameId;
@@ -42,55 +43,59 @@ internal sealed class GameWorker
 
     private async Task Run()
     {
-        while (!_cancellationTokenSource.IsCancellationRequested)
+        using (ScopeContext.PushProperty(GameIdLogProperty, _gameId))
         {
-            try
+            while (!_cancellationTokenSource.IsCancellationRequested)
             {
-                Logger.Info("Connecting to game: {0}.", _gameId);
-
-                using var gameStream = await _lichessClient.OpenGameStreamAsync(_gameId);
-
-                if (string.IsNullOrEmpty(_initialFen))
+                try
                 {
-                    Logger.Info("Introduce yourself in chat - gameId: {0}", _gameId);
+                    Logger.Info("Connecting to game: {0}.", _gameId);
 
-                    await Task.Delay(TimeSpan.FromMilliseconds(100));
-                    await _lichessClient.WriteChatMessageAsync(_gameId, "Hello! I am Sue, also known as Simple UCI Engine.");
-                    await Task.Delay(TimeSpan.FromMilliseconds(100));
-                    await _lichessClient.WriteChatMessageAsync(_gameId, "I am in early stage of development so most of my actions are silly.");
+                    using var gameStream = await _lichessClient.OpenGameStreamAsync(_gameId);
+
+                    if (string.IsNullOrEmpty(_initialFen))
+                    {
+                        Logger.Info("Introduce yourself in chat - gameId: {0}", _gameId);
+
+                        await Task.Delay(TimeSpan.FromMilliseconds(100));
+                        await _lichessClient.WriteChatMessageAsync(_gameId, "Hello! I am Sue, also known as Simple UCI Engine.");
+                        await Task.Delay(TimeSpan.FromMilliseconds(100));
+                        await _lichessClient.WriteChatMessageAsync(_gameId, "I am in early stage of development so most of my actions are silly.");
+                    }
+
+                    while (!gameStream.EndOfStream && !_cancellationTokenSource.IsCancellationRequested)
+                    {
+                        var gameEvent = await gameStream.ReadEventAsync();
+                        Logger.Info("Event received: {0}", gameEvent);
+
+                        await DispatchEventAsync(gameEvent);
+                        _consecutiveErrorsCounter = 0;
+                    }
+
+                    if (gameStream.EndOfStream)
+                    {
+                        await _cancellationTokenSource.CancelAsync();
+                    }
                 }
-
-                while (!gameStream.EndOfStream && !_cancellationTokenSource.IsCancellationRequested)
+                catch (Exception e)
                 {
-                    var gameEvent = await gameStream.ReadEventAsync();
-                    Logger.Info("Event received: {0}", gameEvent);
-
-                    await DispatchEventAsync(gameEvent);
-                    _consecutiveErrorsCounter = 0;
-                }
-
-                if (gameStream.EndOfStream)
-                {
-                    await _cancellationTokenSource.CancelAsync();
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-                await Task.Delay(TimeSpan.FromSeconds(5));
-
-                _consecutiveErrorsCounter++;
-
-                if (_consecutiveErrorsCounter > 5)
-                {
-                    await _lichessClient.WriteChatMessageAsync(_gameId, "I am so sorry but I need to resign. I got into an error state that I can't resolve.");
+                    Logger.Error(e);
                     await Task.Delay(TimeSpan.FromSeconds(5));
-                    await _lichessClient.ResignGameAsync(_gameId);
+
+                    _consecutiveErrorsCounter++;
+
+                    if (_consecutiveErrorsCounter > 5)
+                    {
+                        await _lichessClient.WriteChatMessageAsync(_gameId,
+                            "I am so sorry but I need to resign. I got into an error state that I can't resolve.");
+                        await Task.Delay(TimeSpan.FromSeconds(5));
+                        await _lichessClient.ResignGameAsync(_gameId);
+                    }
                 }
             }
-        }
 
-        Logger.Debug("Game worker stopped - gameId: {0}", _gameId);
+            Logger.Debug("Game worker stopped - gameId: {0}", _gameId);
+        }
     }
 
     private async Task DispatchEventAsync(GameEvent gameEvent)
