@@ -57,7 +57,13 @@ internal sealed class MiniMaxSearch : ISearch
 
     private static int ScoreMove(Chessboard chessboard, int ply)
     {
-        if (ply == 0 || KingIsGone(chessboard))
+        // Promote mates in less moves.
+        if (KingIsGone(chessboard))
+        {
+            return 1000 * (ply + 1) * Math.Sign(Eval(chessboard));
+        }
+
+        if (ply == 0)
         {
             return Eval(chessboard);
         }
