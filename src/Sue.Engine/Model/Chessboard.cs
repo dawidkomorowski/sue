@@ -416,17 +416,31 @@ internal sealed class Chessboard
 
     public IReadOnlyList<Move> GetMoveCandidates()
     {
+        return GetMoveCandidates(ActiveColor, true);
+    }
+
+    #region GetMoveCandidates implementation
+
+    private IReadOnlyList<Move> GetMoveCandidates(Color color, bool includeCastling)
+    {
         var moves = new List<Move>();
 
         foreach (var position in Position.All)
         {
             var chessPiece = GetChessPiece(position);
-            if (ActiveColor is Color.White && chessPiece.IsWhite() || ActiveColor is Color.Black && chessPiece.IsBlack())
+            if (color is Color.White && chessPiece.IsWhite() || color is Color.Black && chessPiece.IsBlack())
             {
                 switch (chessPiece)
                 {
                     case ChessPiece.WhiteKing:
                     case ChessPiece.BlackKing:
+                        AppendKingMoves(position, moves);
+
+                        if (includeCastling)
+                        {
+                            AppendCastlingMoves(position, moves);
+                        }
+
                         break;
                     case ChessPiece.WhiteQueen:
                     case ChessPiece.BlackQueen:
@@ -459,8 +473,6 @@ internal sealed class Chessboard
 
         return moves.AsReadOnly();
     }
-
-    #region GetMoveCandidates implementation
 
     private void AppendWhitePawnMoves(Position position, List<Move> moves)
     {
@@ -617,7 +629,10 @@ internal sealed class Chessboard
         var knight = GetChessPiece(position);
         Debug.Assert(knight is ChessPiece.WhiteKnight or ChessPiece.BlackKnight, "knight is ChessPiece.WhiteKnight or ChessPiece.BlackKnight");
 
-        ReadOnlySpan<(int right, int up)> offsets = [(-1, 2), (1, 2), (-1, -2), (1, -2), (-2, 1), (-2, -1), (2, 1), (2, -1)];
+        ReadOnlySpan<(int right, int up)> offsets =
+        [
+            (-1, 2), (1, 2), (-1, -2), (1, -2), (-2, 1), (-2, -1), (2, 1), (2, -1)
+        ];
         foreach (var (right, up) in offsets)
         {
             var fileIndex = position.File.Index() + right;
@@ -728,6 +743,169 @@ internal sealed class Chessboard
         moves.Add(new Move(position, targetPosition));
 
         return chessPiece is not ChessPiece.None;
+    }
+
+    private void AppendKingMoves(Position position, List<Move> moves)
+    {
+        var king = GetChessPiece(position);
+        Debug.Assert(king is ChessPiece.WhiteKing or ChessPiece.BlackKing, "king is ChessPiece.WhiteKing or ChessPiece.BlackKing");
+
+        ReadOnlySpan<(int right, int up)> offsets =
+        [
+            (-1, 1), (-1, 0), (-1, -1), (0, 1), (0, -1), (1, 1), (1, 0), (1, -1)
+        ];
+        foreach (var (right, up) in offsets)
+        {
+            var fileIndex = position.File.Index() + right;
+            var rankIndex = position.Rank.Index() + up;
+            if (fileIndex < 0 || fileIndex > 7 || rankIndex < 0 || rankIndex > 7)
+            {
+                continue;
+            }
+
+            var targetPosition = position.MoveBy(right, up);
+            var chessPiece = GetChessPiece(targetPosition);
+            if ((king.IsWhite() && !chessPiece.IsWhite()) || (king.IsBlack() && !chessPiece.IsBlack()))
+            {
+                moves.Add(new Move(position, targetPosition));
+            }
+        }
+    }
+
+    private void AppendCastlingMoves(Position position, List<Move> moves)
+    {
+        var king = GetChessPiece(position);
+        Debug.Assert(king is ChessPiece.WhiteKing or ChessPiece.BlackKing, "king is ChessPiece.WhiteKing or ChessPiece.BlackKing");
+
+        if (king is ChessPiece.WhiteKing && WhiteKingSideCastlingAvailable)
+        {
+            var canCastle = true;
+
+            canCastle = canCastle && GetChessPiece(new Position(File.F, Rank.One)) is ChessPiece.None;
+            canCastle = canCastle && GetChessPiece(new Position(File.G, Rank.One)) is ChessPiece.None;
+
+            var enemyMoves = GetMoveCandidates(Color.Black, false);
+            foreach (var enemyMove in enemyMoves)
+            {
+                if (enemyMove.To is { File: File.E, Rank: Rank.One })
+                {
+                    canCastle = false;
+                }
+
+                if (enemyMove.To is { File: File.F, Rank: Rank.One })
+                {
+                    canCastle = false;
+                }
+
+                if (enemyMove.To is { File: File.G, Rank: Rank.One })
+                {
+                    canCastle = false;
+                }
+            }
+
+            if (canCastle)
+            {
+                moves.Add(new Move(new Position(File.E, Rank.One), new Position(File.G, Rank.One)));
+            }
+        }
+
+        if (king is ChessPiece.WhiteKing && WhiteQueenSideCastlingAvailable)
+        {
+            var canCastle = true;
+
+            canCastle = canCastle && GetChessPiece(new Position(File.D, Rank.One)) is ChessPiece.None;
+            canCastle = canCastle && GetChessPiece(new Position(File.C, Rank.One)) is ChessPiece.None;
+            canCastle = canCastle && GetChessPiece(new Position(File.B, Rank.One)) is ChessPiece.None;
+
+            var enemyMoves = GetMoveCandidates(Color.Black, false);
+            foreach (var enemyMove in enemyMoves)
+            {
+                if (enemyMove.To is { File: File.E, Rank: Rank.One })
+                {
+                    canCastle = false;
+                }
+
+                if (enemyMove.To is { File: File.D, Rank: Rank.One })
+                {
+                    canCastle = false;
+                }
+
+                if (enemyMove.To is { File: File.C, Rank: Rank.One })
+                {
+                    canCastle = false;
+                }
+            }
+
+            if (canCastle)
+            {
+                moves.Add(new Move(new Position(File.E, Rank.One), new Position(File.C, Rank.One)));
+            }
+        }
+
+        if (king is ChessPiece.BlackKing && BlackKingSideCastlingAvailable)
+        {
+            var canCastle = true;
+
+            canCastle = canCastle && GetChessPiece(new Position(File.F, Rank.Eight)) is ChessPiece.None;
+            canCastle = canCastle && GetChessPiece(new Position(File.G, Rank.Eight)) is ChessPiece.None;
+
+            var enemyMoves = GetMoveCandidates(Color.White, false);
+            foreach (var enemyMove in enemyMoves)
+            {
+                if (enemyMove.To is { File: File.E, Rank: Rank.Eight })
+                {
+                    canCastle = false;
+                }
+
+                if (enemyMove.To is { File: File.F, Rank: Rank.Eight })
+                {
+                    canCastle = false;
+                }
+
+                if (enemyMove.To is { File: File.G, Rank: Rank.Eight })
+                {
+                    canCastle = false;
+                }
+            }
+
+            if (canCastle)
+            {
+                moves.Add(new Move(new Position(File.E, Rank.Eight), new Position(File.G, Rank.Eight)));
+            }
+        }
+
+        if (king is ChessPiece.BlackKing && BlackQueenSideCastlingAvailable)
+        {
+            var canCastle = true;
+
+            canCastle = canCastle && GetChessPiece(new Position(File.D, Rank.Eight)) is ChessPiece.None;
+            canCastle = canCastle && GetChessPiece(new Position(File.C, Rank.Eight)) is ChessPiece.None;
+            canCastle = canCastle && GetChessPiece(new Position(File.B, Rank.Eight)) is ChessPiece.None;
+
+            var enemyMoves = GetMoveCandidates(Color.White, false);
+            foreach (var enemyMove in enemyMoves)
+            {
+                if (enemyMove.To is { File: File.E, Rank: Rank.Eight })
+                {
+                    canCastle = false;
+                }
+
+                if (enemyMove.To is { File: File.D, Rank: Rank.Eight })
+                {
+                    canCastle = false;
+                }
+
+                if (enemyMove.To is { File: File.C, Rank: Rank.Eight })
+                {
+                    canCastle = false;
+                }
+            }
+
+            if (canCastle)
+            {
+                moves.Add(new Move(new Position(File.E, Rank.Eight), new Position(File.C, Rank.Eight)));
+            }
+        }
     }
 
     #endregion
