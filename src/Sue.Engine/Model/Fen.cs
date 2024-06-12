@@ -213,7 +213,7 @@ public sealed class Fen
 
     private static int ParseRankLineSeparator(string fenString, int index)
     {
-        if (fenString[index] != '/')
+        if (fenString.Length <= index || fenString[index] != '/')
         {
             throw CreateParsingError(fenString, index);
         }
@@ -223,7 +223,7 @@ public sealed class Fen
 
     private static int ParseFenFieldSeparator(string fenString, int index)
     {
-        if (fenString[index] != ' ')
+        if (fenString.Length <= index || fenString[index] != ' ')
         {
             throw CreateParsingError(fenString, index);
         }

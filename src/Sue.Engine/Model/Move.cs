@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Sue.Engine.Model;
 
-internal readonly struct Move : IEquatable<Move>
+public readonly struct Move : IEquatable<Move>
 {
     public Move(Position from, Position to, Promotion promotion = Promotion.None)
     {
