@@ -445,6 +445,8 @@ public class ChessboardTests
     [TestCase("8/7P/8/8/8/8/8/8 w KQkq - 0 1", "h7h8q h7h8r h7h8b h7h8n")]
     // White pawn on H7 and black rook on G8
     [TestCase("6r1/7P/8/8/8/8/8/8 w KQkq - 0 1", "h7h8q h7h8r h7h8b h7h8n h7g8q h7g8r h7g8b h7g8n")]
+    // TODO En Passant
+    [TestCase("8/8/8/8/8/8/3P4/8 w KQkq - 0 1", "")]
 
     #endregion
 

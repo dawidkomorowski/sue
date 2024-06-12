@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using NLog;
 using Sue.Engine.Model;
 
@@ -28,9 +27,9 @@ internal sealed class MiniMaxSearch : ISearch
             return null;
         }
 
-        var shuffledMoves = moveCandidates.ToArray();
-        Random.Shared.Shuffle(shuffledMoves);
-        moveCandidates = shuffledMoves;
+        //var shuffledMoves = moveCandidates.ToArray();
+        //Random.Shared.Shuffle(shuffledMoves);
+        //moveCandidates = shuffledMoves;
 
         var min = int.MaxValue;
         var max = int.MinValue;
@@ -62,7 +61,7 @@ internal sealed class MiniMaxSearch : ISearch
             }
         }
 
-        Logger.Trace("Best move: {0} Score: {1}", bestMove.ToUci(), (chessboard.ActiveColor is Color.White ? max : min));
+        Logger.Trace("Best move: {0} Score: {1}", bestMove.ToUci(), chessboard.ActiveColor is Color.White ? max : min);
         Logger.Trace("Nodes processed: {0}", _nodesProcessed);
 
         return bestMove;
@@ -74,20 +73,25 @@ internal sealed class MiniMaxSearch : ISearch
         if (KingIsGone(chessboard))
         {
             UpdateStatisticsForLeafNode();
-            return 1000 * (ply + 1) * Math.Sign(Eval(chessboard));
+            return 1000 * (ply + 1) * Math.Sign(MaterialEvaluation.Eval(chessboard));
         }
 
         if (ply == 0)
         {
             UpdateStatisticsForLeafNode();
-            return Eval(chessboard);
+            return MaterialEvaluation.Eval(chessboard);
         }
 
         var moveCandidates = chessboard.GetMoveCandidates();
 
         if (moveCandidates.Count == 0)
         {
-            return chessboard.ActiveColor is Color.White ? -1 : 1;
+            if (chessboard.HasKingInCheck(chessboard.ActiveColor))
+            {
+                return 1000 * (ply + 1) * (chessboard.ActiveColor is Color.White ? -1 : 1);
+            }
+
+            return 0;
         }
 
         var min = int.MaxValue;
@@ -116,36 +120,6 @@ internal sealed class MiniMaxSearch : ISearch
         }
 
         return chessboard.ActiveColor is Color.White ? max : min;
-    }
-
-    private static int Eval(Chessboard chessboard)
-    {
-        var score = 0;
-
-        foreach (var position in Position.All)
-        {
-            var chessPiece = chessboard.GetChessPiece(position);
-
-            score += chessPiece switch
-            {
-                ChessPiece.None => 0,
-                ChessPiece.WhiteKing => 200,
-                ChessPiece.WhiteQueen => 9,
-                ChessPiece.WhiteRook => 5,
-                ChessPiece.WhiteBishop => 3,
-                ChessPiece.WhiteKnight => 3,
-                ChessPiece.WhitePawn => 1,
-                ChessPiece.BlackKing => -200,
-                ChessPiece.BlackQueen => -9,
-                ChessPiece.BlackRook => -5,
-                ChessPiece.BlackBishop => -3,
-                ChessPiece.BlackKnight => -3,
-                ChessPiece.BlackPawn => -1,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-        }
-
-        return score;
     }
 
     private static bool KingIsGone(Chessboard chessboard)

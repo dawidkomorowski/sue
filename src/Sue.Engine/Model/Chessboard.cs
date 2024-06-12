@@ -70,6 +70,29 @@ internal sealed class Chessboard
         return fen;
     }
 
+    // TODO Add tests.
+    public bool HasKingInCheck(Color kingColor)
+    {
+        var moveCandidates = GetMoveCandidates(kingColor.Opposite(), false);
+
+        foreach (var move in moveCandidates)
+        {
+            var chessPiece = GetChessPiece(move.To);
+
+            if (kingColor is Color.White && chessPiece is ChessPiece.WhiteKing)
+            {
+                return true;
+            }
+
+            if (kingColor is Color.Black && chessPiece is ChessPiece.BlackKing)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void MakeMove(Move move)
     {
         var cpFrom = GetChessPiece(move.From);
