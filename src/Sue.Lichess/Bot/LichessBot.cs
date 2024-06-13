@@ -44,6 +44,7 @@ public sealed class LichessBot : IDisposable
             {
                 Logger.Error(e);
                 Logger.Warn("Reconnecting to Lichess.");
+                await Task.Delay(TimeSpan.FromSeconds(5));
             }
         }
     }
