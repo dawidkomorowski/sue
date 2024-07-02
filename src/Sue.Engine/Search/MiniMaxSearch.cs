@@ -76,6 +76,11 @@ internal sealed class MiniMaxSearch : ISearch
             return 1000 * (ply + 1) * Math.Sign(MaterialEvaluation.Eval(chessboard));
         }
 
+        if (chessboard.HasKingInCheck(chessboard.ActiveColor.Opposite()))
+        {
+            return 1000 * (ply + 1) * (chessboard.ActiveColor is Color.White ? 1 : -1);
+        }
+
         if (ply == 0)
         {
             UpdateStatisticsForLeafNode();
