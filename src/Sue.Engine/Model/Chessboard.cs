@@ -559,12 +559,22 @@ internal sealed class Chessboard
                 {
                     moves.Add(new Move(position, frontLeft));
                 }
+
+                if (frontLeft == EnPassantTargetPosition && ActiveColor is Color.White)
+                {
+                    moves.Add(new Move(position, frontLeft));
+                }
             }
 
             if (position.File is not File.H)
             {
                 var frontRight = front.MoveRight();
                 if (GetChessPiece(frontRight).IsBlack())
+                {
+                    moves.Add(new Move(position, frontRight));
+                }
+
+                if (frontRight == EnPassantTargetPosition && ActiveColor is Color.White)
                 {
                     moves.Add(new Move(position, frontRight));
                 }
@@ -634,12 +644,22 @@ internal sealed class Chessboard
                 {
                     moves.Add(new Move(position, frontLeft));
                 }
+
+                if (frontLeft == EnPassantTargetPosition && ActiveColor is Color.Black)
+                {
+                    moves.Add(new Move(position, frontLeft));
+                }
             }
 
             if (position.File is not File.H)
             {
                 var frontRight = front.MoveRight();
                 if (GetChessPiece(frontRight).IsWhite())
+                {
+                    moves.Add(new Move(position, frontRight));
+                }
+
+                if (frontRight == EnPassantTargetPosition && ActiveColor is Color.Black)
                 {
                     moves.Add(new Move(position, frontRight));
                 }

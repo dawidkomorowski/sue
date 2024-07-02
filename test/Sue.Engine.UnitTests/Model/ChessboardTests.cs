@@ -428,7 +428,7 @@ public class ChessboardTests
     // White pawn on D5 and black pawn on C5 and E5 (no en passant)
     [TestCase("8/8/8/2pPp3/8/8/8/8 w KQkq - 0 1", "d5d6")]
     // White pawn on D5 and black pawn on C5 and E5 (C6 en passant)
-    [TestCase("8/8/8/2pPp3/8/8/8/8 w KQkq c6 0 1", "d5d6 d5d6")]
+    [TestCase("8/8/8/2pPp3/8/8/8/8 w KQkq c6 0 1", "d5d6 d5c6")]
     // White pawn on D5 and black pawn on C5 and E5 (E6 en passant)
     [TestCase("8/8/8/2pPp3/8/8/8/8 w KQkq e6 0 1", "d5d6 d5e6")]
     // White pawn on A5 and black pawn on B5 (no en passant)

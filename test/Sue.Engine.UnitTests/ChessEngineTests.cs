@@ -42,7 +42,7 @@ public class ChessEngineTests
         return testCases.ToArray();
     }
 
-    private void TestMateInN(Fen fen, Move bestMove)
+    private static void TestMateInN(Fen fen, Move bestMove)
     {
         // Arrange
         // Act
