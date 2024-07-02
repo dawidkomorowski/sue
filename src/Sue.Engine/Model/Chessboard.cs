@@ -560,7 +560,7 @@ internal sealed class Chessboard
                     moves.Add(new Move(position, frontLeft));
                 }
 
-                if (frontLeft == EnPassantTargetPosition && ActiveColor is Color.White)
+                if (position.Rank is Rank.Five && frontLeft == EnPassantTargetPosition)
                 {
                     moves.Add(new Move(position, frontLeft));
                 }
@@ -574,7 +574,7 @@ internal sealed class Chessboard
                     moves.Add(new Move(position, frontRight));
                 }
 
-                if (frontRight == EnPassantTargetPosition && ActiveColor is Color.White)
+                if (position.Rank is Rank.Five && frontRight == EnPassantTargetPosition)
                 {
                     moves.Add(new Move(position, frontRight));
                 }
@@ -645,7 +645,7 @@ internal sealed class Chessboard
                     moves.Add(new Move(position, frontLeft));
                 }
 
-                if (frontLeft == EnPassantTargetPosition && ActiveColor is Color.Black)
+                if (position.Rank is Rank.Four && frontLeft == EnPassantTargetPosition)
                 {
                     moves.Add(new Move(position, frontLeft));
                 }
@@ -659,7 +659,7 @@ internal sealed class Chessboard
                     moves.Add(new Move(position, frontRight));
                 }
 
-                if (frontRight == EnPassantTargetPosition && ActiveColor is Color.Black)
+                if (position.Rank is Rank.Four && frontRight == EnPassantTargetPosition)
                 {
                     moves.Add(new Move(position, frontRight));
                 }
