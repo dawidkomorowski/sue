@@ -741,6 +741,8 @@ public class ChessboardTests
     [TestCase("6r1/8/8/8/8/8/8/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
     // White king on E1 and KQ castling available and H1 attacked by black rook on H8
     [TestCase("7r/8/8/8/8/8/8/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1g1 e1c1")]
+    // TODO White king on E1 and KQ castling available and G1 attacked by black pawn on H2
+    [TestCase("8/8/8/8/8/8/7p/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
     // Black king on E8 and kq castling available
     [TestCase("r3k2r/8/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8g8 e8c8")]
     // Black king on E8 and k castling available
