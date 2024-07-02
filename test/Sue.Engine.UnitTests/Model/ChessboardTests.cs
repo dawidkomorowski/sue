@@ -425,6 +425,20 @@ public class ChessboardTests
     [TestCase("8/8/8/8/7P/8/8/8 w KQkq - 0 1", "h4h5")]
     // White pawn on H4 and black pawn on G5
     [TestCase("8/8/8/6p1/7P/8/8/8 w KQkq - 0 1", "h4h5 h4g5")]
+    // White pawn on D5 and black pawn on C5 and E5 (no en passant)
+    [TestCase("8/8/8/2pPp3/8/8/8/8 w KQkq - 0 1", "d5d6")]
+    // White pawn on D5 and black pawn on C5 and E5 (C6 en passant)
+    [TestCase("8/8/8/2pPp3/8/8/8/8 w KQkq c6 0 1", "d5d6 d5d6")]
+    // White pawn on D5 and black pawn on C5 and E5 (E6 en passant)
+    [TestCase("8/8/8/2pPp3/8/8/8/8 w KQkq e6 0 1", "d5d6 d5e6")]
+    // White pawn on A5 and black pawn on B5 (no en passant)
+    [TestCase("8/8/8/Pp6/8/8/8/8 w KQkq - 0 1", "a5a6")]
+    // White pawn on A5 and black pawn on B5 (B6 en passant)
+    [TestCase("8/8/8/Pp6/8/8/8/8 w KQkq b6 0 1", "a5a6 a5b6")]
+    // White pawn on H5 and black pawn on G5 (no en passant)
+    [TestCase("8/8/8/6pP/8/8/8/8 w KQkq - 0 1", "h5h6")]
+    // White pawn on H5 and black pawn on G5 (G6 en passant)
+    [TestCase("8/8/8/6pP/8/8/8/8 w KQkq g6 0 1", "h5h6 h5g6")]
     // White pawn on D7
     [TestCase("8/3P4/8/8/8/8/8/8 w KQkq - 0 1", "d7d8q d7d8r d7d8b d7d8n")]
     // White pawn on D7 and black rook on D8
@@ -445,8 +459,6 @@ public class ChessboardTests
     [TestCase("8/7P/8/8/8/8/8/8 w KQkq - 0 1", "h7h8q h7h8r h7h8b h7h8n")]
     // White pawn on H7 and black rook on G8
     [TestCase("6r1/7P/8/8/8/8/8/8 w KQkq - 0 1", "h7h8q h7h8r h7h8b h7h8n h7g8q h7g8r h7g8b h7g8n")]
-    // TODO En Passant
-    [TestCase("8/8/8/8/8/8/3P4/8 w KQkq - 0 1", "")]
 
     #endregion
 
@@ -490,6 +502,20 @@ public class ChessboardTests
     [TestCase("8/8/8/7p/8/8/8/8 b KQkq - 0 1", "h5h4")]
     // Black pawn on H5 and white pawn on G4
     [TestCase("8/8/8/7p/6P1/8/8/8 b KQkq - 0 1", "h5h4 h5g4")]
+    // Black pawn on D4 and white pawn on C4 and E4 (no en passant)
+    [TestCase("8/8/8/8/2PpP3/8/8/8 b KQkq - 0 1", "d4d3")]
+    // Black pawn on D4 and white pawn on C4 and E4 (C3 en passant)
+    [TestCase("8/8/8/8/2PpP3/8/8/8 b KQkq c3 0 1", "d4d3 d4c3")]
+    // Black pawn on D4 and white pawn on C4 and E4 (E3 en passant)
+    [TestCase("8/8/8/8/2PpP3/8/8/8 b KQkq e3 0 1", "d4d3 d4e3")]
+    // Black pawn on A4 and white pawn on B4 (no en passant)
+    [TestCase("8/8/8/8/pP6/8/8/8 b KQkq - 0 1", "a4a3")]
+    // Black pawn on A4 and white pawn on B4 (B3 en passant)
+    [TestCase("8/8/8/8/pP6/8/8/8 b KQkq b3 0 1", "a4a3 a4b3")]
+    // Black pawn on H4 and white pawn on G4 (no en passant)
+    [TestCase("8/8/8/8/6Pp/8/8/8 b KQkq - 0 1", "h4h3")]
+    // Black pawn on H4 and white pawn on G4 (G3 en passant)
+    [TestCase("8/8/8/8/6Pp/8/8/8 b KQkq g3 0 1", "h4h3 h4g3")]
     // Black pawn on D2
     [TestCase("8/8/8/8/8/8/3p4/8 b KQkq - 0 1", "d2d1q d2d1r d2d1b d2d1n")]
     // Black pawn on D2 and white rook on D1
