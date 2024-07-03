@@ -70,15 +70,15 @@ internal sealed class MiniMaxSearch : ISearch
     private int ScoreMove(Chessboard chessboard, int ply)
     {
         // Promote mates in less moves.
+        if (chessboard.HasKingInCheck(chessboard.ActiveColor.Opposite()))
+        {
+            return 1000 * (ply + 1) * (chessboard.ActiveColor is Color.White ? 1 : -1);
+        }
+
         if (KingIsGone(chessboard))
         {
             UpdateStatisticsForLeafNode();
             return 1000 * (ply + 1) * Math.Sign(MaterialEvaluation.Eval(chessboard));
-        }
-
-        if (chessboard.HasKingInCheck(chessboard.ActiveColor.Opposite()))
-        {
-            return 1000 * (ply + 1) * (chessboard.ActiveColor is Color.White ? 1 : -1);
         }
 
         if (ply == 0)
