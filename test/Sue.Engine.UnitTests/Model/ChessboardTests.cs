@@ -157,7 +157,26 @@ public class ChessboardTests
     [TestCase("R7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
     [TestCase("B7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
     [TestCase("N7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
-    [TestCase("8/P7/8/8/3k4/8/8/8 b - - 0 1", Color.White, false)]
+    [TestCase("8/P7/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
+    // Black king is in check by queen
+    [TestCase("3Q4/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/Q7/8/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/1Q1k4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/8/8/Q7 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/8/3Q4/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/8/8/6Q1 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3kQ3/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/6Q1/8/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    // Black king is in check by rook
+    [TestCase("3R4/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/2Rk4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/8/3R4/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k2R1/8/8/8 b - - 0 1", Color.Black, true)]
+    // Black king is in check by bishop
+    [TestCase("8/B7/8/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/2B5/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/8/5B2/8 b - - 0 1", Color.Black, true)]
+    [TestCase("7B/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
     // TODO Add more tests.
     public void HasKingInCheck_ShouldReturnTrue_WhenKingIsInCheck(string fenString, Color color, bool kingInCheck)
     {
