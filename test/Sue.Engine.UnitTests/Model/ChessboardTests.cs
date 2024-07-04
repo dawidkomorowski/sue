@@ -113,6 +113,65 @@ public class ChessboardTests
         Assert.That(fen2.ToString(), Is.EqualTo(fenString));
     }
 
+    // White king is not in check
+    [TestCase("8/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
+    [TestCase("q7/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
+    [TestCase("r7/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
+    [TestCase("b7/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
+    [TestCase("n7/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
+    [TestCase("8/p7/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
+    // White king is in check by queen
+    [TestCase("3q4/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/q7/8/8/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/1q1K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/8/8/q7 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/8/3q4/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/8/8/6q1 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3Kq3/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/6q1/8/8/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    // White king is in check by rook
+    [TestCase("3r4/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/2rK4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/8/3r4/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K2r1/8/8/8 w - - 0 1", Color.White, true)]
+    // White king is in check by bishop
+    [TestCase("8/b7/8/8/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/2b5/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/8/5b2/8 w - - 0 1", Color.White, true)]
+    [TestCase("7b/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    // White king is in check by knight
+    [TestCase("8/8/2n5/8/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/1n6/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/1n6/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/8/2n5/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/8/4n3/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/5n2/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/5n2/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/4n3/8/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    // White king is in check by pawn
+    [TestCase("8/8/8/2p5/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/4p3/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    // Black king is not in check
+    [TestCase("8/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
+    [TestCase("Q7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
+    [TestCase("R7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
+    [TestCase("B7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
+    [TestCase("N7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
+    [TestCase("8/P7/8/8/3k4/8/8/8 b - - 0 1", Color.White, false)]
+    // TODO Add more tests.
+    public void HasKingInCheck_ShouldReturnTrue_WhenKingIsInCheck(string fenString, Color color, bool kingInCheck)
+    {
+        // Arrange
+        var fen = Fen.FromString(fenString);
+        var chessboard = Chessboard.FromFen(fen);
+
+        // Act
+        var actual = chessboard.HasKingInCheck(color);
+
+        // Assert
+        Assert.That(actual, Is.EqualTo(kingInCheck));
+    }
+
     #region Castling test cases
 
     // White rook move makes white king side castling not available

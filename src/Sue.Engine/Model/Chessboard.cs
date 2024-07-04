@@ -70,9 +70,32 @@ internal sealed class Chessboard
         return fen;
     }
 
-    // TODO Add tests.
     public bool HasKingInCheck(Color kingColor)
     {
+        Position? kingPosition = null;
+
+        foreach (var position in Position.All)
+        {
+            if (kingColor is Color.White && GetChessPiece(position) is ChessPiece.WhiteKing)
+            {
+                kingPosition = position;
+                break;
+            }
+
+            if (kingColor is Color.Black && GetChessPiece(position) is ChessPiece.BlackKing)
+            {
+                kingPosition = position;
+                break;
+            }
+        }
+
+        if (!kingPosition.HasValue)
+        {
+            return false;
+        }
+
+        return IsAttackedBy(kingPosition.Value, kingColor.Opposite());
+
         var moveCandidates = GetMoveCandidates(kingColor.Opposite(), false);
 
         foreach (var move in moveCandidates)
@@ -952,6 +975,53 @@ internal sealed class Chessboard
     }
 
     #endregion
+
+    // TODO King can attack as well. How to test?
+    private bool IsAttackedBy(Position position, Color color)
+    {
+        // Black pawn
+        if (color is Color.Black)
+        {
+            if (HasChessPiece(position, -1, 1, ChessPiece.BlackPawn))
+            {
+                return true;
+            }
+
+            if (HasChessPiece(position, 1, 1, ChessPiece.BlackPawn))
+            {
+                return true;
+            }
+        }
+
+        // Knight
+        ReadOnlySpan<(int right, int up)> knightOffsets =
+        [
+            (-1, 2), (1, 2), (-1, -2), (1, -2), (-2, 1), (-2, -1), (2, 1), (2, -1)
+        ];
+        var knight = color is Color.White ? ChessPiece.WhiteKnight : ChessPiece.BlackKnight;
+        foreach (var (right, up) in knightOffsets)
+        {
+            if (HasChessPiece(position, up, right, knight))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool HasChessPiece(Position position, int fileOffset, int rankOffset, ChessPiece chessPiece)
+    {
+        var fileIndex = position.File.Index() + fileOffset;
+        var rankIndex = position.Rank.Index() + rankOffset;
+        if (fileIndex < 0 || fileIndex > 7 || rankIndex < 0 || rankIndex > 7)
+        {
+            return false;
+        }
+
+        var targetPosition = position.MoveBy(fileOffset, rankOffset);
+        return GetChessPiece(targetPosition) == chessPiece;
+    }
 
     private static int GetIndex(Position position)
     {
