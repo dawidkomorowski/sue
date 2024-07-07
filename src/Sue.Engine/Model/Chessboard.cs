@@ -95,25 +95,6 @@ internal sealed class Chessboard
         }
 
         return IsAttackedBy(kingPosition.Value, kingColor.Opposite());
-
-        var moveCandidates = GetMoveCandidates(kingColor.Opposite(), false);
-
-        foreach (var move in moveCandidates)
-        {
-            var chessPiece = GetChessPiece(move.To);
-
-            if (kingColor is Color.White && chessPiece is ChessPiece.WhiteKing)
-            {
-                return true;
-            }
-
-            if (kingColor is Color.Black && chessPiece is ChessPiece.BlackKing)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public void MakeMove(Move move)
@@ -977,28 +958,75 @@ internal sealed class Chessboard
     #endregion
 
     // TODO King can attack as well. How to test?
-    private bool IsAttackedBy(Position position, Color color)
+    private bool IsAttackedBy(Position position, Color attacker)
     {
-        // Black pawn
-        if (color is Color.Black)
+        if (attacker is Color.White && IsAttackedByWhitePawn(position))
         {
-            if (HasChessPiece(position, -1, 1, ChessPiece.BlackPawn))
-            {
-                return true;
-            }
-
-            if (HasChessPiece(position, 1, 1, ChessPiece.BlackPawn))
-            {
-                return true;
-            }
+            return true;
         }
 
-        // Knight
+        if (attacker is Color.Black && IsAttackedByBlackPawn(position))
+        {
+            return true;
+        }
+
+        if (IsAttackedByKnight(position, attacker))
+        {
+            return true;
+        }
+
+        if (IsAttackedByBishopOrQueen(position, attacker))
+        {
+            return true;
+        }
+
+        if (IsAttackedByRookOrQueen(position, attacker))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    #region IsAttackedBy implementation
+
+    private bool IsAttackedByWhitePawn(Position position)
+    {
+        if (HasChessPiece(position, -1, -1, ChessPiece.WhitePawn))
+        {
+            return true;
+        }
+
+        if (HasChessPiece(position, 1, -1, ChessPiece.WhitePawn))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool IsAttackedByBlackPawn(Position position)
+    {
+        if (HasChessPiece(position, -1, 1, ChessPiece.BlackPawn))
+        {
+            return true;
+        }
+
+        if (HasChessPiece(position, 1, 1, ChessPiece.BlackPawn))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool IsAttackedByKnight(Position position, Color attacker)
+    {
         ReadOnlySpan<(int right, int up)> knightOffsets =
         [
             (-1, 2), (1, 2), (-1, -2), (1, -2), (-2, 1), (-2, -1), (2, 1), (2, -1)
         ];
-        var knight = color is Color.White ? ChessPiece.WhiteKnight : ChessPiece.BlackKnight;
+        var knight = attacker is Color.White ? ChessPiece.WhiteKnight : ChessPiece.BlackKnight;
         foreach (var (right, up) in knightOffsets)
         {
             if (HasChessPiece(position, up, right, knight))
@@ -1022,6 +1050,147 @@ internal sealed class Chessboard
         var targetPosition = position.MoveBy(fileOffset, rankOffset);
         return GetChessPiece(targetPosition) == chessPiece;
     }
+
+    private bool IsAttackedByBishopOrQueen(Position position, Color attacker)
+    {
+        var topRightMaximumOffset = Math.Min(File.H.Index() - position.File.Index(), Rank.Eight.Index() - position.Rank.Index());
+        var topLeftMaximumOffset = Math.Min(position.File.Index() - File.A.Index(), Rank.Eight.Index() - position.Rank.Index());
+        var bottomRightMaximumOffset = Math.Min(File.H.Index() - position.File.Index(), position.Rank.Index() - Rank.One.Index());
+        var bottomLeftMaximumOffset = Math.Min(position.File.Index() - File.A.Index(), position.Rank.Index() - Rank.One.Index());
+
+        for (var offset = 1; offset <= topRightMaximumOffset; offset++)
+        {
+            var targetPosition = position.MoveBy(offset, offset);
+
+            if (IsAttacked(targetPosition, attacker))
+            {
+                return true;
+            }
+        }
+
+        for (var offset = 1; offset <= topLeftMaximumOffset; offset++)
+        {
+            var targetPosition = position.MoveBy(-offset, offset);
+
+            if (IsAttacked(targetPosition, attacker))
+            {
+                return true;
+            }
+        }
+
+        for (var offset = 1; offset <= bottomRightMaximumOffset; offset++)
+        {
+            var targetPosition = position.MoveBy(offset, -offset);
+
+            if (IsAttacked(targetPosition, attacker))
+            {
+                return true;
+            }
+        }
+
+        for (var offset = 1; offset <= bottomLeftMaximumOffset; offset++)
+        {
+            var targetPosition = position.MoveBy(-offset, -offset);
+
+            if (IsAttacked(targetPosition, attacker))
+            {
+                return true;
+            }
+        }
+
+        return false;
+
+        bool IsAttacked(Position targetPosition, Color attackerColor)
+        {
+            var chessPiece = GetChessPiece(targetPosition);
+
+            if (attackerColor is Color.White)
+            {
+                if (chessPiece is ChessPiece.WhiteBishop || chessPiece is ChessPiece.WhiteQueen)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (chessPiece is ChessPiece.BlackBishop || chessPiece is ChessPiece.BlackQueen)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    private bool IsAttackedByRookOrQueen(Position position, Color attacker)
+    {
+        for (var fileIndex = position.File.Index() + 1; fileIndex <= File.H.Index(); fileIndex++)
+        {
+            var targetPosition = new Position(fileIndex.ToFile(), position.Rank);
+
+            if (IsAttacked(targetPosition, attacker))
+            {
+                return true;
+            }
+        }
+
+        for (var fileIndex = position.File.Index() - 1; fileIndex >= File.A.Index(); fileIndex--)
+        {
+            var targetPosition = new Position(fileIndex.ToFile(), position.Rank);
+
+            if (IsAttacked(targetPosition, attacker))
+            {
+                return true;
+            }
+        }
+
+        for (var rankIndex = position.Rank.Index() + 1; rankIndex <= Rank.Eight.Index(); rankIndex++)
+        {
+            var targetPosition = new Position(position.File, rankIndex.ToRank());
+
+            if (IsAttacked(targetPosition, attacker))
+            {
+                return true;
+            }
+        }
+
+        for (var rankIndex = position.Rank.Index() - 1; rankIndex >= Rank.One.Index(); rankIndex--)
+        {
+            var targetPosition = new Position(position.File, rankIndex.ToRank());
+
+            if (IsAttacked(targetPosition, attacker))
+            {
+                return true;
+            }
+        }
+
+        return false;
+
+        bool IsAttacked(Position targetPosition, Color attackerColor)
+        {
+            var chessPiece = GetChessPiece(targetPosition);
+
+            if (attackerColor is Color.White)
+            {
+                if (chessPiece is ChessPiece.WhiteRook || chessPiece is ChessPiece.WhiteQueen)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (chessPiece is ChessPiece.BlackRook || chessPiece is ChessPiece.BlackQueen)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
+    #endregion
 
     private static int GetIndex(Position position)
     {

@@ -177,7 +177,19 @@ public class ChessboardTests
     [TestCase("8/8/8/8/3k4/2B5/8/8 b - - 0 1", Color.Black, true)]
     [TestCase("8/8/8/8/3k4/8/5B2/8 b - - 0 1", Color.Black, true)]
     [TestCase("7B/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
-    // TODO Add more tests.
+    // Black king is in check by knight
+    [TestCase("8/8/2N5/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/1N6/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/1N6/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/8/2N5/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/8/4N3/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/5N2/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/5N2/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/4N3/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    // Black king is in check by pawn
+    [TestCase("8/8/8/8/3k4/2P5/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/4P3/8/8 b - - 0 1", Color.Black, true)]
+    // TODO Add tests that king is not in check if it has its own piece in between.
     public void HasKingInCheck_ShouldReturnTrue_WhenKingIsInCheck(string fenString, Color color, bool kingInCheck)
     {
         // Arrange
