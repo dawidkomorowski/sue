@@ -1062,9 +1062,14 @@ internal sealed class Chessboard
         {
             var targetPosition = position.MoveBy(offset, offset);
 
-            if (IsAttacked(targetPosition, attacker))
+            if (IsBishopOrQueen(targetPosition, attacker))
             {
                 return true;
+            }
+
+            if (ShouldBreak(targetPosition))
+            {
+                break;
             }
         }
 
@@ -1072,9 +1077,14 @@ internal sealed class Chessboard
         {
             var targetPosition = position.MoveBy(-offset, offset);
 
-            if (IsAttacked(targetPosition, attacker))
+            if (IsBishopOrQueen(targetPosition, attacker))
             {
                 return true;
+            }
+
+            if (ShouldBreak(targetPosition))
+            {
+                break;
             }
         }
 
@@ -1082,9 +1092,14 @@ internal sealed class Chessboard
         {
             var targetPosition = position.MoveBy(offset, -offset);
 
-            if (IsAttacked(targetPosition, attacker))
+            if (IsBishopOrQueen(targetPosition, attacker))
             {
                 return true;
+            }
+
+            if (ShouldBreak(targetPosition))
+            {
+                break;
             }
         }
 
@@ -1092,15 +1107,20 @@ internal sealed class Chessboard
         {
             var targetPosition = position.MoveBy(-offset, -offset);
 
-            if (IsAttacked(targetPosition, attacker))
+            if (IsBishopOrQueen(targetPosition, attacker))
             {
                 return true;
+            }
+
+            if (ShouldBreak(targetPosition))
+            {
+                break;
             }
         }
 
         return false;
 
-        bool IsAttacked(Position targetPosition, Color attackerColor)
+        bool IsBishopOrQueen(Position targetPosition, Color attackerColor)
         {
             var chessPiece = GetChessPiece(targetPosition);
 
@@ -1121,6 +1141,12 @@ internal sealed class Chessboard
 
             return false;
         }
+
+        bool ShouldBreak(Position targetPosition)
+        {
+            var chessPiece = GetChessPiece(targetPosition);
+            return chessPiece is not ChessPiece.None;
+        }
     }
 
     private bool IsAttackedByRookOrQueen(Position position, Color attacker)
@@ -1129,9 +1155,14 @@ internal sealed class Chessboard
         {
             var targetPosition = new Position(fileIndex.ToFile(), position.Rank);
 
-            if (IsAttacked(targetPosition, attacker))
+            if (IsRookOrQueen(targetPosition, attacker))
             {
                 return true;
+            }
+
+            if (ShouldBreak(targetPosition))
+            {
+                break;
             }
         }
 
@@ -1139,9 +1170,14 @@ internal sealed class Chessboard
         {
             var targetPosition = new Position(fileIndex.ToFile(), position.Rank);
 
-            if (IsAttacked(targetPosition, attacker))
+            if (IsRookOrQueen(targetPosition, attacker))
             {
                 return true;
+            }
+
+            if (ShouldBreak(targetPosition))
+            {
+                break;
             }
         }
 
@@ -1149,9 +1185,14 @@ internal sealed class Chessboard
         {
             var targetPosition = new Position(position.File, rankIndex.ToRank());
 
-            if (IsAttacked(targetPosition, attacker))
+            if (IsRookOrQueen(targetPosition, attacker))
             {
                 return true;
+            }
+
+            if (ShouldBreak(targetPosition))
+            {
+                break;
             }
         }
 
@@ -1159,15 +1200,20 @@ internal sealed class Chessboard
         {
             var targetPosition = new Position(position.File, rankIndex.ToRank());
 
-            if (IsAttacked(targetPosition, attacker))
+            if (IsRookOrQueen(targetPosition, attacker))
             {
                 return true;
+            }
+
+            if (ShouldBreak(targetPosition))
+            {
+                break;
             }
         }
 
         return false;
 
-        bool IsAttacked(Position targetPosition, Color attackerColor)
+        bool IsRookOrQueen(Position targetPosition, Color attackerColor)
         {
             var chessPiece = GetChessPiece(targetPosition);
 
@@ -1187,6 +1233,12 @@ internal sealed class Chessboard
             }
 
             return false;
+        }
+
+        bool ShouldBreak(Position targetPosition)
+        {
+            var chessPiece = GetChessPiece(targetPosition);
+            return chessPiece is not ChessPiece.None;
         }
     }
 
