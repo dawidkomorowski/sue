@@ -831,24 +831,9 @@ internal sealed class Chessboard
             canCastle = canCastle && GetChessPiece(new Position(File.F, Rank.One)) is ChessPiece.None;
             canCastle = canCastle && GetChessPiece(new Position(File.G, Rank.One)) is ChessPiece.None;
 
-            var enemyMoves = GetMoveCandidates(Color.Black, false);
-            foreach (var enemyMove in enemyMoves)
-            {
-                if (enemyMove.To is { File: File.E, Rank: Rank.One })
-                {
-                    canCastle = false;
-                }
-
-                if (enemyMove.To is { File: File.F, Rank: Rank.One })
-                {
-                    canCastle = false;
-                }
-
-                if (enemyMove.To is { File: File.G, Rank: Rank.One })
-                {
-                    canCastle = false;
-                }
-            }
+            canCastle = canCastle && !IsAttackedBy(new Position(File.E, Rank.One), Color.Black);
+            canCastle = canCastle && !IsAttackedBy(new Position(File.F, Rank.One), Color.Black);
+            canCastle = canCastle && !IsAttackedBy(new Position(File.G, Rank.One), Color.Black);
 
             if (canCastle)
             {
@@ -864,24 +849,9 @@ internal sealed class Chessboard
             canCastle = canCastle && GetChessPiece(new Position(File.C, Rank.One)) is ChessPiece.None;
             canCastle = canCastle && GetChessPiece(new Position(File.B, Rank.One)) is ChessPiece.None;
 
-            var enemyMoves = GetMoveCandidates(Color.Black, false);
-            foreach (var enemyMove in enemyMoves)
-            {
-                if (enemyMove.To is { File: File.E, Rank: Rank.One })
-                {
-                    canCastle = false;
-                }
-
-                if (enemyMove.To is { File: File.D, Rank: Rank.One })
-                {
-                    canCastle = false;
-                }
-
-                if (enemyMove.To is { File: File.C, Rank: Rank.One })
-                {
-                    canCastle = false;
-                }
-            }
+            canCastle = canCastle && !IsAttackedBy(new Position(File.E, Rank.One), Color.Black);
+            canCastle = canCastle && !IsAttackedBy(new Position(File.D, Rank.One), Color.Black);
+            canCastle = canCastle && !IsAttackedBy(new Position(File.C, Rank.One), Color.Black);
 
             if (canCastle)
             {
@@ -896,24 +866,9 @@ internal sealed class Chessboard
             canCastle = canCastle && GetChessPiece(new Position(File.F, Rank.Eight)) is ChessPiece.None;
             canCastle = canCastle && GetChessPiece(new Position(File.G, Rank.Eight)) is ChessPiece.None;
 
-            var enemyMoves = GetMoveCandidates(Color.White, false);
-            foreach (var enemyMove in enemyMoves)
-            {
-                if (enemyMove.To is { File: File.E, Rank: Rank.Eight })
-                {
-                    canCastle = false;
-                }
-
-                if (enemyMove.To is { File: File.F, Rank: Rank.Eight })
-                {
-                    canCastle = false;
-                }
-
-                if (enemyMove.To is { File: File.G, Rank: Rank.Eight })
-                {
-                    canCastle = false;
-                }
-            }
+            canCastle = canCastle && !IsAttackedBy(new Position(File.E, Rank.Eight), Color.White);
+            canCastle = canCastle && !IsAttackedBy(new Position(File.F, Rank.Eight), Color.White);
+            canCastle = canCastle && !IsAttackedBy(new Position(File.G, Rank.Eight), Color.White);
 
             if (canCastle)
             {
@@ -929,24 +884,9 @@ internal sealed class Chessboard
             canCastle = canCastle && GetChessPiece(new Position(File.C, Rank.Eight)) is ChessPiece.None;
             canCastle = canCastle && GetChessPiece(new Position(File.B, Rank.Eight)) is ChessPiece.None;
 
-            var enemyMoves = GetMoveCandidates(Color.White, false);
-            foreach (var enemyMove in enemyMoves)
-            {
-                if (enemyMove.To is { File: File.E, Rank: Rank.Eight })
-                {
-                    canCastle = false;
-                }
-
-                if (enemyMove.To is { File: File.D, Rank: Rank.Eight })
-                {
-                    canCastle = false;
-                }
-
-                if (enemyMove.To is { File: File.C, Rank: Rank.Eight })
-                {
-                    canCastle = false;
-                }
-            }
+            canCastle = canCastle && !IsAttackedBy(new Position(File.E, Rank.Eight), Color.White);
+            canCastle = canCastle && !IsAttackedBy(new Position(File.D, Rank.Eight), Color.White);
+            canCastle = canCastle && !IsAttackedBy(new Position(File.C, Rank.Eight), Color.White);
 
             if (canCastle)
             {
