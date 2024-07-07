@@ -225,7 +225,6 @@ public class ChessboardTests
     // Black king is in check by pawn
     [TestCase("8/8/8/8/3k4/2P5/8/8 b - - 0 1", Color.Black, true)]
     [TestCase("8/8/8/8/3k4/4P3/8/8 b - - 0 1", Color.Black, true)]
-    // TODO Add tests that king is not in check if it has its own piece in between.
     public void HasKingInCheck_ShouldReturnTrue_WhenKingIsInCheck(string fenString, Color color, bool kingInCheck)
     {
         // Arrange
@@ -883,6 +882,10 @@ public class ChessboardTests
     [TestCase("8/8/8/8/8/8/6p1/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
     // White king on E1 and KQ castling available and G1 attacked by black pawn on H2
     [TestCase("8/8/8/8/8/8/7p/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
+
+    // TODO White king on E1 and KQ castling available and black king on C2
+    [TestCase("8/8/8/8/8/8/2k5/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1g1")]
+
     // Black king on E8 and kq castling available
     [TestCase("r3k2r/8/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8g8 e8c8")]
     // Black king on E8 and k castling available
