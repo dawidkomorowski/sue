@@ -801,6 +801,17 @@ internal sealed class Chessboard
             }
 
             var targetPosition = position.MoveBy(right, up);
+
+            if (king.IsWhite() && IsAttackedBy(targetPosition, Color.Black))
+            {
+                continue;
+            }
+
+            if (king.IsBlack() && IsAttackedBy(targetPosition, Color.White))
+            {
+                continue;
+            }
+
             var chessPiece = GetChessPiece(targetPosition);
             if ((king.IsWhite() && !chessPiece.IsWhite()) || (king.IsBlack() && !chessPiece.IsBlack()))
             {
