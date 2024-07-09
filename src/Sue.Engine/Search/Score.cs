@@ -4,49 +4,50 @@ namespace Sue.Engine.Search;
 
 internal readonly struct Score : IEquatable<Score>, IComparable<Score>
 {
-    public static Score Min { get; } = CreateEval(int.MinValue);
-    public static Score Max { get; } = CreateEval(int.MaxValue);
-    public static Score CreateEval(int eval) => new(eval, 0, false);
-    public static Score CreateMate(int mateIn) => new(0, mateIn, true);
+    private const int MaxMate = 1000;
+    private const int MateOffset = 10000;
 
-    private Score(int eval, int mateIn, bool isMate)
+    public static Score Min { get; } = new(int.MinValue);
+    public static Score Max { get; } = new(int.MaxValue);
+    public static Score CreateMate(int mateIn) => new(mateIn, 0);
+    public static Score CreateEval(int eval) => new(0, eval);
+
+    private readonly int _mateScore;
+
+    private Score(int mateIn, int eval)
     {
+        if (Math.Abs(mateIn) > MaxMate)
+        {
+            throw new ArgumentException("Mate must be in range -1000 to 1000.");
+        }
+
+        _mateScore = MateOffset * Math.Sign(mateIn) - mateIn;
         Eval = eval;
-        MateIn = mateIn;
-        IsMate = isMate;
     }
 
+    private Score(int mateScore)
+    {
+        _mateScore = mateScore;
+        Eval = 0;
+    }
+
+    public bool IsMate => MateIn != 0;
+    public int MateIn => MateOffset * Math.Sign(_mateScore) - _mateScore;
     public int Eval { get; }
-    public int MateIn { get; }
-    public bool IsMate { get; }
 
-    public override string ToString() => $"{nameof(Eval)}: {Eval}, {nameof(MateIn)}: {MateIn}, {nameof(IsMate)}: {IsMate}";
+    public override string ToString() => $"{nameof(IsMate)}: {IsMate}, {nameof(MateIn)}: {MateIn}, {nameof(Eval)}: {Eval}";
 
-    public bool Equals(Score other) => Eval == other.Eval && MateIn == other.MateIn && IsMate == other.IsMate;
+    public bool Equals(Score other) => _mateScore == other._mateScore && Eval == other.Eval;
 
     public override bool Equals(object? obj) => obj is Score other && Equals(other);
-    public override int GetHashCode() => HashCode.Combine(Eval, MateIn, IsMate);
+    public override int GetHashCode() => HashCode.Combine(_mateScore, Eval);
     public static bool operator ==(Score left, Score right) => left.Equals(right);
     public static bool operator !=(Score left, Score right) => !left.Equals(right);
 
     public int CompareTo(Score other)
     {
-        if (IsMate && other.IsMate)
-        {
-            return -MateIn.CompareTo(other.MateIn);
-        }
-
-        if (IsMate && !other.IsMate)
-        {
-            return 1;
-        }
-
-        if (!IsMate && other.IsMate)
-        {
-            return -1;
-        }
-
-        return Eval.CompareTo(other.Eval);
+        var mateInComparison = _mateScore.CompareTo(other._mateScore);
+        return mateInComparison != 0 ? mateInComparison : Eval.CompareTo(other.Eval);
     }
 
     public static bool operator <(Score left, Score right) => left.CompareTo(right) < 0;
