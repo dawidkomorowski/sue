@@ -73,6 +73,7 @@ internal sealed class MiniMaxSearch
 
         if (chessboard.HasKingInCheck(chessboard.ActiveColor.Opposite()))
         {
+            UpdateStatisticsForLeafNode();
             var mateIn = mateInMultiplier * (chessboard.ActiveColor is Color.White ? 1 : -1);
             return Score.CreateMate(mateIn);
         }
@@ -84,23 +85,24 @@ internal sealed class MiniMaxSearch
             return Score.CreateMate(mateIn);
         }
 
-        if (ply == 0)
-        {
-            UpdateStatisticsForLeafNode();
-            return MaterialEvaluation.Eval(chessboard);
-        }
-
         var moveCandidates = chessboard.GetMoveCandidates();
-
         if (moveCandidates.Count == 0)
         {
+            UpdateStatisticsForLeafNode();
+
             if (chessboard.HasKingInCheck(chessboard.ActiveColor))
             {
-                var mateIn = mateInMultiplier * (chessboard.ActiveColor is Color.White ? 1 : -1);
+                var mateIn = mateInMultiplier * (chessboard.ActiveColor is Color.White ? -1 : 1);
                 return Score.CreateMate(mateIn);
             }
 
             return Score.Zero;
+        }
+
+        if (ply == 0)
+        {
+            UpdateStatisticsForLeafNode();
+            return MaterialEvaluation.Eval(chessboard);
         }
 
         var min = Score.Max;
