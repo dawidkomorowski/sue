@@ -443,31 +443,19 @@ internal sealed class Chessboard
 
     public IReadOnlyList<Move> GetMoveCandidates()
     {
-        return GetMoveCandidates(ActiveColor, true);
-    }
-
-    #region GetMoveCandidates implementation
-
-    private IReadOnlyList<Move> GetMoveCandidates(Color color, bool includeCastling)
-    {
         var moves = new List<Move>();
 
         foreach (var position in Position.All)
         {
             var chessPiece = GetChessPiece(position);
-            if (color is Color.White && chessPiece.IsWhite() || color is Color.Black && chessPiece.IsBlack())
+            if (ActiveColor is Color.White && chessPiece.IsWhite() || ActiveColor is Color.Black && chessPiece.IsBlack())
             {
                 switch (chessPiece)
                 {
                     case ChessPiece.WhiteKing:
                     case ChessPiece.BlackKing:
                         AppendKingMoves(position, moves);
-
-                        if (includeCastling)
-                        {
-                            AppendCastlingMoves(position, moves);
-                        }
-
+                        AppendCastlingMoves(position, moves);
                         break;
                     case ChessPiece.WhiteQueen:
                     case ChessPiece.BlackQueen:
@@ -500,6 +488,8 @@ internal sealed class Chessboard
 
         return moves.AsReadOnly();
     }
+
+    #region GetMoveCandidates implementation
 
     private void AppendWhitePawnMoves(Position position, List<Move> moves)
     {
@@ -897,7 +887,6 @@ internal sealed class Chessboard
 
     #endregion
 
-    // TODO King can attack as well. How to test?
     private bool IsAttackedBy(Position position, Color attacker)
     {
         if (attacker is Color.White && IsAttackedByWhitePawn(position))
@@ -911,6 +900,11 @@ internal sealed class Chessboard
         }
 
         if (IsAttackedByKnight(position, attacker))
+        {
+            return true;
+        }
+
+        if (IsAttackedByKing(position, attacker))
         {
             return true;
         }
@@ -970,6 +964,24 @@ internal sealed class Chessboard
         foreach (var (right, up) in knightOffsets)
         {
             if (HasChessPiece(position, up, right, knight))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsAttackedByKing(Position position, Color attacker)
+    {
+        ReadOnlySpan<(int right, int up)> kingOffsets =
+        [
+            (-1, 1), (-1, 0), (-1, -1), (0, 1), (0, -1), (1, 1), (1, 0), (1, -1)
+        ];
+        var king = attacker is Color.White ? ChessPiece.WhiteKing : ChessPiece.BlackKing;
+        foreach (var (right, up) in kingOffsets)
+        {
+            if (HasChessPiece(position, up, right, king))
             {
                 return true;
             }

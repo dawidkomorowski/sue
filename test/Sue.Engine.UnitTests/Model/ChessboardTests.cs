@@ -115,6 +115,7 @@ public class ChessboardTests
 
     // White king is not in check
     [TestCase("8/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
+    [TestCase("k7/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
     [TestCase("q7/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
     [TestCase("r7/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
     [TestCase("b7/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
@@ -138,6 +139,15 @@ public class ChessboardTests
     [TestCase("8/8/8/8/3K4/8/5n2/6q1 w - - 0 1", Color.White, false)]
     [TestCase("8/8/8/8/3K1n1q/8/8/8 w - - 0 1", Color.White, false)]
     [TestCase("8/6q1/5n2/8/3K4/8/8/8 w - - 0 1", Color.White, false)]
+    // White king is in check by king
+    [TestCase("8/8/8/3k4/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/2k5/3K4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/2kK4/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/2k5/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/3k4/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3K4/4k3/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/8/3Kk3/8/8/8 w - - 0 1", Color.White, true)]
+    [TestCase("8/8/8/4k3/3K4/8/8/8 w - - 0 1", Color.White, true)]
     // White king is in check by queen
     [TestCase("3q4/8/8/8/3K4/8/8/8 w - - 0 1", Color.White, true)]
     [TestCase("8/q7/8/8/3K4/8/8/8 w - - 0 1", Color.White, true)]
@@ -171,6 +181,7 @@ public class ChessboardTests
     [TestCase("8/8/8/4p3/3K4/8/8/8 w - - 0 1", Color.White, true)]
     // Black king is not in check
     [TestCase("8/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
+    [TestCase("K7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
     [TestCase("Q7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
     [TestCase("R7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
     [TestCase("B7/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
@@ -194,6 +205,15 @@ public class ChessboardTests
     [TestCase("8/8/8/8/3k4/8/5N2/6Q1 b - - 0 1", Color.Black, false)]
     [TestCase("8/8/8/8/3k1N1Q/8/8/8 b - - 0 1", Color.Black, false)]
     [TestCase("8/6Q1/5N2/8/3k4/8/8/8 b - - 0 1", Color.Black, false)]
+    // Black king is in check by king
+    [TestCase("8/8/8/3K4/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/2K5/3k4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/2Kk4/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/2K5/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/3K4/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3k4/4K3/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/8/3kK3/8/8/8 b - - 0 1", Color.Black, true)]
+    [TestCase("8/8/8/4K3/3k4/8/8/8 b - - 0 1", Color.Black, true)]
     // Black king is in check by queen
     [TestCase("3Q4/8/8/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
     [TestCase("8/Q7/8/8/3k4/8/8/8 b - - 0 1", Color.Black, true)]
@@ -882,10 +902,10 @@ public class ChessboardTests
     [TestCase("8/8/8/8/8/8/6p1/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
     // White king on E1 and KQ castling available and G1 attacked by black pawn on H2
     [TestCase("8/8/8/8/8/8/7p/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
-
-    // TODO White king on E1 and KQ castling available and black king on C2
+    // White king on E1 and KQ castling available and black king on C2
     [TestCase("8/8/8/8/8/8/2k5/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1g1")]
-
+    // White king on E1 and KQ castling available and black king on G2
+    [TestCase("8/8/8/8/8/8/6k1/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
     // Black king on E8 and kq castling available
     [TestCase("r3k2r/8/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8g8 e8c8")]
     // Black king on E8 and k castling available
@@ -936,6 +956,10 @@ public class ChessboardTests
     [TestCase("r3k2r/6P1/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8c8")]
     // Black king on E8 and kq castling available and G8 attacked by white pawn on H7
     [TestCase("r3k2r/7P/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8c8")]
+    // Black king on E8 and kq castling available and white king on C7
+    [TestCase("r3k2r/2K5/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8g8")]
+    // Black king on E8 and kq castling available and white king on G7
+    [TestCase("r3k2r/6K1/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8c8")]
 
     #endregion
 
