@@ -9,6 +9,7 @@ internal readonly struct Score : IEquatable<Score>, IComparable<Score>
 
     public static Score Min { get; } = new(int.MinValue);
     public static Score Max { get; } = new(int.MaxValue);
+    public static Score Zero { get; } = new(0, 0);
     public static Score CreateMate(int mateIn) => new(mateIn, 0);
     public static Score CreateEval(int eval) => new(0, eval);
 

@@ -31,8 +31,8 @@ internal sealed class MiniMaxSearch
         //Random.Shared.Shuffle(shuffledMoves);
         //moveCandidates = shuffledMoves;
 
-        var min = int.MaxValue;
-        var max = int.MinValue;
+        var min = Score.Max;
+        var max = Score.Min;
         var bestMove = moveCandidates[0];
 
         foreach (var move in moveCandidates)
@@ -67,18 +67,21 @@ internal sealed class MiniMaxSearch
         return bestMove;
     }
 
-    private int ScoreMove(Chessboard chessboard, int ply)
+    private Score ScoreMove(Chessboard chessboard, int ply)
     {
-        // Promote mates in less moves.
+        var mateInMultiplier = (int)Math.Ceiling((1 + MaxPly - ply) / 2d);
+
         if (chessboard.HasKingInCheck(chessboard.ActiveColor.Opposite()))
         {
-            return 1000 * (ply + 1) * (chessboard.ActiveColor is Color.White ? 1 : -1);
+            var mateIn = mateInMultiplier * (chessboard.ActiveColor is Color.White ? 1 : -1);
+            return Score.CreateMate(mateIn);
         }
 
         if (KingIsGone(chessboard))
         {
             UpdateStatisticsForLeafNode();
-            return 1000 * (ply + 1) * Math.Sign(MaterialEvaluation.Eval(chessboard));
+            var mateIn = mateInMultiplier * Math.Sign(MaterialEvaluation.Eval(chessboard).Eval);
+            return Score.CreateMate(mateIn);
         }
 
         if (ply == 0)
@@ -93,14 +96,15 @@ internal sealed class MiniMaxSearch
         {
             if (chessboard.HasKingInCheck(chessboard.ActiveColor))
             {
-                return 1000 * (ply + 1) * (chessboard.ActiveColor is Color.White ? -1 : 1);
+                var mateIn = mateInMultiplier * (chessboard.ActiveColor is Color.White ? 1 : -1);
+                return Score.CreateMate(mateIn);
             }
 
-            return 0;
+            return Score.Zero;
         }
 
-        var min = int.MaxValue;
-        var max = int.MinValue;
+        var min = Score.Max;
+        var max = Score.Min;
 
         foreach (var move in moveCandidates)
         {

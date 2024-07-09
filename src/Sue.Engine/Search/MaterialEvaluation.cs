@@ -5,15 +5,16 @@ namespace Sue.Engine.Search;
 
 internal static class MaterialEvaluation
 {
-    public static int Eval(Chessboard chessboard)
+    public static Score Eval(Chessboard chessboard)
     {
-        var score = 0;
+        var eval = 0;
 
         foreach (var position in Position.All)
         {
             var chessPiece = chessboard.GetChessPiece(position);
 
-            score += chessPiece switch
+            // TODO Losing a king is not treated as mate.
+            eval += chessPiece switch
             {
                 ChessPiece.None => 0,
                 ChessPiece.WhiteKing => 200,
@@ -32,6 +33,6 @@ internal static class MaterialEvaluation
             };
         }
 
-        return score;
+        return Score.CreateEval(eval);
     }
 }
