@@ -46,7 +46,7 @@ public class ChessEngineTests
     {
         // Arrange
         // Act
-        var actual = ChessEngine.FindBestMove(fen.ToString(), "", SearchStrategy.MiniMax);
+        var actual = ChessEngine.FindBestMove(fen.ToString(), "");
 
         // Assert
         Assert.That(actual, Is.Not.Null);

@@ -5,7 +5,7 @@ using Sue.Engine.Model;
 
 namespace Sue.Engine.Search;
 
-internal sealed class MiniMaxSearch : ISearch
+internal sealed class MiniMaxSearch
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
     private const int MaxPly = 3;

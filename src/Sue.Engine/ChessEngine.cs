@@ -23,7 +23,7 @@ public static class ChessEngine
         return chessboard.ActiveColor;
     }
 
-    public static string? FindBestMove(string fenString, string uciMoves, SearchStrategy strategy)
+    public static string? FindBestMove(string fenString, string uciMoves)
     {
         Logger.Trace("FindBestMove - fen '{0}' moves '{1}'", fenString, uciMoves);
 
@@ -38,22 +38,11 @@ public static class ChessEngine
 
         Logger.Trace("Finding move for position: '{0}'", chessboard.ToFen());
 
-        var search = CreateSearch(strategy);
+        var search = new MiniMaxSearch();
         var bestMove = search.FindBestMove(chessboard);
 
         Logger.Trace("Best move for position: '{0}' move {1}", chessboard.ToFen(), bestMove?.ToUci());
 
         return bestMove?.ToUci();
-    }
-
-    private static ISearch CreateSearch(SearchStrategy strategy)
-    {
-        return strategy switch
-        {
-            SearchStrategy.Random => new RandomSearch(),
-            SearchStrategy.PureMonteCarlo => new PureMonteCarloSearch(),
-            SearchStrategy.MiniMax => new MiniMaxSearch(),
-            _ => throw new ArgumentOutOfRangeException(nameof(strategy), strategy, "Unknown search strategy.")
-        };
     }
 }
