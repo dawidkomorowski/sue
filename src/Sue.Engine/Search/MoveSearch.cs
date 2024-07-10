@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using NLog;
 using Sue.Engine.Model;
 
@@ -12,6 +14,18 @@ internal sealed class MoveSearch
     private readonly Stopwatch _stopwatch = new();
     private int _nodesProcessed = 0;
     private int _nodesPerSecond = 0;
+
+    private IReadOnlyList<Move> SortMoves(IReadOnlyList<Move> moves, Chessboard chessboard)
+    {
+        var sortedMoves = moves.ToArray();
+        Array.Sort(sortedMoves, (m1, m2) =>
+        {
+            var mv1 = chessboard.GetChessPiece(m1.To) is not ChessPiece.None ? 0 : 1;
+            var mv2 = chessboard.GetChessPiece(m2.To) is not ChessPiece.None ? 0 : 1;
+            return mv1.CompareTo(mv2);
+        });
+        return sortedMoves;
+    }
 
     public Move? FindBestMove(Chessboard chessboard)
     {
@@ -30,6 +44,8 @@ internal sealed class MoveSearch
         //var shuffledMoves = moveCandidates.ToArray();
         //Random.Shared.Shuffle(shuffledMoves);
         //moveCandidates = shuffledMoves;
+
+        moveCandidates = SortMoves(moveCandidates, chessboard);
 
         var min = Score.Max;
         var max = Score.Min;
@@ -106,6 +122,8 @@ internal sealed class MoveSearch
             UpdateStatisticsForLeafNode();
             return MaterialEvaluation.Eval(chessboard);
         }
+
+        moveCandidates = SortMoves(moveCandidates, chessboard);
 
         var min = Score.Max;
         var max = Score.Min;

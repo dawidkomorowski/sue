@@ -1,5 +1,4 @@
-﻿using System;
-using NLog;
+﻿using NLog;
 using Sue.Engine.Model;
 using Sue.Engine.Search;
 
