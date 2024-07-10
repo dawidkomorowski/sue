@@ -10,7 +10,7 @@ namespace Sue.Engine.Search;
 internal sealed class MoveSearch
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-    private const int MaxPly = 3;
+    private const int MaxPly = 4;
     private readonly Stopwatch _stopwatch = new();
     private int _nodesProcessed = 0;
     private int _nodesPerSecond = 0;
