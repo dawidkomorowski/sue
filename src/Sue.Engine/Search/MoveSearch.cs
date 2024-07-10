@@ -123,7 +123,7 @@ internal sealed class MoveSearch
                     max = score;
                 }
 
-                if (max > beta)
+                if (max >= beta)
                 {
                     break;
                 }
@@ -140,7 +140,7 @@ internal sealed class MoveSearch
                     min = score;
                 }
 
-                if (min < alpha)
+                if (min <= alpha)
                 {
                     break;
                 }
