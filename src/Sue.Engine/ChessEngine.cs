@@ -38,7 +38,7 @@ public static class ChessEngine
 
         Logger.Trace("Finding move for position: '{0}'", chessboard.ToFen());
 
-        var search = new MiniMaxSearch();
+        var search = new MoveSearch();
         var bestMove = search.FindBestMove(chessboard);
 
         Logger.Trace("Best move for position: '{0}' move {1}", chessboard.ToFen(), bestMove?.ToUci());

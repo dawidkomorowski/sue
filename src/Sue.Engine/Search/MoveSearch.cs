@@ -5,7 +5,7 @@ using Sue.Engine.Model;
 
 namespace Sue.Engine.Search;
 
-internal sealed class MiniMaxSearch
+internal sealed class MoveSearch
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
     private const int MaxPly = 3;
@@ -33,12 +33,14 @@ internal sealed class MiniMaxSearch
 
         var min = Score.Max;
         var max = Score.Min;
+        var alpha = Score.Min;
+        var beta = Score.Max;
         var bestMove = moveCandidates[0];
 
         foreach (var move in moveCandidates)
         {
             chessboard.MakeMove(move);
-            var score = ScoreMove(chessboard, MaxPly);
+            var score = ScoreMove(chessboard, MaxPly, alpha, beta);
             chessboard.RevertMove();
 
             Logger.Trace("Move: {0} Score: {1}", move.ToUci(), score);
@@ -67,7 +69,7 @@ internal sealed class MiniMaxSearch
         return bestMove;
     }
 
-    private Score ScoreMove(Chessboard chessboard, int ply)
+    private Score ScoreMove(Chessboard chessboard, int ply, Score alpha, Score beta)
     {
         var mateInMultiplier = (int)Math.Ceiling((1 + MaxPly - ply) / 2d);
 
@@ -111,7 +113,7 @@ internal sealed class MiniMaxSearch
         foreach (var move in moveCandidates)
         {
             chessboard.MakeMove(move);
-            var score = ScoreMove(chessboard, ply - 1);
+            var score = ScoreMove(chessboard, ply - 1, alpha, beta);
             chessboard.RevertMove();
 
             if (chessboard.ActiveColor is Color.White)
@@ -120,12 +122,32 @@ internal sealed class MiniMaxSearch
                 {
                     max = score;
                 }
+
+                if (max > beta)
+                {
+                    break;
+                }
+
+                if (max > alpha)
+                {
+                    alpha = max;
+                }
             }
             else
             {
                 if (score < min)
                 {
                     min = score;
+                }
+
+                if (min < alpha)
+                {
+                    break;
+                }
+
+                if (min < beta)
+                {
+                    beta = min;
                 }
             }
         }
