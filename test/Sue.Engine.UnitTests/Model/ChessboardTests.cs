@@ -270,6 +270,10 @@ public class ChessboardTests
     [TestCase("rnbqk2r/pppp1ppp/3bpn2/8/8/3BPN2/PPPP1PPP/RNBQK2R w KQkq - 4 4", "e1g1", "rnbqk2r/pppp1ppp/3bpn2/8/8/3BPN2/PPPP1PPP/RNBQ1RK1 b kq - 5 4")]
     // White queen side castling makes white castling not available
     [TestCase("r3kbnr/pp2pppp/n1ppb3/q7/Q7/N1PPB3/PP2PPPP/R3KBNR w KQkq - 6 6", "e1c1", "r3kbnr/pp2pppp/n1ppb3/q7/Q7/N1PPB3/PP2PPPP/2KR1BNR b kq - 7 6")]
+    // White rook on H1 is captured by black knight on G3 making white king side castling not available
+    [TestCase("r3k2r/8/8/8/8/6n1/8/R3K2R b KQkq - 0 1", "g3h1", "r3k2r/8/8/8/8/8/8/R3K2n w Qkq - 0 2")]
+    // White rook on A1 is captured by black knight on B3 making white queen side castling not available
+    [TestCase("r3k2r/8/8/8/8/1n6/8/R3K2R b KQkq - 0 1", "b3a1", "r3k2r/8/8/8/8/8/8/n3K2R w Kkq - 0 2")]
     // Black rook move makes black king side castling not available
     [TestCase("rnbqkbnr/ppppppp1/8/7p/7P/6P1/PPPPPP2/RNBQKBNR b KQkq - 0 2", "h8h6", "rnbqkbn1/ppppppp1/7r/7p/7P/6P1/PPPPPP2/RNBQKBNR w KQq - 1 3")]
     // Black rook move makes black queen side castling not available
@@ -280,6 +284,10 @@ public class ChessboardTests
     [TestCase("rnbqk2r/ppppbppp/4pn2/8/8/3PPN2/PPP1BPPP/RNBQK2R b KQkq - 0 4", "e8g8", "rnbq1rk1/ppppbppp/4pn2/8/8/3PPN2/PPP1BPPP/RNBQK2R w KQ - 1 5")]
     // Black queen side castling makes black castling not available
     [TestCase("r3kbnr/pbqppppp/npp5/8/8/NPPP4/PBQ1PPPP/R3KBNR b KQkq - 0 6", "e8c8", "2kr1bnr/pbqppppp/npp5/8/8/NPPP4/PBQ1PPPP/R3KBNR w KQ - 1 7")]
+    // Black rook on H8 is captured by white knight on G6 making black king side castling not available
+    [TestCase("r3k2r/8/6N1/8/8/8/8/R3K2R w KQkq - 0 1", "g6h8", "r3k2N/8/8/8/8/8/8/R3K2R b KQq - 0 1")]
+    // Black rook on A8 is captured by white knight on B6 making black queen side castling not available
+    [TestCase("r3k2r/8/1N6/8/8/8/8/R3K2R w KQkq - 0 1", "b6a8", "N3k2r/8/8/8/8/8/8/R3K2R b KQk - 0 1")]
 
     #endregion
 
@@ -461,6 +469,12 @@ public class ChessboardTests
 
     #endregion
 
+    #region Bugs found in games test cases
+
+    // Chess game: https://lichess.org/hISKXqRR#14
+    [TestCase("1r1qkbnr/p1pp1ppp/1pb5/4p3/PP4P1/7N/2PPPP1P/RNBQK2R b KQk - 1 7", "c6h1", "1r1qkbnr/p1pp1ppp/1p6/4p3/PP4P1/7N/2PPPP1P/RNBQK2b w Qk - 0 8")]
+
+    #endregion
     public void MakeMove_ShouldChangeChessboardStateAccordingToRequestedMove_AndThen_RevertMove_ShouldRestoreOriginalChessboardState(string fenString,
         string uciMove, string fenStringAfterMove)
     {
