@@ -877,11 +877,11 @@ public class ChessboardTests
     // White king on E1 and KQ castling available and C1 attacked by black rook on C8
     [TestCase("2r5/8/8/8/8/8/8/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1g1")]
     // White king on E1 and KQ castling available and D1 attacked by black rook on D8
-    [TestCase("3r4/8/8/8/8/8/8/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1g1")]
+    [TestCase("3r4/8/8/8/8/8/8/R3K2R w KQ - 0 1", "e1e2 e1f2 e1f1 e1g1")]
     // White king on E1 and KQ castling available and E1 attacked by black rook on E8
-    [TestCase("4r3/8/8/8/8/8/8/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1")]
+    [TestCase("4r3/8/8/8/8/8/8/R3K2R w KQ - 0 1", "e1d1 e1d2 e1f2 e1f1")]
     // White king on E1 and KQ castling available and F1 attacked by black rook on F8
-    [TestCase("5r2/8/8/8/8/8/8/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
+    [TestCase("5r2/8/8/8/8/8/8/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1c1")]
     // White king on E1 and KQ castling available and G1 attacked by black rook on G8
     [TestCase("6r1/8/8/8/8/8/8/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
     // White king on E1 and KQ castling available and H1 attacked by black rook on H8
@@ -891,21 +891,21 @@ public class ChessboardTests
     // White king on E1 and KQ castling available and A1 and C1 attacked by black pawn on B2
     [TestCase("8/8/8/8/8/8/1p6/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1g1")]
     // White king on E1 and KQ castling available and B1 and D1 attacked by black pawn on C2
-    [TestCase("8/8/8/8/8/8/2p5/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1g1")]
+    [TestCase("8/8/8/8/8/8/2p5/R3K2R w KQ - 0 1", "e1d2 e1e2 e1f2 e1f1 e1g1")]
     // White king on E1 and KQ castling available and C1 and E1 attacked by black pawn on D2
     [TestCase("8/8/8/8/8/8/3p4/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1")]
     // White king on E1 and KQ castling available and D1 and F1 attacked by black pawn on E2
-    [TestCase("8/8/8/8/8/8/4p3/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1")]
+    [TestCase("8/8/8/8/8/8/4p3/R3K2R w KQ - 0 1", "e1d2 e1e2 e1f2")]
     // White king on E1 and KQ castling available and E1 and G1 attacked by black pawn on F2
     [TestCase("8/8/8/8/8/8/5p2/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1")]
     // White king on E1 and KQ castling available and F1 and H1 attacked by black pawn on G2
-    [TestCase("8/8/8/8/8/8/6p1/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
+    [TestCase("8/8/8/8/8/8/6p1/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1c1")]
     // White king on E1 and KQ castling available and G1 attacked by black pawn on H2
     [TestCase("8/8/8/8/8/8/7p/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
     // White king on E1 and KQ castling available and black king on C2
-    [TestCase("8/8/8/8/8/8/2k5/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1g1")]
+    [TestCase("8/8/8/8/8/8/2k5/R3K2R w KQ - 0 1", "e1e2 e1f2 e1f1 e1g1")]
     // White king on E1 and KQ castling available and black king on G2
-    [TestCase("8/8/8/8/8/8/6k1/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1f2 e1f1 e1c1")]
+    [TestCase("8/8/8/8/8/8/6k1/R3K2R w KQ - 0 1", "e1d1 e1d2 e1e2 e1c1")]
     // Black king on E8 and kq castling available
     [TestCase("r3k2r/8/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8g8 e8c8")]
     // Black king on E8 and k castling available
@@ -957,7 +957,7 @@ public class ChessboardTests
     // Black king on E8 and kq castling available and G8 attacked by white pawn on H7
     [TestCase("r3k2r/7P/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8c8")]
     // Black king on E8 and kq castling available and white king on C7
-    [TestCase("r3k2r/2K5/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8g8")]
+    [TestCase("r3k2r/2K5/8/8/8/8/8/8 b kq - 0 1", "e8e7 e8f7 e8f8 e8g8")]
     // Black king on E8 and kq castling available and white king on G7
     [TestCase("r3k2r/6K1/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8c8")]
 
