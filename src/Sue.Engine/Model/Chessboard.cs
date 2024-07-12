@@ -129,7 +129,7 @@ internal sealed class Chessboard
 
         var revertMoveData = CaptureRevertMoveData(move, cpFrom, cpTo);
         PerformMove(move, cpFrom, ref revertMoveData);
-        UpdateCastlingAvailability(move, cpFrom);
+        UpdateCastlingAvailability(move, cpFrom, cpTo);
         UpdateEnPassantTargetPosition(move, cpFrom);
         UpdateHalfMoveClock(cpFrom, cpTo);
 
@@ -303,14 +303,24 @@ internal sealed class Chessboard
         }
     }
 
-    private void UpdateCastlingAvailability(Move move, ChessPiece cpFrom)
+    private void UpdateCastlingAvailability(Move move, ChessPiece cpFrom, ChessPiece cpTo)
     {
         if (cpFrom is ChessPiece.WhiteRook && move.From is { File: File.H, Rank: Rank.One })
         {
             WhiteKingSideCastlingAvailable = false;
         }
 
+        if (cpTo is ChessPiece.WhiteRook && move.To is { File: File.H, Rank: Rank.One })
+        {
+            WhiteKingSideCastlingAvailable = false;
+        }
+
         if (cpFrom is ChessPiece.WhiteRook && move.From is { File: File.A, Rank: Rank.One })
+        {
+            WhiteQueenSideCastlingAvailable = false;
+        }
+
+        if (cpTo is ChessPiece.WhiteRook && move.To is { File: File.A, Rank: Rank.One })
         {
             WhiteQueenSideCastlingAvailable = false;
         }
@@ -326,7 +336,17 @@ internal sealed class Chessboard
             BlackKingSideCastlingAvailable = false;
         }
 
+        if (cpTo is ChessPiece.BlackRook && move.To is { File: File.H, Rank: Rank.Eight })
+        {
+            BlackKingSideCastlingAvailable = false;
+        }
+
         if (cpFrom is ChessPiece.BlackRook && move.From is { File: File.A, Rank: Rank.Eight })
+        {
+            BlackQueenSideCastlingAvailable = false;
+        }
+
+        if (cpTo is ChessPiece.BlackRook && move.To is { File: File.A, Rank: Rank.Eight })
         {
             BlackQueenSideCastlingAvailable = false;
         }
