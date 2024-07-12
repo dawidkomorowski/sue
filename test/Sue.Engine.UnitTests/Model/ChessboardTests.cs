@@ -828,22 +828,66 @@ public class ChessboardTests
     [TestCase("8/8/8/8/3K4/8/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
     // Black king on D4
     [TestCase("8/8/8/8/3k4/8/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
-    // White king on D4 and black pawn on C3, C4, C5, D3, D5, E3, E4, E5
-    [TestCase("8/8/8/2ppp3/2pKp3/2ppp3/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
-    // Black king on D4 and white pawn on C3, C4, C5, D3, D5, E3, E4, E5
-    [TestCase("8/8/8/2PPP3/2PkP3/2PPP3/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
     // White king on D4 and white pawn on C3, C4, C5, D3, D5, E3, E4, E5
     [TestCase("8/8/8/2PPP3/2PKP3/2PPP3/8/8 w - - 0 1", "", File.D, Rank.Four)]
     // Black king on D4 and black pawn on C3, C4, C5, D3, D5, E3, E4, E5
     [TestCase("8/8/8/2ppp3/2pkp3/2ppp3/8/8 b - - 0 1", "", File.D, Rank.Four)]
+    // White king on D4 and black pawn on C3
+    [TestCase("8/8/8/8/3K4/2p5/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // White king on D4 and black pawn on C4
+    [TestCase("8/8/8/8/2pK4/8/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d5 d4e3 d4e4 d4e5")]
+    // White king on D4 and black pawn on C5
+    [TestCase("8/8/8/2p5/3K4/8/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // White king on D4 and black pawn on D3
+    [TestCase("8/8/8/8/3K4/3p4/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // White king on D4 and black pawn on D5
+    [TestCase("8/8/8/3p4/3K4/8/8/8 w - - 0 1", "d4c3 d4c5 d4d3 d4d5 d4e3 d4e5")]
+    // White king on D4 and black pawn on E3
+    [TestCase("8/8/8/8/3K4/4p3/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // White king on D4 and black pawn on E4
+    [TestCase("8/8/8/8/3Kp3/8/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d5 d4e3 d4e4 d4e5")]
+    // White king on D4 and black pawn on E5
+    [TestCase("8/8/8/4p3/3K4/8/8/8 w - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // Black king on D4 and white pawn on C3
+    [TestCase("8/8/8/3P4/3k4/8/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // Black king on D4 and white pawn on C4
+    [TestCase("8/8/8/8/2Pk4/8/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4e3 d4e4 d4e5")]
+    // Black king on D4 and white pawn on C5
+    [TestCase("8/8/8/2P5/3k4/8/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // Black king on D4 and white pawn on D3
+    [TestCase("8/8/8/8/3k4/3P4/8/8 b - - 0 1", "d4c3 d4c5 d4d3 d4d5 d4e3 d4e5")]
+    // Black king on D4 and white pawn on D5
+    [TestCase("8/8/8/3P4/3k4/8/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // Black king on D4 and white pawn on E3
+    [TestCase("8/8/8/8/3k4/4P3/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // Black king on D4 and white pawn on E4
+    [TestCase("8/8/8/8/3kP3/8/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4e3 d4e4 d4e5")]
+    // Black king on D4 and white pawn on E5
+    [TestCase("8/8/8/4P3/3k4/8/8/8 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5 d4e3 d4e4 d4e5")]
     // White king on D4 and white pawn on C4, D3, D5, E4 and black pawn on C3, C5, E3, E5
     [TestCase("8/8/8/2pPp3/2PKP3/2pPp3/8/8 w - - 0 1", "d4c3 d4c5 d4e3 d4e5")]
-    // White king on D4 and black pawn on C4, D3, D5, E4 and white pawn on C3, C5, E3, E5
-    [TestCase("8/8/8/2PpP3/2pKp3/2PpP3/8/8 w - - 0 1", "d4c4 d4d3 d4d5 d4e4")]
+    // White king on D4 and black knight on C4, D3, D5, E4 and white pawn on C3, C5, E3, E5
+    [TestCase("8/8/8/2PnP3/2nKn3/2PnP3/8/8 w - - 0 1", "d4c4 d4d3 d4d5 d4e4")]
     // Black king on D4 and black pawn on C4, D3, D5, E4 and white pawn on C3, C5, E3, E5
     [TestCase("8/8/8/2PpP3/2pkp3/2PpP3/8/8 b - - 0 1", "d4c3 d4c5 d4e3 d4e5")]
-    // Black king on D4 and white pawn on C4, D3, D5, E4 and black pawn on C3, C5, E3, E5
-    [TestCase("8/8/8/2pPp3/2PkP3/2pPp3/8/8 b - - 0 1", "d4c4 d4d3 d4d5 d4e4")]
+    // Black king on D4 and white knight on C4, D3, D5, E4 and black pawn on C3, C5, E3, E5
+    [TestCase("8/8/8/2pNp3/2NkN3/2pNp3/8/8 b - - 0 1", "d4c4 d4d3 d4d5 d4e4")]
+    // White king on D4 and black rook on A3
+    [TestCase("8/8/8/8/3K4/r7/8/8 w - - 0 1", "d4c4 d4c5 d4d5 d4e4 d4e5")]
+    // White king on D4 and black rook on A5
+    [TestCase("8/8/8/r7/3K4/8/8/8 w - - 0 1", "d4c3 d4c4 d4d3 d4e3 d4e4")]
+    // White king on D4 and black rook on C1
+    [TestCase("8/8/8/8/3K4/8/8/2r5 w - - 0 1", "d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // White king on D4 and black rook on E1
+    [TestCase("8/8/8/8/3K4/8/8/4r3 w - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5")]
+    // Black king on D4 and white rook on A3
+    [TestCase("8/8/8/8/3k4/R7/8/8 b - - 0 1", "d4c4 d4c5 d4d5 d4e4 d4e5")]
+    // Black king on D4 and white rook on A5
+    [TestCase("8/8/8/R7/3k4/8/8/8 b - - 0 1", "d4c3 d4c4 d4d3 d4e3 d4e4")]
+    // Black king on D4 and white rook on C1
+    [TestCase("8/8/8/8/3k4/8/8/2R5 b - - 0 1", "d4d3 d4d5 d4e3 d4e4 d4e5")]
+    // Black king on D4 and white rook on E1
+    [TestCase("8/8/8/8/3k4/8/8/4R3 b - - 0 1", "d4c3 d4c4 d4c5 d4d3 d4d5")]
     // White king on A1
     [TestCase("8/8/8/8/8/8/8/K7 w - - 0 1", "a1a2 a1b2 a1b1")]
     // White king on A8
@@ -931,11 +975,11 @@ public class ChessboardTests
     // Black king on E8 and kq castling available and C8 attacked by white rook on C1
     [TestCase("r3k2r/8/8/8/8/8/8/2R5 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8g8")]
     // Black king on E8 and kq castling available and D8 attacked by white rook on D1
-    [TestCase("r3k2r/8/8/8/8/8/8/3R4 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8g8")]
+    [TestCase("r3k2r/8/8/8/8/8/8/3R4 b kq - 0 1", "e8e7 e8f7 e8f8 e8g8")]
     // Black king on E8 and kq castling available and E8 attacked by white rook on E1
-    [TestCase("r3k2r/8/8/8/8/8/8/4R3 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8")]
+    [TestCase("r3k2r/8/8/8/8/8/8/4R3 b kq - 0 1", "e8d8 e8d7 e8f7 e8f8")]
     // Black king on E8 and kq castling available and F8 attacked by white rook on F1
-    [TestCase("r3k2r/8/8/8/8/8/8/5R2 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8c8")]
+    [TestCase("r3k2r/8/8/8/8/8/8/5R2 b kq - 0 1", "e8d8 e8d7 e8e7 e8c8")]
     // Black king on E8 and kq castling available and G8 attacked by white rook on G1
     [TestCase("r3k2r/8/8/8/8/8/8/6R1 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8c8")]
     // Black king on E8 and kq castling available and H8 attacked by white rook on H1
@@ -945,21 +989,21 @@ public class ChessboardTests
     // Black king on E8 and kq castling available and A8 and C8 attacked by white pawn on B7
     [TestCase("r3k2r/1P6/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8g8")]
     // Black king on E8 and kq castling available and B8 and D8 attacked by white pawn on C7
-    [TestCase("r3k2r/2P5/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8g8")]
+    [TestCase("r3k2r/2P5/8/8/8/8/8/8 b kq - 0 1", "e8d7 e8e7 e8f7 e8f8 e8g8")]
     // Black king on E8 and kq castling available and C8 and E8 attacked by white pawn on D7
     [TestCase("r3k2r/3P4/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8")]
     // Black king on E8 and kq castling available and D8 and F8 attacked by white pawn on E7
-    [TestCase("r3k2r/4P3/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8")]
+    [TestCase("r3k2r/4P3/8/8/8/8/8/8 b kq - 0 1", "e8d7 e8e7 e8f7")]
     // Black king on E8 and kq castling available and E8 and G8 attacked by white pawn on F7
     [TestCase("r3k2r/5P2/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8")]
     // Black king on E8 and kq castling available and F8 and H8 attacked by white pawn on G7
-    [TestCase("r3k2r/6P1/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8c8")]
+    [TestCase("r3k2r/6P1/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8c8")]
     // Black king on E8 and kq castling available and G8 attacked by white pawn on H7
     [TestCase("r3k2r/7P/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8c8")]
     // Black king on E8 and kq castling available and white king on C7
     [TestCase("r3k2r/2K5/8/8/8/8/8/8 b kq - 0 1", "e8e7 e8f7 e8f8 e8g8")]
     // Black king on E8 and kq castling available and white king on G7
-    [TestCase("r3k2r/6K1/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8f7 e8f8 e8c8")]
+    [TestCase("r3k2r/6K1/8/8/8/8/8/8 b kq - 0 1", "e8d8 e8d7 e8e7 e8c8")]
 
     #endregion
 
