@@ -17,18 +17,18 @@ internal static class MaterialEvaluation
             eval += chessPiece switch
             {
                 ChessPiece.None => 0,
-                ChessPiece.WhiteKing => 200,
-                ChessPiece.WhiteQueen => 9,
-                ChessPiece.WhiteRook => 5,
-                ChessPiece.WhiteBishop => 3,
-                ChessPiece.WhiteKnight => 3,
-                ChessPiece.WhitePawn => 1,
-                ChessPiece.BlackKing => -200,
-                ChessPiece.BlackQueen => -9,
-                ChessPiece.BlackRook => -5,
-                ChessPiece.BlackBishop => -3,
-                ChessPiece.BlackKnight => -3,
-                ChessPiece.BlackPawn => -1,
+                ChessPiece.WhiteKing => 20000,
+                ChessPiece.WhiteQueen => 900,
+                ChessPiece.WhiteRook => 500,
+                ChessPiece.WhiteBishop => 300,
+                ChessPiece.WhiteKnight => 300,
+                ChessPiece.WhitePawn => position.Rank.Index() - 2 + 100,
+                ChessPiece.BlackKing => -20000,
+                ChessPiece.BlackQueen => -900,
+                ChessPiece.BlackRook => -500,
+                ChessPiece.BlackBishop => -300,
+                ChessPiece.BlackKnight => -300,
+                ChessPiece.BlackPawn => -7 + position.Rank.Index() - 100,
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
