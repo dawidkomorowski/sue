@@ -96,13 +96,6 @@ internal sealed class MoveSearch
             return Score.CreateMate(mateIn);
         }
 
-        if (KingIsGone(chessboard))
-        {
-            UpdateStatisticsForLeafNode();
-            var mateIn = mateInMultiplier * Math.Sign(MaterialEvaluation.Eval(chessboard).Eval);
-            return Score.CreateMate(mateIn);
-        }
-
         var moveCandidates = chessboard.GetMoveCandidates();
         if (moveCandidates.Count == 0)
         {
@@ -171,29 +164,6 @@ internal sealed class MoveSearch
         }
 
         return chessboard.ActiveColor is Color.White ? max : min;
-    }
-
-    private static bool KingIsGone(Chessboard chessboard)
-    {
-        var whiteKingIsGone = true;
-        var blackKingIsGone = true;
-
-        foreach (var position in Position.All)
-        {
-            var chessPiece = chessboard.GetChessPiece(position);
-
-            if (chessPiece is ChessPiece.WhiteKing)
-            {
-                whiteKingIsGone = false;
-            }
-
-            if (chessPiece is ChessPiece.BlackKing)
-            {
-                blackKingIsGone = false;
-            }
-        }
-
-        return whiteKingIsGone || blackKingIsGone;
     }
 
     private void UpdateStatisticsForLeafNode()
