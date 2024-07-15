@@ -76,8 +76,9 @@ public sealed class LichessBot : IDisposable
         }
     }
 
-    private async Task HandleEventAsync(PingEvent pingEvent)
+    private Task HandleEventAsync(PingEvent pingEvent)
     {
+        return Task.CompletedTask;
     }
 
     private async Task HandleEventAsync(ChallengeEvent challengeEvent)
@@ -93,7 +94,7 @@ public sealed class LichessBot : IDisposable
         }
     }
 
-    private async Task HandleEventAsync(GameStartEvent gameStartEvent)
+    private Task HandleEventAsync(GameStartEvent gameStartEvent)
     {
         if (_gameWorkers.ContainsKey(gameStartEvent.GameId))
         {
@@ -105,9 +106,11 @@ public sealed class LichessBot : IDisposable
             _gameWorkers.Add(gameStartEvent.GameId, gameWorker);
             gameWorker.Start();
         }
+
+        return Task.CompletedTask;
     }
 
-    private async Task HandleEventAsync(GameFinishEvent gameFinishEvent)
+    private Task HandleEventAsync(GameFinishEvent gameFinishEvent)
     {
         if (_gameWorkers.TryGetValue(gameFinishEvent.GameId, out var gameWorker))
         {
@@ -118,5 +121,7 @@ public sealed class LichessBot : IDisposable
         {
             Logger.Warn("GameWorker for game {0} no longer exists.", gameFinishEvent.GameId);
         }
+
+        return Task.CompletedTask;
     }
 }

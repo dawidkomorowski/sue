@@ -117,8 +117,9 @@ internal sealed class GameWorker
         }
     }
 
-    private async Task HandleEventAsync(PingGameEvent pingGameEvent)
+    private Task HandleEventAsync(PingGameEvent pingGameEvent)
     {
+        return Task.CompletedTask;
     }
 
     private async Task HandleEventAsync(GameFullEvent gameFullEvent)
