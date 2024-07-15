@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using NLog;
 using Sue.Engine.Model;
 
@@ -15,16 +13,14 @@ internal sealed class MoveSearch
     private int _nodesProcessed = 0;
     private int _nodesPerSecond = 0;
 
-    private IReadOnlyList<Move> SortMoves(IReadOnlyList<Move> moves, Chessboard chessboard)
+    private static void SortMoves(Span<Move> moves, Chessboard chessboard)
     {
-        var sortedMoves = moves.ToArray();
-        Array.Sort(sortedMoves, (m1, m2) =>
+        moves.Sort((m1, m2) =>
         {
             var mv1 = chessboard.GetChessPiece(m1.To) is not ChessPiece.None ? 0 : 1;
             var mv2 = chessboard.GetChessPiece(m2.To) is not ChessPiece.None ? 0 : 1;
             return mv1.CompareTo(mv2);
         });
-        return sortedMoves;
     }
 
     public Move? FindBestMove(Chessboard chessboard)
@@ -33,9 +29,11 @@ internal sealed class MoveSearch
         _nodesProcessed = 0;
         _nodesPerSecond = 0;
 
-        var moveCandidates = chessboard.GetMoveCandidates();
+        Span<Move> moveBuffer = stackalloc Move[Chessboard.MoveBufferSize];
+        var moveCount = chessboard.GetMoveCandidates(moveBuffer);
+        var moveCandidates = moveBuffer.Slice(0, moveCount);
 
-        if (moveCandidates.Count == 0)
+        if (moveCandidates.Length == 0)
         {
             Logger.Trace("No moves available.");
             return null;
@@ -45,7 +43,7 @@ internal sealed class MoveSearch
         //Random.Shared.Shuffle(shuffledMoves);
         //moveCandidates = shuffledMoves;
 
-        moveCandidates = SortMoves(moveCandidates, chessboard);
+        SortMoves(moveCandidates, chessboard);
 
         var min = Score.Max;
         var max = Score.Min;
@@ -96,8 +94,11 @@ internal sealed class MoveSearch
             return Score.CreateMate(mateIn);
         }
 
-        var moveCandidates = chessboard.GetMoveCandidates();
-        if (moveCandidates.Count == 0)
+        Span<Move> moveBuffer = stackalloc Move[Chessboard.MoveBufferSize];
+        var moveCount = chessboard.GetMoveCandidates(moveBuffer);
+        var moveCandidates = moveBuffer.Slice(0, moveCount);
+
+        if (moveCandidates.Length == 0)
         {
             UpdateStatisticsForLeafNode();
 
@@ -116,7 +117,7 @@ internal sealed class MoveSearch
             return MaterialEvaluation.Eval(chessboard);
         }
 
-        moveCandidates = SortMoves(moveCandidates, chessboard);
+        SortMoves(moveCandidates, chessboard);
 
         var min = Score.Max;
         var max = Score.Min;

@@ -9,6 +9,8 @@ internal sealed class Chessboard
     private readonly ChessPiece[] _chessboard = new ChessPiece[64];
     private readonly Stack<RevertMoveData> _revertMoveStack = new();
 
+    public const int MoveBufferSize = 512;
+
     public Color ActiveColor { get; set; }
     public bool WhiteKingSideCastlingAvailable { get; set; }
     public bool WhiteQueenSideCastlingAvailable { get; set; }
@@ -461,9 +463,11 @@ internal sealed class Chessboard
         FullMoveNumber = data.FullMoveNumber;
     }
 
-    public IReadOnlyList<Move> GetMoveCandidates()
+    public int GetMoveCandidates(Span<Move> moveBuffer)
     {
-        var moves = new List<Move>();
+        Debug.Assert(moveBuffer.Length >= MoveBufferSize, $"moveBuffer.Length >= MoveBufferSize ({MoveBufferSize})");
+
+        var index = 0;
 
         foreach (var position in Position.All)
         {
@@ -474,31 +478,33 @@ internal sealed class Chessboard
                 {
                     case ChessPiece.WhiteKing:
                     case ChessPiece.BlackKing:
-                        AppendKingMoves(position, moves);
-                        AppendCastlingMoves(position, moves);
+                        index = AppendKingMoves(position, moveBuffer, index);
+                        index = AppendCastlingMoves(position, moveBuffer, index);
                         break;
                     case ChessPiece.WhiteQueen:
                     case ChessPiece.BlackQueen:
-                        AppendRookMoves(position, moves);
-                        AppendBishopMoves(position, moves);
+                        index = AppendRookMoves(position, moveBuffer, index);
+                        index = AppendBishopMoves(position, moveBuffer, index);
                         break;
                     case ChessPiece.WhiteRook:
                     case ChessPiece.BlackRook:
-                        AppendRookMoves(position, moves);
+                        index = AppendRookMoves(position, moveBuffer, index);
                         break;
                     case ChessPiece.WhiteBishop:
                     case ChessPiece.BlackBishop:
-                        AppendBishopMoves(position, moves);
+                        index = AppendBishopMoves(position, moveBuffer, index);
                         break;
                     case ChessPiece.WhiteKnight:
                     case ChessPiece.BlackKnight:
-                        AppendKnightMoves(position, moves);
+                        index = AppendKnightMoves(position, moveBuffer, index);
                         break;
                     case ChessPiece.WhitePawn:
-                        AppendWhitePawnMoves(position, moves);
+                        index = AppendWhitePawnMoves(position, moveBuffer, index);
                         break;
                     case ChessPiece.BlackPawn:
-                        AppendBlackPawnMoves(position, moves);
+                        index = AppendBlackPawnMoves(position, moveBuffer, index);
+                        break;
+                    case ChessPiece.None:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -506,12 +512,12 @@ internal sealed class Chessboard
             }
         }
 
-        return moves.AsReadOnly();
+        return index;
     }
 
     #region GetMoveCandidates implementation
 
-    private void AppendWhitePawnMoves(Position position, List<Move> moves)
+    private int AppendWhitePawnMoves(Position position, Span<Move> moveBuffer, int index)
     {
         var pawn = GetChessPiece(position);
         Debug.Assert(pawn is ChessPiece.WhitePawn, "pawn is ChessPiece.WhitePawn");
@@ -522,10 +528,10 @@ internal sealed class Chessboard
         {
             if (GetChessPiece(front) is ChessPiece.None)
             {
-                moves.Add(new Move(position, front, Promotion.Queen));
-                moves.Add(new Move(position, front, Promotion.Rook));
-                moves.Add(new Move(position, front, Promotion.Bishop));
-                moves.Add(new Move(position, front, Promotion.Knight));
+                moveBuffer[index++] = new Move(position, front, Promotion.Queen);
+                moveBuffer[index++] = new Move(position, front, Promotion.Rook);
+                moveBuffer[index++] = new Move(position, front, Promotion.Bishop);
+                moveBuffer[index++] = new Move(position, front, Promotion.Knight);
             }
 
             if (position.File is not File.A)
@@ -533,10 +539,10 @@ internal sealed class Chessboard
                 var frontLeft = front.MoveLeft();
                 if (GetChessPiece(frontLeft).IsBlack())
                 {
-                    moves.Add(new Move(position, frontLeft, Promotion.Queen));
-                    moves.Add(new Move(position, frontLeft, Promotion.Rook));
-                    moves.Add(new Move(position, frontLeft, Promotion.Bishop));
-                    moves.Add(new Move(position, frontLeft, Promotion.Knight));
+                    moveBuffer[index++] = new Move(position, frontLeft, Promotion.Queen);
+                    moveBuffer[index++] = new Move(position, frontLeft, Promotion.Rook);
+                    moveBuffer[index++] = new Move(position, frontLeft, Promotion.Bishop);
+                    moveBuffer[index++] = new Move(position, frontLeft, Promotion.Knight);
                 }
             }
 
@@ -545,10 +551,10 @@ internal sealed class Chessboard
                 var frontRight = front.MoveRight();
                 if (GetChessPiece(frontRight).IsBlack())
                 {
-                    moves.Add(new Move(position, frontRight, Promotion.Queen));
-                    moves.Add(new Move(position, frontRight, Promotion.Rook));
-                    moves.Add(new Move(position, frontRight, Promotion.Bishop));
-                    moves.Add(new Move(position, frontRight, Promotion.Knight));
+                    moveBuffer[index++] = new Move(position, frontRight, Promotion.Queen);
+                    moveBuffer[index++] = new Move(position, frontRight, Promotion.Rook);
+                    moveBuffer[index++] = new Move(position, frontRight, Promotion.Bishop);
+                    moveBuffer[index++] = new Move(position, frontRight, Promotion.Knight);
                 }
             }
         }
@@ -558,12 +564,12 @@ internal sealed class Chessboard
 
             if (position.Rank is Rank.Two && GetChessPiece(front) is ChessPiece.None && GetChessPiece(front2) is ChessPiece.None)
             {
-                moves.Add(new Move(position, front2));
+                moveBuffer[index++] = new Move(position, front2);
             }
 
             if (GetChessPiece(front) is ChessPiece.None)
             {
-                moves.Add(new Move(position, front));
+                moveBuffer[index++] = new Move(position, front);
             }
 
             if (position.File is not File.A)
@@ -571,12 +577,12 @@ internal sealed class Chessboard
                 var frontLeft = front.MoveLeft();
                 if (GetChessPiece(frontLeft).IsBlack())
                 {
-                    moves.Add(new Move(position, frontLeft));
+                    moveBuffer[index++] = new Move(position, frontLeft);
                 }
 
                 if (position.Rank is Rank.Five && frontLeft == EnPassantTargetPosition)
                 {
-                    moves.Add(new Move(position, frontLeft));
+                    moveBuffer[index++] = new Move(position, frontLeft);
                 }
             }
 
@@ -585,18 +591,20 @@ internal sealed class Chessboard
                 var frontRight = front.MoveRight();
                 if (GetChessPiece(frontRight).IsBlack())
                 {
-                    moves.Add(new Move(position, frontRight));
+                    moveBuffer[index++] = new Move(position, frontRight);
                 }
 
                 if (position.Rank is Rank.Five && frontRight == EnPassantTargetPosition)
                 {
-                    moves.Add(new Move(position, frontRight));
+                    moveBuffer[index++] = new Move(position, frontRight);
                 }
             }
         }
+
+        return index;
     }
 
-    private void AppendBlackPawnMoves(Position position, List<Move> moves)
+    private int AppendBlackPawnMoves(Position position, Span<Move> moveBuffer, int index)
     {
         var pawn = GetChessPiece(position);
         Debug.Assert(pawn is ChessPiece.BlackPawn, "pawn is ChessPiece.BlackPawn");
@@ -607,10 +615,10 @@ internal sealed class Chessboard
         {
             if (GetChessPiece(front) is ChessPiece.None)
             {
-                moves.Add(new Move(position, front, Promotion.Queen));
-                moves.Add(new Move(position, front, Promotion.Rook));
-                moves.Add(new Move(position, front, Promotion.Bishop));
-                moves.Add(new Move(position, front, Promotion.Knight));
+                moveBuffer[index++] = new Move(position, front, Promotion.Queen);
+                moveBuffer[index++] = new Move(position, front, Promotion.Rook);
+                moveBuffer[index++] = new Move(position, front, Promotion.Bishop);
+                moveBuffer[index++] = new Move(position, front, Promotion.Knight);
             }
 
             if (position.File is not File.A)
@@ -618,10 +626,10 @@ internal sealed class Chessboard
                 var frontLeft = front.MoveLeft();
                 if (GetChessPiece(frontLeft).IsWhite())
                 {
-                    moves.Add(new Move(position, frontLeft, Promotion.Queen));
-                    moves.Add(new Move(position, frontLeft, Promotion.Rook));
-                    moves.Add(new Move(position, frontLeft, Promotion.Bishop));
-                    moves.Add(new Move(position, frontLeft, Promotion.Knight));
+                    moveBuffer[index++] = new Move(position, frontLeft, Promotion.Queen);
+                    moveBuffer[index++] = new Move(position, frontLeft, Promotion.Rook);
+                    moveBuffer[index++] = new Move(position, frontLeft, Promotion.Bishop);
+                    moveBuffer[index++] = new Move(position, frontLeft, Promotion.Knight);
                 }
             }
 
@@ -630,10 +638,10 @@ internal sealed class Chessboard
                 var frontRight = front.MoveRight();
                 if (GetChessPiece(frontRight).IsWhite())
                 {
-                    moves.Add(new Move(position, frontRight, Promotion.Queen));
-                    moves.Add(new Move(position, frontRight, Promotion.Rook));
-                    moves.Add(new Move(position, frontRight, Promotion.Bishop));
-                    moves.Add(new Move(position, frontRight, Promotion.Knight));
+                    moveBuffer[index++] = new Move(position, frontRight, Promotion.Queen);
+                    moveBuffer[index++] = new Move(position, frontRight, Promotion.Rook);
+                    moveBuffer[index++] = new Move(position, frontRight, Promotion.Bishop);
+                    moveBuffer[index++] = new Move(position, frontRight, Promotion.Knight);
                 }
             }
         }
@@ -643,12 +651,12 @@ internal sealed class Chessboard
 
             if (position.Rank is Rank.Seven && GetChessPiece(front) is ChessPiece.None && GetChessPiece(front2) is ChessPiece.None)
             {
-                moves.Add(new Move(position, front2));
+                moveBuffer[index++] = new Move(position, front2);
             }
 
             if (GetChessPiece(front) is ChessPiece.None)
             {
-                moves.Add(new Move(position, front));
+                moveBuffer[index++] = new Move(position, front);
             }
 
             if (position.File is not File.A)
@@ -656,12 +664,12 @@ internal sealed class Chessboard
                 var frontLeft = front.MoveLeft();
                 if (GetChessPiece(frontLeft).IsWhite())
                 {
-                    moves.Add(new Move(position, frontLeft));
+                    moveBuffer[index++] = new Move(position, frontLeft);
                 }
 
                 if (position.Rank is Rank.Four && frontLeft == EnPassantTargetPosition)
                 {
-                    moves.Add(new Move(position, frontLeft));
+                    moveBuffer[index++] = new Move(position, frontLeft);
                 }
             }
 
@@ -670,18 +678,20 @@ internal sealed class Chessboard
                 var frontRight = front.MoveRight();
                 if (GetChessPiece(frontRight).IsWhite())
                 {
-                    moves.Add(new Move(position, frontRight));
+                    moveBuffer[index++] = new Move(position, frontRight);
                 }
 
                 if (position.Rank is Rank.Four && frontRight == EnPassantTargetPosition)
                 {
-                    moves.Add(new Move(position, frontRight));
+                    moveBuffer[index++] = new Move(position, frontRight);
                 }
             }
         }
+
+        return index;
     }
 
-    private void AppendKnightMoves(Position position, List<Move> moves)
+    private int AppendKnightMoves(Position position, Span<Move> moveBuffer, int index)
     {
         var knight = GetChessPiece(position);
         Debug.Assert(knight is ChessPiece.WhiteKnight or ChessPiece.BlackKnight, "knight is ChessPiece.WhiteKnight or ChessPiece.BlackKnight");
@@ -703,12 +713,14 @@ internal sealed class Chessboard
             var chessPiece = GetChessPiece(targetPosition);
             if ((knight.IsWhite() && !chessPiece.IsWhite()) || (knight.IsBlack() && !chessPiece.IsBlack()))
             {
-                moves.Add(new Move(position, targetPosition));
+                moveBuffer[index++] = new Move(position, targetPosition);
             }
         }
+
+        return index;
     }
 
-    private void AppendBishopMoves(Position position, List<Move> moves)
+    private int AppendBishopMoves(Position position, Span<Move> moveBuffer, int index)
     {
         var topRightMaximumOffset = Math.Min(File.H.Index() - position.File.Index(), Rank.Eight.Index() - position.Rank.Index());
         var topLeftMaximumOffset = Math.Min(position.File.Index() - File.A.Index(), Rank.Eight.Index() - position.Rank.Index());
@@ -718,7 +730,7 @@ internal sealed class Chessboard
         for (var offset = 1; offset <= topRightMaximumOffset; offset++)
         {
             var targetPosition = position.MoveBy(offset, offset);
-            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moves))
+            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moveBuffer, ref index))
             {
                 break;
             }
@@ -727,7 +739,7 @@ internal sealed class Chessboard
         for (var offset = 1; offset <= topLeftMaximumOffset; offset++)
         {
             var targetPosition = position.MoveBy(-offset, offset);
-            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moves))
+            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moveBuffer, ref index))
             {
                 break;
             }
@@ -736,7 +748,7 @@ internal sealed class Chessboard
         for (var offset = 1; offset <= bottomRightMaximumOffset; offset++)
         {
             var targetPosition = position.MoveBy(offset, -offset);
-            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moves))
+            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moveBuffer, ref index))
             {
                 break;
             }
@@ -745,18 +757,20 @@ internal sealed class Chessboard
         for (var offset = 1; offset <= bottomLeftMaximumOffset; offset++)
         {
             var targetPosition = position.MoveBy(-offset, -offset);
-            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moves))
+            if (ShouldBreak_AndAlso_TryAddMove(position, targetPosition, moveBuffer, ref index))
             {
                 break;
             }
         }
+
+        return index;
     }
 
-    private void AppendRookMoves(Position position, List<Move> moves)
+    private int AppendRookMoves(Position position, Span<Move> moveBuffer, int index)
     {
         for (var fileIndex = position.File.Index() + 1; fileIndex <= File.H.Index(); fileIndex++)
         {
-            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(fileIndex.ToFile(), position.Rank), moves))
+            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(fileIndex.ToFile(), position.Rank), moveBuffer, ref index))
             {
                 break;
             }
@@ -764,7 +778,7 @@ internal sealed class Chessboard
 
         for (var fileIndex = position.File.Index() - 1; fileIndex >= File.A.Index(); fileIndex--)
         {
-            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(fileIndex.ToFile(), position.Rank), moves))
+            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(fileIndex.ToFile(), position.Rank), moveBuffer, ref index))
             {
                 break;
             }
@@ -772,7 +786,7 @@ internal sealed class Chessboard
 
         for (var rankIndex = position.Rank.Index() + 1; rankIndex <= Rank.Eight.Index(); rankIndex++)
         {
-            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(position.File, rankIndex.ToRank()), moves))
+            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(position.File, rankIndex.ToRank()), moveBuffer, ref index))
             {
                 break;
             }
@@ -780,14 +794,16 @@ internal sealed class Chessboard
 
         for (var rankIndex = position.Rank.Index() - 1; rankIndex >= Rank.One.Index(); rankIndex--)
         {
-            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(position.File, rankIndex.ToRank()), moves))
+            if (ShouldBreak_AndAlso_TryAddMove(position, new Position(position.File, rankIndex.ToRank()), moveBuffer, ref index))
             {
                 break;
             }
         }
+
+        return index;
     }
 
-    private bool ShouldBreak_AndAlso_TryAddMove(Position position, Position targetPosition, List<Move> moves)
+    private bool ShouldBreak_AndAlso_TryAddMove(Position position, Position targetPosition, Span<Move> moveBuffer, ref int index)
     {
         var myChessPiece = GetChessPiece(position);
         var chessPiece = GetChessPiece(targetPosition);
@@ -797,12 +813,12 @@ internal sealed class Chessboard
             return true;
         }
 
-        moves.Add(new Move(position, targetPosition));
+        moveBuffer[index++] = new Move(position, targetPosition);
 
         return chessPiece is not ChessPiece.None;
     }
 
-    private void AppendKingMoves(Position position, List<Move> moves)
+    private int AppendKingMoves(Position position, Span<Move> moveBuffer, int index)
     {
         var king = GetChessPiece(position);
         Debug.Assert(king is ChessPiece.WhiteKing or ChessPiece.BlackKing, "king is ChessPiece.WhiteKing or ChessPiece.BlackKing");
@@ -835,12 +851,14 @@ internal sealed class Chessboard
             var chessPiece = GetChessPiece(targetPosition);
             if ((king.IsWhite() && !chessPiece.IsWhite()) || (king.IsBlack() && !chessPiece.IsBlack()))
             {
-                moves.Add(new Move(position, targetPosition));
+                moveBuffer[index++] = new Move(position, targetPosition);
             }
         }
+
+        return index;
     }
 
-    private void AppendCastlingMoves(Position position, List<Move> moves)
+    private int AppendCastlingMoves(Position position, Span<Move> moveBuffer, int index)
     {
         var king = GetChessPiece(position);
         Debug.Assert(king is ChessPiece.WhiteKing or ChessPiece.BlackKing, "king is ChessPiece.WhiteKing or ChessPiece.BlackKing");
@@ -858,7 +876,7 @@ internal sealed class Chessboard
 
             if (canCastle)
             {
-                moves.Add(new Move(new Position(File.E, Rank.One), new Position(File.G, Rank.One)));
+                moveBuffer[index++] = new Move(new Position(File.E, Rank.One), new Position(File.G, Rank.One));
             }
         }
 
@@ -876,7 +894,7 @@ internal sealed class Chessboard
 
             if (canCastle)
             {
-                moves.Add(new Move(new Position(File.E, Rank.One), new Position(File.C, Rank.One)));
+                moveBuffer[index++] = new Move(new Position(File.E, Rank.One), new Position(File.C, Rank.One));
             }
         }
 
@@ -893,7 +911,7 @@ internal sealed class Chessboard
 
             if (canCastle)
             {
-                moves.Add(new Move(new Position(File.E, Rank.Eight), new Position(File.G, Rank.Eight)));
+                moveBuffer[index++] = new Move(new Position(File.E, Rank.Eight), new Position(File.G, Rank.Eight));
             }
         }
 
@@ -911,9 +929,11 @@ internal sealed class Chessboard
 
             if (canCastle)
             {
-                moves.Add(new Move(new Position(File.E, Rank.Eight), new Position(File.C, Rank.Eight)));
+                moveBuffer[index++] = new Move(new Position(File.E, Rank.Eight), new Position(File.C, Rank.Eight));
             }
         }
+
+        return index;
     }
 
     #endregion

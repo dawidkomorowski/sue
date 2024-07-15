@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using Sue.Engine.Model;
@@ -475,6 +476,7 @@ public class ChessboardTests
     [TestCase("1r1qkbnr/p1pp1ppp/1pb5/4p3/PP4P1/7N/2PPPP1P/RNBQK2R b KQk - 1 7", "c6h1", "1r1qkbnr/p1pp1ppp/1p6/4p3/PP4P1/7N/2PPPP1P/RNBQK2b w Qk - 0 8")]
 
     #endregion
+
     public void MakeMove_ShouldChangeChessboardStateAccordingToRequestedMove_AndThen_RevertMove_ShouldRestoreOriginalChessboardState(string fenString,
         string uciMove, string fenStringAfterMove)
     {
@@ -1042,7 +1044,9 @@ public class ChessboardTests
         }
 
         // Act
-        var moves = chessboard.GetMoveCandidates();
+        Span<Move> moveBuffer = stackalloc Move[Chessboard.MoveBufferSize];
+        var moveCount = chessboard.GetMoveCandidates(moveBuffer);
+        var moves = moveBuffer.Slice(0, moveCount).ToArray();
 
         // Assert
         Assert.That(moves, Is.Unique);
