@@ -10,7 +10,7 @@ namespace Sue.Engine.Search;
 internal sealed class MoveSearch
 {
     private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-    private const int MaxPly = 4;
+    private const int MaxDepth = 5;
     private readonly Stopwatch _stopwatch = new();
     private int _nodesProcessed = 0;
     private int _nodesPerSecond = 0;
@@ -56,7 +56,7 @@ internal sealed class MoveSearch
         foreach (var move in moveCandidates)
         {
             chessboard.MakeMove(move);
-            var score = ScoreMove(chessboard, MaxPly, alpha, beta);
+            var score = ScoreMove(chessboard, MaxDepth - 1, alpha, beta);
             chessboard.RevertMove();
 
             Logger.Trace("Move: {0} Score: {1}", move.ToUci(), score);
@@ -85,9 +85,9 @@ internal sealed class MoveSearch
         return bestMove;
     }
 
-    private Score ScoreMove(Chessboard chessboard, int ply, Score alpha, Score beta)
+    private Score ScoreMove(Chessboard chessboard, int depth, Score alpha, Score beta)
     {
-        var mateInMultiplier = (int)Math.Ceiling((1 + MaxPly - ply) / 2d);
+        var mateInMultiplier = (int)Math.Ceiling((MaxDepth - depth) / 2d);
 
         if (chessboard.HasKingInCheck(chessboard.ActiveColor.Opposite()))
         {
@@ -117,7 +117,7 @@ internal sealed class MoveSearch
             return Score.Zero;
         }
 
-        if (ply == 0)
+        if (depth == 0)
         {
             UpdateStatisticsForLeafNode();
             return MaterialEvaluation.Eval(chessboard);
@@ -131,7 +131,7 @@ internal sealed class MoveSearch
         foreach (var move in moveCandidates)
         {
             chessboard.MakeMove(move);
-            var score = ScoreMove(chessboard, ply - 1, alpha, beta);
+            var score = ScoreMove(chessboard, depth - 1, alpha, beta);
             chessboard.RevertMove();
 
             if (chessboard.ActiveColor is Color.White)
