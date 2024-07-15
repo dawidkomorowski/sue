@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Sue.Engine.Model;
 
 public enum Rank
 {
-    One,
-    Two,
-    Three,
-    Four,
-    Five,
-    Six,
-    Seven,
-    Eight
+    One = 0,
+    Two = 1,
+    Three = 2,
+    Four = 3,
+    Five = 4,
+    Six = 5,
+    Seven = 6,
+    Eight = 7
 }
 
 internal static class RankExtensions
@@ -35,20 +37,11 @@ internal static class RankExtensions
         };
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int Index(this Rank rank)
     {
-        return rank switch
-        {
-            Rank.One => 0,
-            Rank.Two => 1,
-            Rank.Three => 2,
-            Rank.Four => 3,
-            Rank.Five => 4,
-            Rank.Six => 5,
-            Rank.Seven => 6,
-            Rank.Eight => 7,
-            _ => throw new ArgumentOutOfRangeException(nameof(rank), rank, null)
-        };
+        Debug.Assert(rank is >= Rank.One and <= Rank.Eight, "rank is >= Rank.One and <= Rank.Eight");
+        return (int)rank;
     }
 
     public static Rank Add(this Rank rank, int offset)
@@ -80,19 +73,10 @@ internal static class CharExtensionsForRank
 
 internal static class IntExtensionsForRank
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Rank ToRank(this int index)
     {
-        return index switch
-        {
-            0 => Rank.One,
-            1 => Rank.Two,
-            2 => Rank.Three,
-            3 => Rank.Four,
-            4 => Rank.Five,
-            5 => Rank.Six,
-            6 => Rank.Seven,
-            7 => Rank.Eight,
-            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
-        };
+        Debug.Assert(index is >= 0 and <= 7, "index is >= 0 and <= 7");
+        return (Rank)index;
     }
 }

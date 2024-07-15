@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Sue.Engine.Model;
 
 public enum File
 {
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H
+    A = 0,
+    B = 1,
+    C = 2,
+    D = 3,
+    E = 4,
+    F = 5,
+    G = 6,
+    H = 7
 }
 
 internal static class FileExtensions
@@ -35,20 +37,11 @@ internal static class FileExtensions
         };
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int Index(this File file)
     {
-        return file switch
-        {
-            File.A => 0,
-            File.B => 1,
-            File.C => 2,
-            File.D => 3,
-            File.E => 4,
-            File.F => 5,
-            File.G => 6,
-            File.H => 7,
-            _ => throw new ArgumentOutOfRangeException(nameof(file), file, null)
-        };
+        Debug.Assert(file is >= File.A and <= File.H, "file is >= File.A and <= File.H");
+        return (int)file;
     }
 
     public static File Add(this File file, int offset)
@@ -80,19 +73,10 @@ internal static class CharExtensionsForFile
 
 internal static class IntExtensionsForFile
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static File ToFile(this int index)
     {
-        return index switch
-        {
-            0 => File.A,
-            1 => File.B,
-            2 => File.C,
-            3 => File.D,
-            4 => File.E,
-            5 => File.F,
-            6 => File.G,
-            7 => File.H,
-            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
-        };
+        Debug.Assert(index is >= 0 and <= 7, "index is >= 0 and <= 7");
+        return (File)index;
     }
 }
