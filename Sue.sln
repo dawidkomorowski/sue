@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmark", "benchmark", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sue.Engine.MicroBenchmark", "benchmark\Sue.Engine.MicroBenchmark\Sue.Engine.MicroBenchmark.csproj", "{D01CD9ED-B1D9-4F02-AC54-667469D45748}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sue.Engine.ProfilingApp", "benchmark\Sue.Engine.ProfilingApp\Sue.Engine.ProfilingApp.csproj", "{06C8DBC8-2E6F-40F4-BDC8-C056BC7A8031}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{D01CD9ED-B1D9-4F02-AC54-667469D45748}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D01CD9ED-B1D9-4F02-AC54-667469D45748}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D01CD9ED-B1D9-4F02-AC54-667469D45748}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06C8DBC8-2E6F-40F4-BDC8-C056BC7A8031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06C8DBC8-2E6F-40F4-BDC8-C056BC7A8031}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06C8DBC8-2E6F-40F4-BDC8-C056BC7A8031}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06C8DBC8-2E6F-40F4-BDC8-C056BC7A8031}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{3200821B-32EE-441B-BE58-79B84E009232} = {FC2BB0AF-E05A-4BAE-9AB5-CB7C24620232}
 		{85EE1B83-7DDF-49E5-8B15-C46ABC04DF86} = {FC2BB0AF-E05A-4BAE-9AB5-CB7C24620232}
 		{D01CD9ED-B1D9-4F02-AC54-667469D45748} = {BD6A7A82-6881-43CD-AD32-7FEC2204419A}
+		{06C8DBC8-2E6F-40F4-BDC8-C056BC7A8031} = {BD6A7A82-6881-43CD-AD32-7FEC2204419A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {717574CE-23F5-4D2D-B726-D02073B25E9D}
