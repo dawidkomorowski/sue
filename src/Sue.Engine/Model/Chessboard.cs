@@ -941,7 +941,7 @@ internal sealed class Chessboard
 
     #endregion
 
-    private bool IsAttackedBy(Position position, Color attacker)
+    private bool IsAttackedBy(in Position position, Color attacker)
     {
         if (attacker is Color.White && IsAttackedByWhitePawn(position))
         {
@@ -978,7 +978,7 @@ internal sealed class Chessboard
 
     #region IsAttackedBy implementation
 
-    private bool IsAttackedByWhitePawn(Position position)
+    private bool IsAttackedByWhitePawn(in Position position)
     {
         if (HasChessPiece(position, -1, -1, ChessPiece.WhitePawn))
         {
@@ -993,7 +993,7 @@ internal sealed class Chessboard
         return false;
     }
 
-    private bool IsAttackedByBlackPawn(Position position)
+    private bool IsAttackedByBlackPawn(in Position position)
     {
         if (HasChessPiece(position, -1, 1, ChessPiece.BlackPawn))
         {
@@ -1008,7 +1008,7 @@ internal sealed class Chessboard
         return false;
     }
 
-    private bool IsAttackedByKnight(Position position, Color attacker)
+    private bool IsAttackedByKnight(in Position position, Color attacker)
     {
         ReadOnlySpan<(int right, int up)> knightOffsets =
         [
@@ -1026,7 +1026,7 @@ internal sealed class Chessboard
         return false;
     }
 
-    private bool IsAttackedByKing(Position position, Color attacker)
+    private bool IsAttackedByKing(in Position position, Color attacker)
     {
         ReadOnlySpan<(int right, int up)> kingOffsets =
         [
@@ -1044,7 +1044,7 @@ internal sealed class Chessboard
         return false;
     }
 
-    private bool HasChessPiece(Position position, int fileOffset, int rankOffset, ChessPiece chessPiece)
+    private bool HasChessPiece(in Position position, int fileOffset, int rankOffset, ChessPiece chessPiece)
     {
         var fileIndex = position.File.Index() + fileOffset;
         var rankIndex = position.Rank.Index() + rankOffset;
@@ -1057,7 +1057,7 @@ internal sealed class Chessboard
         return GetChessPiece(targetPosition) == chessPiece;
     }
 
-    private bool IsAttackedByBishopOrQueen(Position position, Color attacker)
+    private bool IsAttackedByBishopOrQueen(in Position position, Color attacker)
     {
         var topRightMaximumOffset = Math.Min(File.H.Index() - position.File.Index(), Rank.Eight.Index() - position.Rank.Index());
         var topLeftMaximumOffset = Math.Min(position.File.Index() - File.A.Index(), Rank.Eight.Index() - position.Rank.Index());
@@ -1156,7 +1156,7 @@ internal sealed class Chessboard
         }
     }
 
-    private bool IsAttackedByRookOrQueen(Position position, Color attacker)
+    private bool IsAttackedByRookOrQueen(in Position position, Color attacker)
     {
         for (var fileIndex = position.File.Index() + 1; fileIndex <= File.H.Index(); fileIndex++)
         {
