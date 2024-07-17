@@ -1,22 +1,23 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace Sue.Engine.Model;
 
 public enum ChessPiece
 {
-    None,
-    WhiteKing,
-    WhiteQueen,
-    WhiteRook,
-    WhiteBishop,
-    WhiteKnight,
-    WhitePawn,
-    BlackKing,
-    BlackQueen,
-    BlackRook,
-    BlackBishop,
-    BlackKnight,
-    BlackPawn
+    None = 0,
+    WhiteKing = 1,
+    WhiteQueen = 2,
+    WhiteRook = 3,
+    WhiteBishop = 4,
+    WhiteKnight = 5,
+    WhitePawn = 6,
+    BlackKing = 7,
+    BlackQueen = 8,
+    BlackRook = 9,
+    BlackBishop = 10,
+    BlackKnight = 11,
+    BlackPawn = 12
 }
 
 internal static class ChessPieceExtensions
@@ -41,32 +42,16 @@ internal static class ChessPieceExtensions
         };
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsWhite(this ChessPiece chessPiece)
     {
-        return chessPiece switch
-        {
-            ChessPiece.WhiteKing => true,
-            ChessPiece.WhiteQueen => true,
-            ChessPiece.WhiteRook => true,
-            ChessPiece.WhiteBishop => true,
-            ChessPiece.WhiteKnight => true,
-            ChessPiece.WhitePawn => true,
-            _ => false
-        };
+        return chessPiece is >= ChessPiece.WhiteKing and <= ChessPiece.WhitePawn;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsBlack(this ChessPiece chessPiece)
     {
-        return chessPiece switch
-        {
-            ChessPiece.BlackKing => true,
-            ChessPiece.BlackQueen => true,
-            ChessPiece.BlackRook => true,
-            ChessPiece.BlackBishop => true,
-            ChessPiece.BlackKnight => true,
-            ChessPiece.BlackPawn => true,
-            _ => false
-        };
+        return chessPiece is >= ChessPiece.BlackKing and <= ChessPiece.BlackPawn;
     }
 }
 
