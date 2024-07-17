@@ -13,16 +13,6 @@ internal sealed class MoveSearch
     private int _nodesProcessed = 0;
     private int _nodesPerSecond = 0;
 
-    private static void SortMoves(Span<Move> moves, Chessboard chessboard)
-    {
-        moves.Sort((m1, m2) =>
-        {
-            var mv1 = chessboard.GetChessPiece(m1.To) is not ChessPiece.None ? 0 : 1;
-            var mv2 = chessboard.GetChessPiece(m2.To) is not ChessPiece.None ? 0 : 1;
-            return mv1.CompareTo(mv2);
-        });
-    }
-
     public Move? FindBestMove(Chessboard chessboard)
     {
         _stopwatch.Restart();
@@ -54,7 +44,7 @@ internal sealed class MoveSearch
         foreach (var move in moveCandidates)
         {
             chessboard.MakeMove(move);
-            var score = ScoreMove(chessboard, MaxDepth - 1, alpha, beta);
+            var score = AlphaBetaSearch(chessboard, MaxDepth - 1, alpha, beta);
             chessboard.RevertMove();
 
             Logger.Trace("Move: {0} Score: {1}", move.ToUci(), score);
@@ -83,7 +73,7 @@ internal sealed class MoveSearch
         return bestMove;
     }
 
-    private Score ScoreMove(Chessboard chessboard, int depth, Score alpha, Score beta)
+    private Score AlphaBetaSearch(Chessboard chessboard, int depth, Score alpha, Score beta)
     {
         var mateInMultiplier = (int)Math.Ceiling((MaxDepth - depth) / 2d);
 
@@ -125,7 +115,7 @@ internal sealed class MoveSearch
         foreach (var move in moveCandidates)
         {
             chessboard.MakeMove(move);
-            var score = ScoreMove(chessboard, depth - 1, alpha, beta);
+            var score = AlphaBetaSearch(chessboard, depth - 1, alpha, beta);
             chessboard.RevertMove();
 
             if (chessboard.ActiveColor is Color.White)
@@ -165,6 +155,16 @@ internal sealed class MoveSearch
         }
 
         return chessboard.ActiveColor is Color.White ? max : min;
+    }
+
+    private static void SortMoves(Span<Move> moves, Chessboard chessboard)
+    {
+        moves.Sort((m1, m2) =>
+        {
+            var mv1 = chessboard.GetChessPiece(m1.To) is not ChessPiece.None ? 0 : 1;
+            var mv2 = chessboard.GetChessPiece(m2.To) is not ChessPiece.None ? 0 : 1;
+            return mv1.CompareTo(mv2);
+        });
     }
 
     private void UpdateStatisticsForLeafNode()
