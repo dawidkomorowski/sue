@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Sue.Engine.Model;
 
@@ -14,21 +13,22 @@ public readonly struct Position : IEquatable<Position>
     public File File { get; }
     public Rank Rank { get; }
 
-    public static readonly IReadOnlyList<Position> All;
+
+    private static readonly Position[] AllArray;
+    public static ReadOnlySpan<Position> All => AllArray;
 
     static Position()
     {
-        var all = new List<Position>();
+        var index = 0;
+        AllArray = new Position[64];
 
         foreach (var file in FileExtensions.Files())
         {
             foreach (var rank in RankExtensions.Ranks())
             {
-                all.Add(new Position(file, rank));
+                AllArray[index++] = new Position(file, rank);
             }
         }
-
-        All = all.AsReadOnly();
     }
 
     internal Position MoveUp() => new(File, Rank.Add(1));
