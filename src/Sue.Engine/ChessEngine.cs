@@ -6,7 +6,7 @@ namespace Sue.Engine;
 
 public static class ChessEngine
 {
-    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
     public static Color GetActiveColor(string fenString, string uciMoves)
     {

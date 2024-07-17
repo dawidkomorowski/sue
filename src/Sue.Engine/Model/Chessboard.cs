@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Sue.Engine.Model;
 
 internal sealed class Chessboard
 {
     private readonly ChessPiece[] _chessboard = new ChessPiece[64];
-    private readonly Stack<RevertMoveData> _revertMoveStack = new();
+    private readonly Stack<RevertMoveData> _revertMoveStack = new(128);
 
     public const int MoveBufferSize = 512;
 
@@ -20,12 +21,14 @@ internal sealed class Chessboard
     public int HalfMoveClock { get; set; }
     public int FullMoveNumber { get; set; } = 1;
 
-    public ChessPiece GetChessPiece(Position position)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ChessPiece GetChessPiece(in Position position)
     {
         return _chessboard[GetIndex(position)];
     }
 
-    public void SetChessPiece(Position position, ChessPiece chessPiece)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void SetChessPiece(in Position position, ChessPiece chessPiece)
     {
         _chessboard[GetIndex(position)] = chessPiece;
     }
@@ -1123,7 +1126,7 @@ internal sealed class Chessboard
 
         return false;
 
-        bool IsBishopOrQueen(Position targetPosition, Color attackerColor)
+        bool IsBishopOrQueen(in Position targetPosition, Color attackerColor)
         {
             var chessPiece = GetChessPiece(targetPosition);
 
@@ -1145,7 +1148,8 @@ internal sealed class Chessboard
             return false;
         }
 
-        bool ShouldBreak(Position targetPosition)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        bool ShouldBreak(in Position targetPosition)
         {
             var chessPiece = GetChessPiece(targetPosition);
             return chessPiece is not ChessPiece.None;
@@ -1216,7 +1220,7 @@ internal sealed class Chessboard
 
         return false;
 
-        bool IsRookOrQueen(Position targetPosition, Color attackerColor)
+        bool IsRookOrQueen(in Position targetPosition, Color attackerColor)
         {
             var chessPiece = GetChessPiece(targetPosition);
 
@@ -1238,7 +1242,8 @@ internal sealed class Chessboard
             return false;
         }
 
-        bool ShouldBreak(Position targetPosition)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        bool ShouldBreak(in Position targetPosition)
         {
             var chessPiece = GetChessPiece(targetPosition);
             return chessPiece is not ChessPiece.None;
@@ -1247,7 +1252,8 @@ internal sealed class Chessboard
 
     #endregion
 
-    private static int GetIndex(Position position)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static int GetIndex(in Position position)
     {
         return position.File.Index() * 8 + position.Rank.Index();
     }

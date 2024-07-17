@@ -44,11 +44,10 @@ internal static class RankExtensions
         return (int)rank;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Rank Add(this Rank rank, int offset)
     {
-        var rankIndex = rank.Index();
-        var newRankIndex = rankIndex + offset;
-        return newRankIndex.ToRank();
+        return (rank.Index() + offset).ToRank();
     }
 }
 

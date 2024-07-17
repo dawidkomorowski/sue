@@ -44,11 +44,10 @@ internal static class FileExtensions
         return (int)file;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static File Add(this File file, int offset)
     {
-        var fileIndex = file.Index();
-        var newFileIndex = fileIndex + offset;
-        return newFileIndex.ToFile();
+        return (file.Index() + offset).ToFile();
     }
 }
 
