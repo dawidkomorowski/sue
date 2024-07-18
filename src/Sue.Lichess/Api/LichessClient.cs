@@ -65,6 +65,17 @@ internal sealed class LichessClient : IDisposable
         Logger.Debug("Challenge accepted: {0}.", challengeId);
     }
 
+    public async Task DeclineChallengeAsync(string challengeId)
+    {
+        Logger.Debug("Declining challenge: {0}.", challengeId);
+
+        var response = await _httpClient.PostAsync(new Uri($"api/challenge/{challengeId}/decline", UriKind.Relative), new StringContent(string.Empty));
+        Logger.Debug("Request response: {0}", await response.Content.ReadAsStringAsync());
+        response.EnsureSuccessStatusCode();
+
+        Logger.Debug("Challenge declined: {0}.", challengeId);
+    }
+
     public async Task WriteChatMessageAsync(string gameId, string message)
     {
         Logger.Debug("WriteChatMessageAsync: gameId: {0}, message: {1}.", gameId, message);

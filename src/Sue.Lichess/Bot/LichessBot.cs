@@ -83,15 +83,29 @@ public sealed class LichessBot : IDisposable
 
     private async Task HandleEventAsync(ChallengeEvent challengeEvent)
     {
-        if (challengeEvent.DestinationUserId == _botId && !challengeEvent.IsRated)
+        if (challengeEvent.DestinationUserId != _botId)
         {
-            await _lichessClient.AcceptChallengeAsync(challengeEvent.ChallengeId);
-            Logger.Info("Challenge accepted: {0}", challengeEvent.ChallengeId);
+            await _lichessClient.DeclineChallengeAsync(challengeEvent.ChallengeId);
+            Logger.Info("Challenge declined: {0}", challengeEvent.ChallengeId);
+            return;
         }
-        else
+
+        if (challengeEvent.VariantKey != ChallengeEvent.Variant.Standard && challengeEvent.VariantKey != ChallengeEvent.Variant.FromPosition)
         {
-            Logger.Info("Challenge ignored: {0}", challengeEvent.ChallengeId);
+            await _lichessClient.DeclineChallengeAsync(challengeEvent.ChallengeId);
+            Logger.Info("Challenge declined: {0}", challengeEvent.ChallengeId);
+            return;
         }
+
+        if (challengeEvent.IsRated)
+        {
+            await _lichessClient.DeclineChallengeAsync(challengeEvent.ChallengeId);
+            Logger.Info("Challenge declined: {0}", challengeEvent.ChallengeId);
+            return;
+        }
+
+        await _lichessClient.AcceptChallengeAsync(challengeEvent.ChallengeId);
+        Logger.Info("Challenge accepted: {0}", challengeEvent.ChallengeId);
     }
 
     private Task HandleEventAsync(GameStartEvent gameStartEvent)

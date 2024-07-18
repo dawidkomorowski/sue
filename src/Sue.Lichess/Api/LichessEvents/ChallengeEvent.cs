@@ -13,12 +13,21 @@ internal sealed class ChallengeEvent : LichessEvent
         DestinationUserId = eventJson.RootElement.GetProperty("challenge").GetProperty("destUser").GetProperty("id").GetString() ??
                             throw new ArgumentException("Missing 'challenge.destUser.id'.");
         IsRated = eventJson.RootElement.GetProperty("challenge").GetProperty("rated").GetBoolean();
+        VariantKey = eventJson.RootElement.GetProperty("challenge").GetProperty("variant").GetProperty("key").GetString() ??
+                     throw new ArgumentException("Missing 'challenge.variant.key'.");
     }
 
     public string ChallengeId { get; }
     public string ChallengerId { get; }
     public string DestinationUserId { get; }
     public bool IsRated { get; }
+    public string VariantKey { get; }
 
     public override string ToString() => $"{nameof(ChallengeEvent)}: {JsonSerializer.Serialize(this)}";
+
+    public static class Variant
+    {
+        public const string Standard = "standard";
+        public const string FromPosition = "fromPosition";
+    }
 }

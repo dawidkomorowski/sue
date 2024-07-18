@@ -127,6 +127,7 @@ internal sealed class GameWorker
         _initialFen = gameFullEvent.InitialFen == "startpos" ? Fen.StartPos : gameFullEvent.InitialFen;
         _myColorIsWhite = gameFullEvent.WhiteId == _botId;
 
+        await HandleEasterEgg(gameFullEvent);
         await TryMakeMoveAsync(gameFullEvent.Moves);
     }
 
@@ -160,5 +161,15 @@ internal sealed class GameWorker
     {
         var activeColor = ChessEngine.GetActiveColor(_initialFen, moves);
         return (_myColorIsWhite && activeColor is Color.White) || (!_myColorIsWhite && activeColor is Color.Black);
+    }
+
+    private async Task HandleEasterEgg(GameFullEvent gameFullEvent)
+    {
+        const string kuphelId = "kuphel";
+        if (gameFullEvent.WhiteId == kuphelId || gameFullEvent.BlackId == kuphelId)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            await _lichessClient.WriteChatMessageAsync(_gameId, "Dear Kuphel, I was waiting for you ❤️.");
+        }
     }
 }
