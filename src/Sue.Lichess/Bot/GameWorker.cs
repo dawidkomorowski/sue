@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using NLog;
-using Sue.Engine;
 using Sue.Engine.Model;
 using Sue.Lichess.Api;
 using Sue.Lichess.Api.GameEvents;
@@ -11,14 +10,12 @@ namespace Sue.Lichess.Bot;
 
 internal sealed class GameWorker
 {
-    private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-    private const string GameIdLogProperty = "gameId";
+    private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private readonly LichessClient _lichessClient;
     private readonly string _botId;
     private readonly string _gameId;
     private readonly CancellationTokenSource _cancellationTokenSource = new();
-    private string _initialFen = string.Empty;
-    private bool _myColorIsWhite = false;
+    private Game? _game;
     private int _consecutiveErrorsCounter = 0;
 
     public GameWorker(LichessClient lichessClient, string botId, string gameId)
@@ -38,12 +35,13 @@ internal sealed class GameWorker
     {
         Logger.Debug("Stop - gameId: {0}", _gameId);
         _cancellationTokenSource.Cancel();
+        _game?.Dispose();
         // TODO CancellationTokenSource is not disposed!
     }
 
     private async Task Run()
     {
-        using (ScopeContext.PushProperty(GameIdLogProperty, _gameId))
+        using (ScopeContext.PushProperty(Constants.GameIdLogProperty, _gameId))
         {
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
@@ -53,7 +51,7 @@ internal sealed class GameWorker
 
                     using var gameStream = await _lichessClient.OpenGameStreamAsync(_gameId);
 
-                    if (string.IsNullOrEmpty(_initialFen))
+                    if (_game is null)
                     {
                         Logger.Info("Introduce yourself in chat - gameId: {0}", _gameId);
 
@@ -119,48 +117,38 @@ internal sealed class GameWorker
 
     private Task HandleEventAsync(PingGameEvent pingGameEvent)
     {
+        if (_game is not null && _game.HasError)
+        {
+            throw new InvalidOperationException("Game is in error state.");
+        }
+
         return Task.CompletedTask;
     }
 
     private async Task HandleEventAsync(GameFullEvent gameFullEvent)
     {
-        _initialFen = gameFullEvent.InitialFen == "startpos" ? Fen.StartPos : gameFullEvent.InitialFen;
-        _myColorIsWhite = gameFullEvent.WhiteId == _botId;
-
         await HandleEasterEgg(gameFullEvent);
-        await TryMakeMoveAsync(gameFullEvent.Moves);
+
+        var initialFen = gameFullEvent.InitialFen == "startpos" ? Fen.StartPos : gameFullEvent.InitialFen;
+        var myColor = gameFullEvent.WhiteId == _botId ? Color.White : Color.Black;
+
+        _game?.Dispose();
+        _game = new Game(_lichessClient, _gameId, initialFen, myColor, gameFullEvent.HasClock);
+
+        var whiteTime = TimeSpan.FromMilliseconds(gameFullEvent.WhiteTimeMs);
+        var blackTime = TimeSpan.FromMilliseconds(gameFullEvent.BlackTimeMs);
+
+        _game.Update(gameFullEvent.Moves, whiteTime, blackTime);
     }
 
-    private async Task HandleEventAsync(GameStateEvent gameStateEvent)
+    private Task HandleEventAsync(GameStateEvent gameStateEvent)
     {
-        await TryMakeMoveAsync(gameStateEvent.Moves);
-    }
+        var whiteTime = TimeSpan.FromMilliseconds(gameStateEvent.WhiteTimeMs);
+        var blackTime = TimeSpan.FromMilliseconds(gameStateEvent.BlackTimeMs);
 
-    private async Task TryMakeMoveAsync(string moves)
-    {
-        if (!IsItMyTurn(moves))
-        {
-            return;
-        }
+        _game?.Update(gameStateEvent.Moves, whiteTime, blackTime);
 
-        Logger.Debug("Starting search for best move, gameId: {0}", _gameId);
-
-        var move = ChessEngine.FindBestMove(_initialFen, moves);
-        if (move != null)
-        {
-            Logger.Debug("Best move: {0}, gameId: {1}", move, _gameId);
-            await _lichessClient.MakeMoveAsync(_gameId, move);
-        }
-        else
-        {
-            Logger.Error("Did not find any move! gameId: {0}", _gameId);
-        }
-    }
-
-    private bool IsItMyTurn(string moves)
-    {
-        var activeColor = ChessEngine.GetActiveColor(_initialFen, moves);
-        return (_myColorIsWhite && activeColor is Color.White) || (!_myColorIsWhite && activeColor is Color.Black);
+        return Task.CompletedTask;
     }
 
     private async Task HandleEasterEgg(GameFullEvent gameFullEvent)
@@ -169,7 +157,7 @@ internal sealed class GameWorker
         if (gameFullEvent.WhiteId == kuphelId || gameFullEvent.BlackId == kuphelId)
         {
             await Task.Delay(TimeSpan.FromSeconds(1));
-            await _lichessClient.WriteChatMessageAsync(_gameId, "Dear Kuphel, I was waiting for you ❤️.");
+            await _lichessClient.WriteChatMessageAsync(_gameId, "Dear Kuphel, I was waiting for you <3.");
         }
     }
 }
