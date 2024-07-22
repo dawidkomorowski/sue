@@ -105,6 +105,11 @@ internal sealed class MoveSearch
                     max = score;
                     bestMove = move;
                 }
+
+                if (max > alpha)
+                {
+                    alpha = max;
+                }
             }
             else
             {
@@ -112,6 +117,11 @@ internal sealed class MoveSearch
                 {
                     min = score;
                     bestMove = move;
+                }
+
+                if (min < beta)
+                {
+                    beta = min;
                 }
             }
 
