@@ -42,12 +42,13 @@ internal sealed class Game : IDisposable
         }
 
         _chessEngineIsReady.Wait();
-        _chessEngineIsReady.Reset();
 
         if (HasError)
         {
             throw new InvalidOperationException("Game is in error state.");
         }
+
+        _chessEngineIsReady.Reset();
 
         _moves = moves;
         _whiteTime = whiteTime;
@@ -55,10 +56,16 @@ internal sealed class Game : IDisposable
 
         Logger.Debug("Starting search for best move, gameId: {0}", _gameId);
 
-        Task.Run(FindAndMakeMove);
+        Task.Run(FindAndMakeMove_ThreadFunc);
     }
 
-    private async Task FindAndMakeMove()
+    private bool ItIsMyTurn(string moves)
+    {
+        var activeColor = ChessEngine.GetActiveColor(_initialFen, moves);
+        return (_myColor is Color.White && activeColor is Color.White) || (_myColor is Color.Black && activeColor is Color.Black);
+    }
+
+    private async Task FindAndMakeMove_ThreadFunc()
     {
         using (ScopeContext.PushProperty(Constants.GameIdLogProperty, _gameId))
         {
@@ -92,12 +99,6 @@ internal sealed class Game : IDisposable
                 _chessEngineIsReady.Set();
             }
         }
-    }
-
-    private bool ItIsMyTurn(string moves)
-    {
-        var activeColor = ChessEngine.GetActiveColor(_initialFen, moves);
-        return (_myColor is Color.White && activeColor is Color.White) || (_myColor is Color.Black && activeColor is Color.Black);
     }
 
     public void Dispose()

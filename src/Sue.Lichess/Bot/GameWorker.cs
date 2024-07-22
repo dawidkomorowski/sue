@@ -36,8 +36,6 @@ internal sealed class GameWorker
         Logger.Debug("Stop - gameId: {0}", _gameId);
         // TODO CancellationTokenSource is not disposed!
         _cancellationTokenSource.Cancel();
-        // TODO This code produces deadlock!!!
-        _game?.Dispose();
     }
 
     private async Task Run()
@@ -92,6 +90,9 @@ internal sealed class GameWorker
                     }
                 }
             }
+
+            Logger.Debug("Disposing Game instance - gameId: {0}", _gameId);
+            _game?.Dispose();
 
             Logger.Debug("Game worker stopped - gameId: {0}", _gameId);
         }
