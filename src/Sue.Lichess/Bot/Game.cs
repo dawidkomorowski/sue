@@ -64,7 +64,14 @@ internal sealed class Game : IDisposable
         {
             try
             {
-                var move = ChessEngine.FindBestMove(_initialFen, _moves);
+                var chessEngineSettings = new ChessEngineSettings
+                {
+                    WhiteTime = _whiteTime,
+                    BlackTime = _blackTime,
+                    FixedSearchTime = _hasClock ? null : TimeSpan.FromSeconds(15)
+                };
+
+                var move = ChessEngine.FindBestMove(_initialFen, _moves, chessEngineSettings);
                 if (move != null)
                 {
                     Logger.Debug("Best move: {0}, gameId: {1}", move, _gameId);

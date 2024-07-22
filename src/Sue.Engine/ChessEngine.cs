@@ -22,7 +22,7 @@ public static class ChessEngine
         return chessboard.ActiveColor;
     }
 
-    public static string? FindBestMove(string fenString, string uciMoves)
+    public static string? FindBestMove(string fenString, string uciMoves, ChessEngineSettings settings)
     {
         Logger.Trace("FindBestMove - fen '{0}' moves '{1}'", fenString, uciMoves);
 
@@ -35,10 +35,12 @@ public static class ChessEngine
             chessboard.MakeMove(move);
         }
 
+        var searchTime = TimeManagement.ComputeSearchTime(settings, chessboard);
+
         Logger.Trace("Finding move for position: '{0}'", chessboard.ToFen());
 
         var search = new MoveSearch();
-        var bestMove = search.FindBestMove(chessboard);
+        var bestMove = search.FindBestMove(chessboard, searchTime);
 
         Logger.Trace("Best move for position: '{0}' move {1}", chessboard.ToFen(), bestMove?.ToUci());
 

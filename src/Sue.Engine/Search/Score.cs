@@ -36,7 +36,7 @@ internal readonly struct Score : IEquatable<Score>, IComparable<Score>
     public int MateIn => MateOffset * Math.Sign(_mateScore) - _mateScore;
     public int Eval { get; }
 
-    public override string ToString() => $"{nameof(IsMate)}: {IsMate}, {nameof(MateIn)}: {MateIn}, {nameof(Eval)}: {Eval}";
+    public override string ToString() => $"{nameof(IsMate)}: {IsMate}, {nameof(MateIn)}: {MateIn}, {nameof(Eval)}: {Eval / 100d}";
 
     public bool Equals(Score other) => _mateScore == other._mateScore && Eval == other.Eval;
 

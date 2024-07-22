@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using NLog;
@@ -45,8 +46,15 @@ public class ChessEngineTests
     private static void TestMateInN(Fen fen, Move bestMove)
     {
         // Arrange
+        var chessEngineSettings = new ChessEngineSettings
+        {
+            WhiteTime = TimeSpan.Zero,
+            BlackTime = TimeSpan.Zero,
+            FixedSearchTime = TimeSpan.FromSeconds(15)
+        };
+
         // Act
-        var actual = ChessEngine.FindBestMove(fen.ToString(), "");
+        var actual = ChessEngine.FindBestMove(fen.ToString(), "", chessEngineSettings);
 
         // Assert
         Assert.That(actual, Is.Not.Null);
