@@ -34,9 +34,10 @@ internal sealed class GameWorker
     public void Stop()
     {
         Logger.Debug("Stop - gameId: {0}", _gameId);
-        _cancellationTokenSource.Cancel();
-        _game?.Dispose();
         // TODO CancellationTokenSource is not disposed!
+        _cancellationTokenSource.Cancel();
+        // TODO This code produces deadlock!!!
+        _game?.Dispose();
     }
 
     private async Task Run()
