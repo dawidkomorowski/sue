@@ -27,6 +27,7 @@ internal sealed class MoveSearch
         _searchTime = searchTime;
 
         ScoredMove? bestMove = null;
+        var depthCompleted = 0;
 
         for (var depth = 1; depth <= MaxDepth; depth++)
         {
@@ -35,10 +36,11 @@ internal sealed class MoveSearch
 
             if (SearchTimeIsOver())
             {
-                Logger.Trace("Search time is over. Iterative deepening stopped at depth: {0}", depth);
+                Logger.Trace("Search time is over. Iterative deepening aborted at depth: {0}", depth);
                 break;
             }
 
+            depthCompleted = depth;
             bestMove = alphaBetaMove;
 
             if (bestMove is null)
@@ -60,7 +62,7 @@ internal sealed class MoveSearch
             return null;
         }
 
-        Logger.Trace("Final best move: {0} Score: {1}", bestMove.Value.Move.ToUci(), bestMove.Value.Score);
+        Logger.Trace("Final best move: {0} Score: {1} Depth: {2}", bestMove.Value.Move.ToUci(), bestMove.Value.Score, depthCompleted);
         Logger.Trace("Nodes processed: {0}", _nodesProcessed);
 
         return bestMove.Value.Move;
