@@ -22,13 +22,13 @@ internal static class MaterialEvaluation
                 ChessPiece.WhiteRook => 500,
                 ChessPiece.WhiteBishop => 300,
                 ChessPiece.WhiteKnight => 300,
-                ChessPiece.WhitePawn => position.Rank.Index() - 2 + 100,
+                ChessPiece.WhitePawn => position.Rank.Index() - 1 + 100,
                 ChessPiece.BlackKing => -20000,
                 ChessPiece.BlackQueen => -900,
                 ChessPiece.BlackRook => -500,
                 ChessPiece.BlackBishop => -300,
                 ChessPiece.BlackKnight => -300,
-                ChessPiece.BlackPawn => -7 + position.Rank.Index() - 100,
+                ChessPiece.BlackPawn => -6 + position.Rank.Index() - 100,
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
