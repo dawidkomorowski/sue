@@ -85,7 +85,6 @@ internal sealed class MoveSearch
 
         SortMoves(moveCandidates, chessboard);
 
-        // TODO Alpha and beta are not preserved between search starting from root.
         var min = Score.Max;
         var max = Score.Min;
         var alpha = Score.Min;
