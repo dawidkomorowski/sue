@@ -75,4 +75,9 @@ public class ChessEngineTests
 
     [TestCaseSource(nameof(MateIn3))]
     public void Test_MateIn_3(Fen fen, Move bestMove) => TestMateInN(fen, bestMove);
+
+    private static TestCaseData[] MateIn8() => MateIn(8);
+
+    [TestCaseSource(nameof(MateIn8))]
+    public void Test_MateIn_8(Fen fen, Move bestMove) => TestMateInN(fen, bestMove);
 }
