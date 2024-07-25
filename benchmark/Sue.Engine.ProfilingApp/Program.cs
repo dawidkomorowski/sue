@@ -17,8 +17,6 @@ internal static class Program
 
             var chessEngineSettings = new ChessEngineSettings
             {
-                WhiteTime = TimeSpan.Zero,
-                BlackTime = TimeSpan.Zero,
                 FixedSearchTime = TimeSpan.FromSeconds(15)
             };
 

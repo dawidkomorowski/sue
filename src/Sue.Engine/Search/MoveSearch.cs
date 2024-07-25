@@ -9,12 +9,19 @@ internal sealed class MoveSearch
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private const int MaxDepth = 50;
+    private readonly ChessEngineSettings _settings;
     private readonly Stopwatch _nodesPerSecondStopwatch = new();
     private readonly Stopwatch _searchTimeStopwatch = new();
     private int _nodesProcessed = 0;
     private int _nodesPerDepth = 0;
     private int _nodesPerSecond = 0;
     private TimeSpan _searchTime;
+    private Comparison<Move>? _moveComparison;
+
+    public MoveSearch(ChessEngineSettings settings)
+    {
+        _settings = settings;
+    }
 
     public Move? FindBestMove(Chessboard chessboard, TimeSpan searchTime)
     {
@@ -26,10 +33,25 @@ internal sealed class MoveSearch
         _searchTimeStopwatch.Restart();
         _searchTime = searchTime;
 
+        var depthLimit = MaxDepth;
+
+        if (_settings.UseFixedDepth)
+        {
+            depthLimit = _settings.FixedDepth.Value;
+            _searchTime = TimeSpan.MaxValue;
+        }
+
+        _moveComparison = (m1, m2) =>
+        {
+            var mv1 = chessboard.GetChessPiece(m1.To) is not ChessPiece.None ? 0 : 1;
+            var mv2 = chessboard.GetChessPiece(m2.To) is not ChessPiece.None ? 0 : 1;
+            return mv1.CompareTo(mv2);
+        };
+
         ScoredMove? bestMove = null;
         var depthCompleted = 0;
 
-        for (var depth = 1; depth <= MaxDepth; depth++)
+        for (var depth = 1; depth <= depthLimit; depth++)
         {
             Logger.Trace("Start search with depth {0}.", depth);
             var alphaBetaMove = AlphaBetaRootSearch(chessboard, depth);
@@ -229,14 +251,10 @@ internal sealed class MoveSearch
         return chessboard.ActiveColor is Color.White ? max : min;
     }
 
-    private static void SortMoves(Span<Move> moves, Chessboard chessboard)
+    private void SortMoves(Span<Move> moves, Chessboard chessboard)
     {
-        moves.Sort((m1, m2) =>
-        {
-            var mv1 = chessboard.GetChessPiece(m1.To) is not ChessPiece.None ? 0 : 1;
-            var mv2 = chessboard.GetChessPiece(m2.To) is not ChessPiece.None ? 0 : 1;
-            return mv1.CompareTo(mv2);
-        });
+        Debug.Assert(_moveComparison != null, nameof(_moveComparison) + " != null");
+        moves.Sort(_moveComparison);
     }
 
     private bool SearchTimeIsOver()
