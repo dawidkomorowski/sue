@@ -105,7 +105,7 @@ internal sealed class MoveSearch
             return null;
         }
 
-        SortMoves(moveCandidates, chessboard);
+        SortMoves(moveCandidates);
 
         var min = Score.Max;
         var max = Score.Min;
@@ -196,7 +196,7 @@ internal sealed class MoveSearch
             return MaterialEvaluation.Eval(chessboard);
         }
 
-        SortMoves(moveCandidates, chessboard);
+        SortMoves(moveCandidates);
 
         var min = Score.Max;
         var max = Score.Min;
@@ -251,7 +251,7 @@ internal sealed class MoveSearch
         return chessboard.ActiveColor is Color.White ? max : min;
     }
 
-    private void SortMoves(Span<Move> moves, Chessboard chessboard)
+    private void SortMoves(Span<Move> moves)
     {
         Debug.Assert(_moveComparison != null, nameof(_moveComparison) + " != null");
         moves.Sort(_moveComparison);
