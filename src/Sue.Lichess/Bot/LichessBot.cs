@@ -97,13 +97,6 @@ public sealed class LichessBot : IDisposable
             return;
         }
 
-        if (challengeEvent.IsRated)
-        {
-            await _lichessClient.DeclineChallengeAsync(challengeEvent.ChallengeId);
-            Logger.Info("Challenge declined: {0}", challengeEvent.ChallengeId);
-            return;
-        }
-
         await _lichessClient.AcceptChallengeAsync(challengeEvent.ChallengeId);
         Logger.Info("Challenge accepted: {0}", challengeEvent.ChallengeId);
     }
