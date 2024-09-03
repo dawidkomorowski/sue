@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using NLog;
+using Sue.Lichess.Bot;
 
 namespace Sue.Lichess.Api;
 
@@ -52,6 +53,25 @@ internal sealed class LichessClient : IDisposable
         Logger.Debug("Game stream open for game: {0}.", gameId);
 
         return new GameStream(stream);
+    }
+
+    public async Task CreateChallengeAsync(string username, bool rated)
+    {
+        Logger.Debug("Sending challenge to player: {0}.", username);
+
+        var content = new FormUrlEncodedContent(new[]
+        {
+            new KeyValuePair<string, string>("rated", rated.ToString().ToLowerInvariant()),
+            new KeyValuePair<string, string>("clock.limit", "300"),
+            new KeyValuePair<string, string>("clock.increment", "0"),
+            new KeyValuePair<string, string>("color", "random"),
+            new KeyValuePair<string, string>("variant", "standard"),
+        });
+        var response = await _httpClient.PostAsync(new Uri($"api/challenge/{username}", UriKind.Relative), content);
+        Logger.Debug("Request response: {0}", await response.Content.ReadAsStringAsync());
+        response.EnsureSuccessStatusCode();
+
+        Logger.Debug("Challenge sent to player: {0}.", username);
     }
 
     public async Task AcceptChallengeAsync(string challengeId)

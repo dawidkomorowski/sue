@@ -57,7 +57,7 @@ internal sealed class GameWorker
                         await Task.Delay(TimeSpan.FromMilliseconds(100));
                         await _lichessClient.WriteChatMessageAsync(_gameId, "Hello! I am Sue, also known as Simple UCI Engine.");
                         await Task.Delay(TimeSpan.FromMilliseconds(100));
-                        await _lichessClient.WriteChatMessageAsync(_gameId, "I am in early stage of development so most of my actions are silly.");
+                        await _lichessClient.WriteChatMessageAsync(_gameId, "I am in development so some of my moves might look silly.");
                     }
 
                     while (!gameStream.EndOfStream && !_cancellationTokenSource.IsCancellationRequested)
@@ -127,10 +127,8 @@ internal sealed class GameWorker
         return Task.CompletedTask;
     }
 
-    private async Task HandleEventAsync(GameFullEvent gameFullEvent)
+    private Task HandleEventAsync(GameFullEvent gameFullEvent)
     {
-        await HandleEasterEgg(gameFullEvent);
-
         var initialFen = gameFullEvent.InitialFen == "startpos" ? Fen.StartPos : gameFullEvent.InitialFen;
         var myColor = gameFullEvent.WhiteId == _botId ? Color.White : Color.Black;
 
@@ -141,6 +139,8 @@ internal sealed class GameWorker
         var blackTime = TimeSpan.FromMilliseconds(gameFullEvent.BlackTimeMs);
 
         _game.Update(gameFullEvent.Moves, whiteTime, blackTime);
+
+        return Task.CompletedTask;
     }
 
     private Task HandleEventAsync(GameStateEvent gameStateEvent)
@@ -151,15 +151,5 @@ internal sealed class GameWorker
         _game?.Update(gameStateEvent.Moves, whiteTime, blackTime);
 
         return Task.CompletedTask;
-    }
-
-    private async Task HandleEasterEgg(GameFullEvent gameFullEvent)
-    {
-        const string kuphelId = "kuphel";
-        if (gameFullEvent.WhiteId == kuphelId || gameFullEvent.BlackId == kuphelId)
-        {
-            await Task.Delay(TimeSpan.FromSeconds(1));
-            await _lichessClient.WriteChatMessageAsync(_gameId, "Dear Kuphel, I was waiting for you <3.");
-        }
     }
 }
