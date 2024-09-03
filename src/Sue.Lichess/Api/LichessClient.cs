@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using NLog;
-using Sue.Lichess.Bot;
 
 namespace Sue.Lichess.Api;
 
@@ -31,6 +30,45 @@ internal sealed class LichessClient : IDisposable
 
         using var jsonDocument = JsonDocument.Parse(stringContent);
         return jsonDocument.RootElement.GetProperty("id").GetString() ?? throw new InvalidOperationException("Missing 'id'.");
+    }
+
+    public async Task<int> GetBlitzRating()
+    {
+        Logger.Debug("GetBlitzRating.");
+
+        var response = await _httpClient.GetAsync(new Uri("api/account", UriKind.Relative));
+        var stringContent = await response.Content.ReadAsStringAsync();
+        Logger.Debug("Request response: {0}", stringContent);
+        response.EnsureSuccessStatusCode();
+
+        using var jsonDocument = JsonDocument.Parse(stringContent);
+        return jsonDocument.RootElement.GetProperty("perfs").GetProperty("blitz").GetProperty("rating").GetInt32();
+    }
+
+    public async Task<IReadOnlyList<OnlineBot>> GetOnlineBots()
+    {
+        Logger.Debug("GetBotsOnline.");
+
+        var response = await _httpClient.GetAsync(new Uri("api/bot/online", UriKind.Relative));
+        var stringContent = await response.Content.ReadAsStringAsync();
+        Logger.Debug("Request response: {0}", stringContent);
+        response.EnsureSuccessStatusCode();
+
+        var onlineBots = new List<OnlineBot>();
+        var lines = stringContent.Split('\n');
+        foreach (var line in lines)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
+
+            using var json = JsonDocument.Parse(line);
+            var onlineBot = new OnlineBot(json);
+            onlineBots.Add(onlineBot);
+        }
+
+        return onlineBots.AsReadOnly();
     }
 
     public async Task<EventStream> OpenEventStreamAsync()

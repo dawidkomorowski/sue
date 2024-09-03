@@ -13,10 +13,12 @@ public sealed class LichessBot : IDisposable
     private readonly LichessClient _lichessClient;
     private readonly Dictionary<string, GameWorker> _gameWorkers = new();
     private string _botId = string.Empty;
+    private BotGameChallengeScheduler _botGameChallengeScheduler;
 
     public LichessBot(string apiToken)
     {
         _lichessClient = new LichessClient(apiToken);
+        _botGameChallengeScheduler = new BotGameChallengeScheduler(_lichessClient);
     }
 
     public async Task RunAsync()
@@ -25,6 +27,9 @@ public sealed class LichessBot : IDisposable
 
         _botId = await _lichessClient.GetAccountId();
         Logger.Info("Retrieved account id: {0}", _botId);
+
+        Logger.Info("Starting bot game challenge scheduler.");
+        _botGameChallengeScheduler.Start();
 
         while (true)
         {
@@ -51,6 +56,7 @@ public sealed class LichessBot : IDisposable
 
     public void Dispose()
     {
+        _botGameChallengeScheduler.Stop();
         _lichessClient.Dispose();
     }
 
