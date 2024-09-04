@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
 using NUnit.Framework;
 using Sue.Engine.Model;
 using File = System.IO.File;
@@ -15,14 +12,6 @@ namespace Sue.Engine.UnitTests;
 [Parallelizable(ParallelScope.All)]
 public class ChessEngineTests
 {
-    [OneTimeSetUp]
-    public void SetUp()
-    {
-        var loggingConfiguration = new LoggingConfiguration();
-        loggingConfiguration.AddRuleForAllLevels(new ConsoleTarget());
-        LogManager.Configuration = loggingConfiguration;
-    }
-
     private static TestCaseData[] MateIn(int n)
     {
         var lines = File.ReadAllLines(Path.Combine("TestFiles", "Mate", $"mate_in_{n}.epd"));
