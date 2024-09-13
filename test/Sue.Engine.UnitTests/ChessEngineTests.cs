@@ -69,4 +69,126 @@ public class ChessEngineTests
 
     [TestCaseSource(nameof(MateIn8))]
     public void Test_MateIn_8(Fen fen, Move bestMove) => TestMateInN(fen, bestMove);
+
+    [Test]
+    public void FindBestMove_ShouldPlayFromOpeningBook()
+    {
+        // Arrange
+        var engineSettings = new EngineSettings
+        {
+            RandomSeed = 3
+        };
+
+        var chessEngine = new ChessEngine(engineSettings);
+
+        var searchSettings = new SearchSettings
+        {
+            FixedSearchTime = TimeSpan.FromSeconds(15)
+        };
+
+        // Act
+        var actual = chessEngine.FindBestMove(Fen.StartPos, "", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("d2d4"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("g8f6"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("g1f3"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("e7e6"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("c2c4"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6 c2c4", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("b7b6"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6 c2c4 b7b6", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("g2g3"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6 c2c4 b7b6 g2g3", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("c8a6"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6 c2c4 b7b6 g2g3 c8a6", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("d1a4"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6 c2c4 b7b6 g2g3 c8a6 d1a4", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("c7c5"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6 c2c4 b7b6 g2g3 c8a6 d1a4 c7c5", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("f1g2"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6 c2c4 b7b6 g2g3 c8a6 d1a4 c7c5 f1g2", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("a6b7"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6 c2c4 b7b6 g2g3 c8a6 d1a4 c7c5 f1g2 a6b7", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("d4c5"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6 c2c4 b7b6 g2g3 c8a6 d1a4 c7c5 f1g2 a6b7 d4c5", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("f8c5"));
+
+        // Act
+        actual = chessEngine.FindBestMove(Fen.StartPos, "d2d4 g8f6 g1f3 e7e6 c2c4 b7b6 g2g3 c8a6 d1a4 c7c5 f1g2 a6b7 d4c5 f8c5", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.Not.Null);
+        Assert.That(actual, Is.EqualTo("e1g1"));
+    }
 }

@@ -50,7 +50,11 @@ public sealed class ChessEngine
             chessboard.MakeMove(move);
         }
 
-        if (fenString == Fen.StartPos)
+        if (fenString != Fen.StartPos)
+        {
+            Logger.Trace("FEN string is not initial position. Skipping book lookup. FEN: '{0}'", fenString);
+        }
+        else
         {
             Logger.Trace("Looking for next moves in book.");
             var nextMovesFromBook = _openingBookAbk.GetNextMoves(moves);
@@ -61,10 +65,6 @@ public sealed class ChessEngine
                 Logger.Trace("Next move from book for position: '{0}' move {1}", chessboard.ToFen(), nextMove.ToUci());
                 return nextMove.ToUci();
             }
-        }
-        else
-        {
-            Logger.Trace("FEN string is not initial position. Skipping book lookup. FEN: '{0}'", fenString);
         }
 
         var searchTime = TimeManagement.ComputeSearchTime(settings, chessboard);
