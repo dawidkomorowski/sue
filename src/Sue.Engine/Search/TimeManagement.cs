@@ -8,7 +8,7 @@ internal static class TimeManagement
     private const int EstimatedMovesPerGame = 50;
     private const int EstimatedMovesNeeded = 10;
 
-    public static TimeSpan ComputeSearchTime(ChessEngineSettings settings, Chessboard chessboard)
+    public static TimeSpan ComputeSearchTime(SearchSettings settings, Chessboard chessboard)
     {
         if (settings.FixedSearchTime.HasValue)
         {

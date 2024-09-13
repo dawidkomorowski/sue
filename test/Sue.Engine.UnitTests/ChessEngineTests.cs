@@ -35,15 +35,15 @@ public class ChessEngineTests
     private static void TestMateInN(Fen fen, Move bestMove)
     {
         // Arrange
-        var chessEngineSettings = new ChessEngineSettings
+        var chessEngine = new ChessEngine();
+
+        var searchSettings = new SearchSettings
         {
             FixedSearchTime = TimeSpan.FromSeconds(15)
         };
 
-        var chessEngine = new ChessEngine();
-
         // Act
-        var actual = chessEngine.FindBestMove(fen.ToString(), "", chessEngineSettings);
+        var actual = chessEngine.FindBestMove(fen.ToString(), "", searchSettings);
 
         // Assert
         Assert.That(actual, Is.Not.Null);

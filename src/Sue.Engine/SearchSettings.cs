@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Sue.Engine;
 
-public sealed class ChessEngineSettings
+public sealed class SearchSettings
 {
     public TimeSpan WhiteTime { get; init; }
     public TimeSpan BlackTime { get; init; }

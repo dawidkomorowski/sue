@@ -12,9 +12,13 @@ public sealed class ChessEngine
     private readonly OpeningBookAbk _openingBookAbk = new();
     private readonly Random _random;
 
-    public ChessEngine()
+    public ChessEngine() : this(new EngineSettings())
     {
-        var randomSeed = Random.Shared.Next();
+    }
+
+    public ChessEngine(EngineSettings settings)
+    {
+        var randomSeed = settings.RandomSeed ?? Random.Shared.Next();
         Logger.Trace("Random seed: {0}", randomSeed);
         _random = new Random(randomSeed);
     }
@@ -33,7 +37,7 @@ public sealed class ChessEngine
         return chessboard.ActiveColor;
     }
 
-    public string? FindBestMove(string fenString, string uciMoves, ChessEngineSettings settings)
+    public string? FindBestMove(string fenString, string uciMoves, SearchSettings settings)
     {
         Logger.Trace("FindBestMove - fen '{0}' moves '{1}'", fenString, uciMoves);
 

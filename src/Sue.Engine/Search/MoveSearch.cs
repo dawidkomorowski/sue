@@ -9,7 +9,7 @@ internal sealed class MoveSearch
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private const int MaxDepth = 50;
-    private readonly ChessEngineSettings _settings;
+    private readonly SearchSettings _settings;
     private readonly Stopwatch _nodesPerSecondStopwatch = new();
     private readonly Stopwatch _searchTimeStopwatch = new();
     private int _nodesProcessed = 0;
@@ -18,7 +18,7 @@ internal sealed class MoveSearch
     private TimeSpan _searchTime;
     private Comparison<Move>? _moveComparison;
 
-    public MoveSearch(ChessEngineSettings settings)
+    public MoveSearch(SearchSettings settings)
     {
         _settings = settings;
     }

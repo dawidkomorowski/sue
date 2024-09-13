@@ -16,12 +16,12 @@ internal static class Program
         {
             Logger.Info("FindBestMove started.");
 
-            var chessEngineSettings = new ChessEngineSettings
+            var searchSettings = new SearchSettings
             {
                 FixedSearchTime = TimeSpan.FromSeconds(15)
             };
 
-            chessEngine.FindBestMove("1rbr2k1/5pp1/1b3nnp/1pp1pN2/4P3/2P1BN1P/1PB2PP1/R3R1K1 b - - 11 25", "", chessEngineSettings);
+            chessEngine.FindBestMove("1rbr2k1/5pp1/1b3nnp/1pp1pN2/4P3/2P1BN1P/1PB2PP1/R3R1K1 b - - 11 25", "", searchSettings);
 
             Logger.Info("FindBestMove completed.");
         }
