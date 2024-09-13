@@ -21,7 +21,7 @@ internal readonly struct AbkEntry
 
     public bool HasNextMove => NextMove >= 0;
     public bool HasNextSibling => NextSibling >= 0;
-    public Move ToMove() => new Move(From, To, Promotion);
+    public Move ToMove() => new(From, To, Promotion);
 
     public override string ToString() =>
         $"{nameof(From)}: {From}, {nameof(To)}: {To}, {nameof(Promotion)}: {Promotion}, {nameof(Priority)}: {Priority}, {nameof(NumberOfGames)}: {NumberOfGames}, {nameof(NumberOfWon)}: {NumberOfWon}, {nameof(NumberOfLost)}: {NumberOfLost}, {nameof(PlyCount)}: {PlyCount}, {nameof(NextMove)}: {NextMove}, {nameof(NextSibling)}: {NextSibling}";
@@ -96,15 +96,15 @@ internal sealed class OpeningBookAbk
 
     private Move[] GetAllSiblings(AbkEntry entry)
     {
-        var nextMoves = new List<Move> { entry.ToMove() };
+        var moves = new List<Move> { entry.ToMove() };
 
         while (entry.HasNextSibling)
         {
             entry = GetEntry(entry.NextSibling);
-            nextMoves.Add(entry.ToMove());
+            moves.Add(entry.ToMove());
         }
 
-        return nextMoves.ToArray();
+        return moves.ToArray();
     }
 
     private static AbkEntry ReadEntry(BinaryReader reader)

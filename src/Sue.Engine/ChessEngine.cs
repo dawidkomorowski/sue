@@ -10,11 +10,13 @@ public sealed class ChessEngine
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private readonly OpeningBookAbk _openingBookAbk = new();
+    private readonly Random _random;
 
     public ChessEngine()
     {
         var randomSeed = Random.Shared.Next();
         Logger.Trace("Random seed: {0}", randomSeed);
+        _random = new Random(randomSeed);
     }
 
     public Color GetActiveColor(string fenString, string uciMoves)
@@ -51,10 +53,7 @@ public sealed class ChessEngine
             if (nextMovesFromBook.Length != 0)
             {
                 Logger.Trace("Found next moves in book.");
-
-                Random.Shared.Shuffle(nextMovesFromBook);
-                var nextMove = nextMovesFromBook[0];
-
+                var nextMove = nextMovesFromBook[_random.Next(nextMovesFromBook.Length)];
                 Logger.Trace("Next move from book for position: '{0}' move {1}", chessboard.ToFen(), nextMove.ToUci());
                 return nextMove.ToUci();
             }
