@@ -54,6 +54,11 @@ public sealed class ChessEngine
         {
             Logger.Trace("FEN string is not initial position. Skipping book lookup. FEN: '{0}'", fenString);
         }
+        else if (moves.Count > OpeningBookAbk.MaxDepth)
+        {
+            Logger.Trace("Already played moves exceed opening book depth. Skipping book lookup. FEN: '{0}', Moves: {1}, Book Depth: {2}", fenString,
+                moves.Count, OpeningBookAbk.MaxDepth);
+        }
         else
         {
             Logger.Trace("Looking for next moves in book.");

@@ -34,6 +34,7 @@ internal sealed class OpeningBookAbk
     private readonly List<AbkEntry> _entries = [];
 
     public const int FirstEntryPtr = OffsetToFirstEntry;
+    public const int MaxDepth = 28;
 
     public OpeningBookAbk()
     {
