@@ -11,6 +11,12 @@ public sealed class ChessEngine
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private readonly OpeningBookAbk _openingBookAbk = new();
 
+    public ChessEngine()
+    {
+        var randomSeed = Random.Shared.Next();
+        Logger.Trace("Random seed: {0}", randomSeed);
+    }
+
     public Color GetActiveColor(string fenString, string uciMoves)
     {
         var fen = Fen.FromString(fenString);
