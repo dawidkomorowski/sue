@@ -40,8 +40,10 @@ public class ChessEngineTests
             FixedSearchTime = TimeSpan.FromSeconds(15)
         };
 
+        var chessEngine = new ChessEngine();
+
         // Act
-        var actual = ChessEngine.FindBestMove(fen.ToString(), "", chessEngineSettings);
+        var actual = chessEngine.FindBestMove(fen.ToString(), "", chessEngineSettings);
 
         // Assert
         Assert.That(actual, Is.Not.Null);

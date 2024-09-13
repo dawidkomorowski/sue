@@ -17,6 +17,7 @@ internal sealed class Game : IDisposable
     private readonly Color _myColor;
     private readonly bool _hasClock;
     private readonly ManualResetEventSlim _chessEngineIsReady = new(true);
+    private readonly ChessEngine _chessEngine;
 
     private string _moves = string.Empty;
     private TimeSpan _whiteTime;
@@ -29,6 +30,7 @@ internal sealed class Game : IDisposable
         _initialFen = initialFen;
         _myColor = myColor;
         _hasClock = hasClock;
+        _chessEngine = new ChessEngine();
     }
 
     public bool HasError { get; private set; }
@@ -61,7 +63,7 @@ internal sealed class Game : IDisposable
 
     private bool ItIsMyTurn(string moves)
     {
-        var activeColor = ChessEngine.GetActiveColor(_initialFen, moves);
+        var activeColor = _chessEngine.GetActiveColor(_initialFen, moves);
         return (_myColor is Color.White && activeColor is Color.White) || (_myColor is Color.Black && activeColor is Color.Black);
     }
 
@@ -78,7 +80,7 @@ internal sealed class Game : IDisposable
                     FixedSearchTime = _hasClock ? null : TimeSpan.FromSeconds(15)
                 };
 
-                var move = ChessEngine.FindBestMove(_initialFen, _moves, chessEngineSettings);
+                var move = _chessEngine.FindBestMove(_initialFen, _moves, chessEngineSettings);
                 if (move != null)
                 {
                     Logger.Debug("Best move: {0}, gameId: {1}", move, _gameId);

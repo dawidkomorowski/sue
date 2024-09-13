@@ -6,12 +6,12 @@ using Sue.Engine.Search;
 
 namespace Sue.Engine;
 
-public static class ChessEngine
+public sealed class ChessEngine
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-    private static readonly OpeningBookAbk OpeningBookAbk = new();
+    private readonly OpeningBookAbk _openingBookAbk = new();
 
-    public static Color GetActiveColor(string fenString, string uciMoves)
+    public Color GetActiveColor(string fenString, string uciMoves)
     {
         var fen = Fen.FromString(fenString);
         var moves = Move.ParseUciMoves(uciMoves);
@@ -25,7 +25,7 @@ public static class ChessEngine
         return chessboard.ActiveColor;
     }
 
-    public static string? FindBestMove(string fenString, string uciMoves, ChessEngineSettings settings)
+    public string? FindBestMove(string fenString, string uciMoves, ChessEngineSettings settings)
     {
         Logger.Trace("FindBestMove - fen '{0}' moves '{1}'", fenString, uciMoves);
 
@@ -39,7 +39,7 @@ public static class ChessEngine
         }
 
         Logger.Trace("Looking for next moves in book.");
-        var nextMovesFromBook = OpeningBookAbk.GetNextMoves(moves);
+        var nextMovesFromBook = _openingBookAbk.GetNextMoves(moves);
         if (nextMovesFromBook.Length != 0)
         {
             Logger.Trace("Found next moves in book.");
