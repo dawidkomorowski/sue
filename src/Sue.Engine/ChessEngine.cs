@@ -38,17 +38,24 @@ public sealed class ChessEngine
             chessboard.MakeMove(move);
         }
 
-        Logger.Trace("Looking for next moves in book.");
-        var nextMovesFromBook = _openingBookAbk.GetNextMoves(moves);
-        if (nextMovesFromBook.Length != 0)
+        if (fenString == Fen.StartPos)
         {
-            Logger.Trace("Found next moves in book.");
+            Logger.Trace("Looking for next moves in book.");
+            var nextMovesFromBook = _openingBookAbk.GetNextMoves(moves);
+            if (nextMovesFromBook.Length != 0)
+            {
+                Logger.Trace("Found next moves in book.");
 
-            Random.Shared.Shuffle(nextMovesFromBook);
-            var nextMove = nextMovesFromBook[0];
+                Random.Shared.Shuffle(nextMovesFromBook);
+                var nextMove = nextMovesFromBook[0];
 
-            Logger.Trace("Next move from book for position: '{0}' move {1}", chessboard.ToFen(), nextMove.ToUci());
-            return nextMove.ToUci();
+                Logger.Trace("Next move from book for position: '{0}' move {1}", chessboard.ToFen(), nextMove.ToUci());
+                return nextMove.ToUci();
+            }
+        }
+        else
+        {
+            Logger.Trace("FEN string is not initial position. Skipping book lookup. FEN: '{0}'", fenString);
         }
 
         var searchTime = TimeManagement.ComputeSearchTime(settings, chessboard);
