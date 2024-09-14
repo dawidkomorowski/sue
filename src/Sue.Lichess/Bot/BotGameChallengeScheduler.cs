@@ -13,7 +13,6 @@ internal sealed class BotGameChallengeScheduler
     private readonly CancellationTokenSource _cancellationTokenSource = new();
     private readonly LichessClient _lichessClient;
     private readonly TimeSpan _interval = TimeSpan.FromMinutes(30);
-    private const string SchedulerLogId = "scheduler";
 
     public BotGameChallengeScheduler(LichessClient lichessClient)
     {
@@ -35,7 +34,7 @@ internal sealed class BotGameChallengeScheduler
 
     private async Task Run()
     {
-        using (ScopeContext.PushProperty(Constants.GameIdLogProperty, SchedulerLogId))
+        using (ScopeContext.PushProperty(Constants.IsSchedulerLogProperty, true))
         {
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
