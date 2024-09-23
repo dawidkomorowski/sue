@@ -35,7 +35,12 @@ public class ChessEngineTests
     private static void TestMateInN(Fen fen, Move bestMove)
     {
         // Arrange
-        var chessEngine = new ChessEngine();
+        var engineSettings = new EngineSettings
+        {
+            RandomSeed = 0
+        };
+
+        var chessEngine = new ChessEngine(engineSettings);
 
         var searchSettings = new SearchSettings
         {

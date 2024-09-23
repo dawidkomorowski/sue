@@ -9,7 +9,12 @@ internal static class Program
 
     private static void Main()
     {
-        var chessEngine = new ChessEngine();
+        var engineSettings = new EngineSettings
+        {
+            RandomSeed = 0
+        };
+
+        var chessEngine = new ChessEngine(engineSettings);
         var startTime = DateTime.Now;
 
         while (DateTime.Now - startTime < TimeSpan.FromMinutes(1))

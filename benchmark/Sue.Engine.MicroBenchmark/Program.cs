@@ -18,7 +18,12 @@ public class ChessEngineBenchmark
     [Benchmark]
     public void FindBestMove()
     {
-        var chessEngine = new ChessEngine();
+        var engineSettings = new EngineSettings
+        {
+            RandomSeed = 0
+        };
+
+        var chessEngine = new ChessEngine(engineSettings);
 
         var searchSettings = new SearchSettings
         {
