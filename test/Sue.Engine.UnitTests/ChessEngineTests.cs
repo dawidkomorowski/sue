@@ -196,4 +196,49 @@ public class ChessEngineTests
         Assert.That(actual, Is.Not.Null);
         Assert.That(actual, Is.EqualTo("e1g1"));
     }
+
+    [Test]
+    public void FindBestMove_ShouldPickRandomMoveFromBestMoves()
+    {
+        // Arrange
+        var fenString = "rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq - 0 1";
+
+        var searchSettings = new SearchSettings
+        {
+            FixedDepth = 5
+        };
+
+        // Act
+        var engineSettings = new EngineSettings
+        {
+            RandomSeed = 0
+        };
+        var chessEngine = new ChessEngine(engineSettings);
+        var actual = chessEngine.FindBestMove(fenString, "", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.EqualTo("b8c6"));
+
+        // Act
+        engineSettings = new EngineSettings
+        {
+            RandomSeed = 1
+        };
+        chessEngine = new ChessEngine(engineSettings);
+        actual = chessEngine.FindBestMove(fenString, "", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.EqualTo("c7c6"));
+
+        // Act
+        engineSettings = new EngineSettings
+        {
+            RandomSeed = 2
+        };
+        chessEngine = new ChessEngine(engineSettings);
+        actual = chessEngine.FindBestMove(fenString, "", searchSettings);
+
+        // Assert
+        Assert.That(actual, Is.EqualTo("e7e6"));
+    }
 }

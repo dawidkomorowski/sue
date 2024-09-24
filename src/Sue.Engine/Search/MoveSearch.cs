@@ -9,6 +9,7 @@ internal sealed class MoveSearch
 {
     private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
     private const int MaxDepth = 50;
+    private readonly Random _random;
     private readonly SearchSettings _settings;
     private readonly Stopwatch _nodesPerSecondStopwatch = new();
     private readonly Stopwatch _searchTimeStopwatch = new();
@@ -18,8 +19,9 @@ internal sealed class MoveSearch
     private TimeSpan _searchTime;
     private Comparison<Move>? _moveComparison;
 
-    public MoveSearch(SearchSettings settings)
+    public MoveSearch(Random random, SearchSettings settings)
     {
+        _random = random;
         _settings = settings;
     }
 
@@ -104,6 +106,8 @@ internal sealed class MoveSearch
             Logger.Trace("No moves available.");
             return null;
         }
+
+        _random.Shuffle(moveCandidates);
 
         SortMoves(moveCandidates);
 

@@ -76,7 +76,7 @@ public sealed class ChessEngine
 
         Logger.Trace("Finding move for position: '{0}'", chessboard.ToFen());
 
-        var search = new MoveSearch(settings);
+        var search = new MoveSearch(_random, settings);
         var bestMove = search.FindBestMove(chessboard, searchTime);
 
         Logger.Trace("Best move for position: '{0}' move {1}", chessboard.ToFen(), bestMove?.ToUci());

@@ -10,7 +10,7 @@ internal sealed class Chessboard
     private readonly ChessPiece[] _chessboard = new ChessPiece[64];
     private readonly Stack<RevertMoveData> _revertMoveStack = new(128);
 
-    public const int MoveBufferSize = 512;
+    public const int MoveBufferSize = 218;
 
     public Color ActiveColor { get; set; }
     public bool WhiteKingSideCastlingAvailable { get; set; }
