@@ -117,13 +117,21 @@ internal sealed class MoveSearch
         var beta = Score.Max;
         var bestMove = moveCandidates[0];
 
+        var totalSizeOfPvBuffers = (((1 + depth) * depth) / 2) + depth;
+        Span<Move> pvBuffersWithResultBuffer = stackalloc Move[totalSizeOfPvBuffers];
+        var pv = pvBuffersWithResultBuffer.Slice(0, depth);
+        var pvCandidate = pvBuffersWithResultBuffer.Slice(depth, depth);
+        var pvBuffers = pvBuffersWithResultBuffer.Slice(depth, totalSizeOfPvBuffers - depth);
+
         foreach (var move in moveCandidates)
         {
             chessboard.MakeMove(move);
-            var score = AlphaBetaSearch(chessboard, depth - 1, alpha, beta, 1);
+            var score = AlphaBetaSearch(chessboard, depth - 1, alpha, beta, 1, pvBuffers);
             chessboard.RevertMove();
 
             Logger.Trace("Move: {0} Score: {1}", move.ToUci(), score);
+
+            pvCandidate[0] = move;
 
             if (chessboard.ActiveColor is Color.White)
             {
@@ -131,6 +139,7 @@ internal sealed class MoveSearch
                 {
                     max = score;
                     bestMove = move;
+                    pvCandidate.CopyTo(pv);
                 }
 
                 if (max > alpha)
@@ -144,6 +153,7 @@ internal sealed class MoveSearch
                 {
                     min = score;
                     bestMove = move;
+                    pvCandidate.CopyTo(pv);
                 }
 
                 if (min < beta)
@@ -163,10 +173,15 @@ internal sealed class MoveSearch
         Logger.Trace("Best move: {0} Score: {1} Depth: {2}", bestMove.ToUci(), bestMoveScore, depth);
         Logger.Trace("Nodes processed per depth: {0} Depth: {1}", _nodesPerDepth, depth);
 
+        for (var i = 0; i < depth; i++)
+        {
+            Logger.Trace("PV[{0}] = {1}", i, pv[i]);
+        }
+
         return new ScoredMove(bestMove, bestMoveScore);
     }
 
-    private Score AlphaBetaSearch(Chessboard chessboard, int depth, Score alpha, Score beta, int halfMove)
+    private Score AlphaBetaSearch(Chessboard chessboard, int depth, Score alpha, Score beta, int halfMove, Span<Move> pvBuffers)
     {
         var mateInMultiplier = (int)Math.Ceiling(halfMove / 2d);
 
@@ -204,18 +219,25 @@ internal sealed class MoveSearch
 
         var min = Score.Max;
         var max = Score.Min;
+        var depthPlusOne = depth + 1;
+        var pvStartIndex = pvBuffers.Length - (((1 + depthPlusOne) * depthPlusOne) / 2) + 1;
+        var pv = pvBuffers.Slice(pvStartIndex, depth);
+        var pvCandidate = pvBuffers.Slice(pvStartIndex + depth, depth);
 
         foreach (var move in moveCandidates)
         {
             chessboard.MakeMove(move);
-            var score = AlphaBetaSearch(chessboard, depth - 1, alpha, beta, halfMove + 1);
+            var score = AlphaBetaSearch(chessboard, depth - 1, alpha, beta, halfMove + 1, pvBuffers);
             chessboard.RevertMove();
+
+            pvCandidate[0] = move;
 
             if (chessboard.ActiveColor is Color.White)
             {
                 if (score > max)
                 {
                     max = score;
+                    pvCandidate.CopyTo(pv);
                 }
 
                 if (max >= beta)
@@ -233,6 +255,7 @@ internal sealed class MoveSearch
                 if (score < min)
                 {
                     min = score;
+                    pvCandidate.CopyTo(pv);
                 }
 
                 if (min <= alpha)
