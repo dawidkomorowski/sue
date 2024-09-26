@@ -117,6 +117,11 @@ internal sealed class MoveSearch
 
         SortMoves(moveCandidates);
 
+        if (_usePv)
+        {
+            SortPvMove(moveCandidates, pvIn, 0);
+        }
+
         var min = Score.Max;
         var max = Score.Min;
         var alpha = Score.Min;
@@ -132,7 +137,7 @@ internal sealed class MoveSearch
         foreach (var move in moveCandidates)
         {
             chessboard.MakeMove(move);
-            var score = AlphaBetaSearch(chessboard, depth - 1, alpha, beta, 1, pvBuffers);
+            var score = AlphaBetaSearch(chessboard, depth - 1, alpha, beta, 1, pvBuffers, pvIn);
             chessboard.RevertMove();
 
             Logger.Trace("Move: {0} Score: {1}", move.ToUci(), score);
@@ -189,14 +194,13 @@ internal sealed class MoveSearch
         return new ScoredMove(bestMove, bestMoveScore);
     }
 
-    private Score AlphaBetaSearch(Chessboard chessboard, int depth, Score alpha, Score beta, int halfMove, Span<Move> pvBuffers)
+    private Score AlphaBetaSearch(Chessboard chessboard, int depth, Score alpha, Score beta, int halfMove, Span<Move> pvBuffers, ReadOnlySpan<Move> pvIn)
     {
         var mateInMultiplier = (int)Math.Ceiling(halfMove / 2d);
 
         if (chessboard.HasKingInCheck(chessboard.ActiveColor.Opposite()))
         {
             UpdateStatisticsForLeafNode();
-            _usePv = false;
             var mateIn = mateInMultiplier * (chessboard.ActiveColor is Color.White ? 1 : -1);
             return Score.CreateMate(mateIn);
         }
@@ -208,7 +212,6 @@ internal sealed class MoveSearch
         if (moveCandidates.Length == 0)
         {
             UpdateStatisticsForLeafNode();
-            _usePv = false;
 
             if (chessboard.HasKingInCheck(chessboard.ActiveColor))
             {
@@ -222,11 +225,15 @@ internal sealed class MoveSearch
         if (depth == 0)
         {
             UpdateStatisticsForLeafNode();
-            _usePv = false;
             return MaterialEvaluation.Eval(chessboard);
         }
 
         SortMoves(moveCandidates);
+
+        if (_usePv)
+        {
+            SortPvMove(moveCandidates, pvIn, halfMove);
+        }
 
         var min = Score.Max;
         var max = Score.Min;
@@ -238,7 +245,7 @@ internal sealed class MoveSearch
         foreach (var move in moveCandidates)
         {
             chessboard.MakeMove(move);
-            var score = AlphaBetaSearch(chessboard, depth - 1, alpha, beta, halfMove + 1, pvBuffers);
+            var score = AlphaBetaSearch(chessboard, depth - 1, alpha, beta, halfMove + 1, pvBuffers, pvIn);
             chessboard.RevertMove();
 
             pvCandidate[0] = move;
@@ -295,8 +302,30 @@ internal sealed class MoveSearch
         moves.Sort(_moveComparison);
     }
 
-    private void SortPvMove(Span<Move> moves, ReadOnlySpan<Move> pvIn)
+    private void SortPvMove(Span<Move> moves, ReadOnlySpan<Move> pv, int pvMoveIndex)
     {
+        if (pv.Length <= pvMoveIndex)
+        {
+            _usePv = false;
+            return;
+        }
+
+        if (moves.Length < 2)
+        {
+            return;
+        }
+
+        var pvMove = pv[pvMoveIndex];
+
+        for (var i = moves.Length - 1; i > 0; i--)
+        {
+            var move = moves[i];
+            if (move == pvMove)
+            {
+                moves[i] = moves[i - 1];
+                moves[i - 1] = pvMove;
+            }
+        }
     }
 
     private bool SearchTimeIsOver()

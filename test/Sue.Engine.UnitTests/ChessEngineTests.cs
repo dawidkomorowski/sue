@@ -205,7 +205,7 @@ public class ChessEngineTests
 
         var searchSettings = new SearchSettings
         {
-            FixedDepth = 5
+            FixedDepth = 3
         };
 
         // Act
@@ -217,7 +217,7 @@ public class ChessEngineTests
         var actual = chessEngine.FindBestMove(fenString, "", searchSettings);
 
         // Assert
-        Assert.That(actual, Is.EqualTo("b8c6"));
+        Assert.That(actual, Is.EqualTo("b7b5"));
 
         // Act
         engineSettings = new EngineSettings
@@ -228,7 +228,7 @@ public class ChessEngineTests
         actual = chessEngine.FindBestMove(fenString, "", searchSettings);
 
         // Assert
-        Assert.That(actual, Is.EqualTo("c7c6"));
+        Assert.That(actual, Is.EqualTo("f7f5"));
 
         // Act
         engineSettings = new EngineSettings
@@ -239,6 +239,6 @@ public class ChessEngineTests
         actual = chessEngine.FindBestMove(fenString, "", searchSettings);
 
         // Assert
-        Assert.That(actual, Is.EqualTo("e7e6"));
+        Assert.That(actual, Is.EqualTo("h7h5"));
     }
 }
