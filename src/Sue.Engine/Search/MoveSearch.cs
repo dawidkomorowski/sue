@@ -18,6 +18,7 @@ internal sealed class MoveSearch
     private int _nodesPerSecond = 0;
     private TimeSpan _searchTime;
     private Comparison<Move>? _moveComparison;
+    private bool _usePv;
 
     public MoveSearch(Random random, SearchSettings settings)
     {
@@ -52,11 +53,15 @@ internal sealed class MoveSearch
 
         ScoredMove? bestMove = null;
         var depthCompleted = 0;
+        Span<Move> pvBuffer = stackalloc Move[depthLimit];
 
         for (var depth = 1; depth <= depthLimit; depth++)
         {
+            var pvIn = pvBuffer.Slice(0, depth - 1);
+            var pvOut = pvBuffer.Slice(0, depth);
+
             Logger.Trace("Start search with depth {0}.", depth);
-            var alphaBetaMove = AlphaBetaRootSearch(chessboard, depth);
+            var alphaBetaMove = AlphaBetaRootSearch(chessboard, depth, pvIn, pvOut);
 
             if (SearchTimeIsOver())
             {
@@ -92,10 +97,11 @@ internal sealed class MoveSearch
         return bestMove.Value.Move;
     }
 
-    private ScoredMove? AlphaBetaRootSearch(Chessboard chessboard, int depth)
+    private ScoredMove? AlphaBetaRootSearch(Chessboard chessboard, int depth, ReadOnlySpan<Move> pvIn, Span<Move> pvOut)
     {
         _nodesPerSecondStopwatch.Restart();
         _nodesPerDepth = 0;
+        _usePv = true;
 
         Span<Move> moveBuffer = stackalloc Move[Chessboard.MoveBufferSize];
         var moveCount = chessboard.GetMoveCandidates(moveBuffer);
@@ -178,6 +184,8 @@ internal sealed class MoveSearch
             Logger.Trace("PV[{0}] = {1}", i, pv[i]);
         }
 
+        pv.CopyTo(pvOut);
+
         return new ScoredMove(bestMove, bestMoveScore);
     }
 
@@ -188,6 +196,7 @@ internal sealed class MoveSearch
         if (chessboard.HasKingInCheck(chessboard.ActiveColor.Opposite()))
         {
             UpdateStatisticsForLeafNode();
+            _usePv = false;
             var mateIn = mateInMultiplier * (chessboard.ActiveColor is Color.White ? 1 : -1);
             return Score.CreateMate(mateIn);
         }
@@ -199,6 +208,7 @@ internal sealed class MoveSearch
         if (moveCandidates.Length == 0)
         {
             UpdateStatisticsForLeafNode();
+            _usePv = false;
 
             if (chessboard.HasKingInCheck(chessboard.ActiveColor))
             {
@@ -212,6 +222,7 @@ internal sealed class MoveSearch
         if (depth == 0)
         {
             UpdateStatisticsForLeafNode();
+            _usePv = false;
             return MaterialEvaluation.Eval(chessboard);
         }
 
@@ -282,6 +293,10 @@ internal sealed class MoveSearch
     {
         Debug.Assert(_moveComparison != null, nameof(_moveComparison) + " != null");
         moves.Sort(_moveComparison);
+    }
+
+    private void SortPvMove(Span<Move> moves, ReadOnlySpan<Move> pvIn)
+    {
     }
 
     private bool SearchTimeIsOver()
